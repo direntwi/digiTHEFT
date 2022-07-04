@@ -33,7 +33,7 @@ class MemberTable():
     memberStatus = db.Column(db.String(120), unique = False, nullable = False)
 
     def __repr__(self):
-        pass
+        return f"('{self.memberID}', '{self.memberLastName}', '{self.memberOtherNames}', '{self.memberStatus}')"
     
 # ##contents in the following brackets are subject to change 
 # class Books(db.Model):
