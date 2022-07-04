@@ -19,14 +19,14 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS CategoryTable(
+        CREATE TABLE IF NOT EXISTS Category(
             categoryID INTEGER PRIMARY KEY
             category TEXT NOT NULL
 
         )
         """, 
         """
-        CREATE TABLE IF NOT EXISTS Books(
+        CREATE TABLE IF NOT EXISTS Book(
             bookTitle TEXT NOT NULL
             authorID INTEGER NOT NULL
             dateAdded DATETIME
@@ -50,7 +50,7 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS MemberTable(
+        CREATE TABLE IF NOT EXISTS Member(
             memberID
             lastName
             otherNames
@@ -59,7 +59,7 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS LoanTable(
+        CREATE TABLE IF NOT EXISTS Loan(
             memberID
             loanID
             bookID
@@ -70,7 +70,7 @@ def create_tables():
         ) 
         """,
         """
-        CREATE TABLE IF NOT EXISTS FineTable(
+        CREATE TABLE IF NOT EXISTS Fine(
             memberID
             loanID
             fineID
@@ -80,7 +80,7 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS FinePaymentTable(
+        CREATE TABLE IF NOT EXISTS Payment(
             fineID
             memberID
             paymentDate
