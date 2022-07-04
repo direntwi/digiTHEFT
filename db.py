@@ -13,18 +13,27 @@ db = SQLAlchemy(app)
 class Author():
     authorID = db.Column(db.Integer, primary_key = True)
     authorLastName = db.Column(db.String(120), unique = False, nullable = False)
-    authorOtherNames = db.Column(db.String(120), unique = False, nullable = False)
+    authorOtherNames = db.Column(db.String(120), unique = False, nullable = False) 
     # books = db.relationship('Books', backref='author', lazy='True' ) #This is how you represent the relationship between an author and his/her books
     
     def __repr__(self):
         return f"Author('{self.authorID}', '{self.authorLastName}', '{self.authorOtherNames}')"
 
-# class CategoryTable():
-#     categoryID = db.Column(db.Integer, primary_key = True)
-#     category = db.Column(db.String(120), unique = False, nullable = False)
+class CategoryTable():
+    categoryID = db.Column(db.Integer, primary_key = True)
+    category = db.Column(db.String(120), unique = False, nullable = False)
 
-#     def __repr__(self):
-#         pass
+    def __repr__(self):
+        return f"CategoryTable('{self.categoryID}', '{self.category}')"
+
+class MemberTable():
+    memberID = db.Column(db.Integer, primary_key = True)
+    memberLastName = db.Column(db.String(120), unique = False, nullable = False)
+    memberOtherNames = db.Column(db.String(120), unique = False, nullable = False)
+    memberStatus = db.Column(db.String(120), unique = False, nullable = False)
+
+    def __repr__(self):
+        pass
     
 # ##contents in the following brackets are subject to change 
 # class Books(db.Model):
@@ -46,24 +55,17 @@ class Author():
 
 # class BookAndAuthor():
 #     authorID = db.Column()
-#     bookID = db.Column()
+#     barCodeID = db.Column()
 
 #     def __repr__(self):
 #         pass
 
-# class MemberTable():
-#     memberID = db.Column()
-#     lastName = db.Column()
-#     otherNames = db.Column()
-#     memberStatus = db.Column()
 
-#     def __repr__(self):
-#         pass
 
 # class LoanTable():
 #     memberID = db.Column()
 #     loanID = db.Column()
-#     bookID = db.Column()
+#     barCodeID = db.Column()
 #     loanDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)##this is how the system would record a date by default if one isn't given
 #     returnDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
 #     dueDate = db.Column(db.DateTime, nullable = False)
