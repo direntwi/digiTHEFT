@@ -68,16 +68,19 @@ class Book(db.Model):
 
 
 
-# class Loan(db.Model):
-#     memberID = db.Column()
-#     loanID = db.Column()
-#     barCodeID = db.Column()
-#     loanDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)##this is how the system would record a date by default if one isn't given
-#     returnDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
-#     dueDate = db.Column(db.DateTime, nullable = False)
+class Loan(db.Model):
+    loanID = db.Column(db.Integer, primary_key = True)
+    loanDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)##this is how the system would record a date by default if one isn't given
+    returnDate = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
+    dueDate = db.Column(db.DateTime, nullable = False)
 
-#     def __repr__(self):
-#         pass
+    memberID = db.Column(db.Integer, db.ForeignKey('member.memberID'))
+    barCodeID = db.Column(db.Integer, db.ForeignKey('book.barCodeID'))
+
+
+
+    def __repr__(self):
+        return f"Loan('{self.loanID}', '{self.loanDate}', '{self.returnDate}', '{self.dueDate},', '{self.memberID}', '{self.barCodeID}'"
 
 # class Fine(db.Model):
 #     memberID = db.Column()
