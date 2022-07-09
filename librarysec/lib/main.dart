@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:librarysec/login.dart';
+import 'package:librarysec/checkout.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:librarysec/page.dart';
+import 'package:librarysec/login.dart';
 
 const String title = 'KNUST LIBRARY PORTAL';
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme:
           ThemeData(brightness: Brightness.dark, accentColor: Colors.orange),
-      home: const Pages(),
+      home: const Login(),
     );
   }
 }
