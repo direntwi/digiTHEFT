@@ -1,5 +1,3 @@
-from unicodedata import category
-from unittest import result
 from flask import Flask, jsonify, request
 import queries
 from db import create_tables
