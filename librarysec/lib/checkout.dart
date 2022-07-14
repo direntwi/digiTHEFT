@@ -1,6 +1,5 @@
 //import 'package:flutter/material.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:librarysec/main.dart';
 import 'package:librarysec/pages/home.dart';
 import 'package:librarysec/pages/items.dart';
 import 'package:librarysec/pages/profile.dart';
@@ -8,6 +7,8 @@ import 'package:librarysec/pages/search.dart';
 import 'package:librarysec/pages/settings.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:librarysec/navi.dart';
+
+import 'login.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({
@@ -114,13 +115,16 @@ class _Checkout extends State<Checkout> with WindowListener {
           FilledButton(
             child: const Text('Yes'),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                FluentPageRoute(builder: (context) => const Login()),
+              );
             },
           ),
           FilledButton(
             child: const Text('No'),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.of(context).pop();
             },
           )
         ]);
