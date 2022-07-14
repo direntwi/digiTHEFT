@@ -31,13 +31,11 @@ class MyApp extends StatelessWidget {
     return FluentApp(
       title: 'KNUST LIBRARY PORTAL',
       color: Colors.purple,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        accentColor: Colors.purple,
-      ),
+      theme:
+          ThemeData(brightness: Brightness.light, accentColor: Colors.purple),
       darkTheme:
           ThemeData(brightness: Brightness.dark, accentColor: Colors.orange),
-      home: const Login(),
+      home: const Checkout(),
     );
   }
 }

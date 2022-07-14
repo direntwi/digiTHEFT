@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   _HomePageState({required String txt});
+  final autoSuggestBox = TextEditingController();
 
   var items = [
     'Item 1',
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Row(
-                    //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       DropDownButton(
                           //menuColor: Color.fromARGB(153, 64, 24, 100),
@@ -48,15 +50,12 @@ class _HomePageState extends State<HomePage> {
                                   setState(() {});
                                 })
                           ]),
-                      SizedBox(
-                        width: 27,
-                      ),
-                      // TextBox(
-                      //   //maxLength: 50,
-                      //   decoration: BoxDecoration(
-                      //       color: Color.fromRGBO(232, 216, 244, 25)),
-                      //   placeholder: 'Type your notes here',
-                      // ),
+                      Container(
+                          height: 32,
+                          width: 200,
+                          child: const TextBox(
+                            placeholder: 'Enter command or Barcode',
+                          )),
                     ])
               ],
             )));
