@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
-
 import 'checkout.dart';
 import 'main.dart';
 
