@@ -3,13 +3,13 @@ import 'package:librarysec/checkout.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:librarysec/login.dart';
 
-const String title = 'KNUST LIBRARY PORTAL';
+const String apptitle = 'KNUST LIBRARY PORTAL';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   windowManager.waitUntilReadyToShow().then((_) async {
-    await windowManager.setTitle(title);
+    await windowManager.setTitle(apptitle);
     await windowManager.setTitleBarStyle(TitleBarStyle.normal);
     await windowManager.setBackgroundColor(Colors.transparent);
     //await windowManager.setSize(const Size(755, 545));
