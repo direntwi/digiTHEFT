@@ -1,6 +1,6 @@
-import 'dart:async';
 
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:librarysec/main.dart';
 
 class Navigat {
@@ -28,11 +28,13 @@ Widget PageBox(
           width: width,
           child: Text(title!, style: TextStyle(color: Colors.white)),
         ),
-        SizedBox(
-          height: 0.62 * height,
+        Container(
+          width: width ,
+          height: height,
         ),
         Container(
           color: Color.fromARGB(255, 207, 124, 124),
+          // alignment: AlignmentDirectional.bottomCenter,
           height: 0.18 * height,
           width: width,
           child: Text(title, style: TextStyle(color: Colors.white)),
