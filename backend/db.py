@@ -10,8 +10,7 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS Author(
             authorID INTEGER PRIMARY KEY,
-            authorLastName TEXT NOT NULL,
-            authorOtherNames TEXT NOT NULL
+            authorName TEXT NOT NULL
 
         )
         """,
@@ -25,8 +24,7 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS Member(
             memberID INTEGER PRIMARY KEY,
-            memberLastName TEXT NOT NULL,
-            memberOtherNames TEXT NOT NULL,
+            memberName TEXT NOT NULL,
             memberStatus TEXT NOT NULL
 
         )

@@ -31,6 +31,11 @@ def findAuthor(authorID):
     result = queries.getAuthor(authorID)
     return jsonify(result)
 
+@app.route("/search-author/<authorName>", methods=["GET"])
+def traverseAuthor(authorName):
+    result = queries.searchAuthor(authorName)
+    return jsonify(result)
+
 @app.route("/delete-author/<authorID>", methods=["DELETE"])
 def removeAuthor(authorID):
     result = queries.deleteAuthor(authorID)
@@ -90,6 +95,11 @@ def reviseMember():
 @app.route("/get-member/<memberID>", methods=["GET"])
 def findMember(memberID):
     result = queries.getMember(memberID)
+    return jsonify(result)
+
+@app.route("/search-member/<memberName>", methods=["GET"])
+def traverseMember(memberName):
+    result = queries.searchMember(memberName)
     return jsonify(result)
 
 @app.route("/delete-member/<memberID>", methods=["DELETE"])

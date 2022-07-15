@@ -1,34 +1,48 @@
-from unittest import result
 from db import get_db
 
 #For Author Table
-def newAuthor(authorLastName, authorOtherNames):
+def newAuthor(authorName):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Author(authorLastName, authorOtherNames) VALUES (?,?)"
-    cursor.execute(statement, [authorLastName, authorOtherNames])
+    statement = "INSERT INTO Author(authorName) VALUES (?)"
+    cursor.execute(statement, [authorName])
     db.commit()
     return {"status": 201, "message": "new author added"}
 
 
-def updateAuthor(authorLastName, authorOtherNames, authorID):
+def updateAuthor(authorName, authorID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Author SET authorLastName=?, authorOtherNames=? WHERE authorID = ?"
-    cursor.execute(statement, [authorLastName, authorOtherNames, authorID])
+    statement = "UPDATE Author SET authorName=? WHERE authorID = ?"
+    cursor.execute(statement, [authorName, authorID])
     db.commit()
     return {"status": 202, "message": "author info updated"}
 
 def getAuthor(authorID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT authorLastName, authorOtherNames FROM Author WHERE authorID =?"
+    statement = "SELECT authorName FROM Author WHERE authorID =?"
     cursor.execute(statement, [authorID])
     result = cursor.fetchone()
     return{
-        "authorLastName" : f"{result[0]}",
-        "authorOtherNames" : result[1]
+        "authorName" : f"{result[0]}"
     }
+
+def searchAuthor(authorName=None): ##to be continued
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT authorName, FROM Author WHERE authorName = %s"
+    cursor.execute(statement, [authorName])
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "authorID" : f"{resultItem[0]}",
+               "authorName": resultItem[1]
+            }
+        )
+    return resultDict
 
 def deleteAuthor(authorID):
     db = get_db()
@@ -81,34 +95,51 @@ def deleteCategory(categoryID):
 
 
 #For Member Table
-def newMember(memberLastName, memberOtherNames, memberStatus):
+def newMember(memberName, memberStatus):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Member(memberLastName, memberOtherNames, memberStatus) VALUES (?,?,?)"
-    cursor.execute(statement, [memberLastName, memberOtherNames, memberStatus])
+    statement = "INSERT INTO Member(memberName, memberStatus) VALUES (?,?)"
+    cursor.execute(statement, [memberName, memberStatus])
     db.commit()
     return {"status": 201, "message": "new Member added"}
 
 
-def updateMember(memberLastName, memberOtherNames, memberStatus, memberID):
+def updateMember(memberName, memberStatus, memberID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Member SET memberLastName=?, memberOtherNames=?, memberStatus=? WHERE memberID = ?"
-    cursor.execute(statement, [memberLastName, memberOtherNames, memberStatus, memberID])
+    statement = "UPDATE Member SET memberName=?, memberStatus=? WHERE memberID = ?"
+    cursor.execute(statement, [memberName, memberStatus, memberID])
     db.commit()
     return {"status": 202, "message": "Member info updated"}
 
 def getMember(memberID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT memberLastName, memberOtherNames FROM Member WHERE memberID =?"
+    statement = "SELECT memberName, memberStatus FROM Member WHERE memberID =?"
     cursor.execute(statement, [memberID])
     result = cursor.fetchone()
     return{
-        "memberLastName" : f"{result[0]}",
-        "memberOtherNames" : result[1],
-        "memberStatus": result[2]
+        "memberName" : f"{result[0]}",
+        "memberStatus": result[1]
     }
+
+def searchMember(memberName=None): ##to be continued
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT * FROM Member WHERE memberName = %s"
+    cursor.execute(statement, [memberName])
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "memberID" : f"{resultItem[0]}",
+               "memberName": resultItem[1],
+               "memberStatus": resultItem[2]
+            }
+        )
+    return resultDict
+
 
 def deleteMember(memberID):
     db = get_db()
