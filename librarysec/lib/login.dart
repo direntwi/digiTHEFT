@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
+import 'checkout.dart';
+import 'main.dart';
 
 class Login extends StatefulWidget {
   const Login({
@@ -22,7 +24,7 @@ class _Page extends State<Login> with WindowListener {
             'KNUST LIBRARY PORTAL',
             style: TextStyle(
                 fontSize: 30,
-                color: Color(0xff610600),
+                color: appColor,
                 fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -62,7 +64,19 @@ class _Page extends State<Login> with WindowListener {
                       errorBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.red)),
                     ),
-                  ))
+                  )),
+              SizedBox(
+                height: 40,
+              ),
+              ElevatedButton(onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Checkout()),
+                );
+              }, child: Text("Login"),
+              style: ElevatedButton.styleFrom(
+                primary: appColor,
+              ),)
             ],
           )
         ])));

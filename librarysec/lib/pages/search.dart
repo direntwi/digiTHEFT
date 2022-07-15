@@ -12,6 +12,10 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
-    return ScaffoldPage();
+    return const ScaffoldPage(
+      padding: EdgeInsets.all(20),
+
+
+    );
   }
 }

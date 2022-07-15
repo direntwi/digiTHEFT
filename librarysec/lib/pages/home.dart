@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:librarysec/navi.dart';
 //import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
 //import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
         content: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,13 +52,25 @@ class _HomePageState extends State<HomePage> {
                                   setState(() {});
                                 })
                           ]),
-                      Container(
+                      const SizedBox(
                           height: 32,
                           width: 200,
-                          child: const TextBox(
+                          child: TextBox(
                             placeholder: 'Enter command or Barcode',
                           )),
-                    ])
+                    ]),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    PageBox(height: 200, width: 400, title: 'No Patrons yet'),
+                    PageBox(height: 200, width: 400, title: 'No item Available')
+                  ],
+                ),
+                SizedBox(height: 60),
+                PageBox(height: 150, width: 1400, title: 'Transaction Log')
               ],
             )));
   }
