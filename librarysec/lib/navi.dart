@@ -21,23 +21,24 @@ Widget PageBox(
     height: height,
     width: width,
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
           color: Color.fromARGB(255, 207, 124, 124),
-          height: 0.18 * height,
+          height: 30,
           width: width,
-          child: Text(title!, style: TextStyle(color: Colors.white)),
+          child: Align(alignment: Alignment.centerLeft, child: Text(title!, style: TextStyle(color: Colors.white)),),
         ),
-        Container(
-          width: width ,
-          height: height,
-        ),
+        // Container(
+        //   width: width ,
+        //   height: height,
+        // ),
         Container(
           color: Color.fromARGB(255, 207, 124, 124),
           // alignment: AlignmentDirectional.bottomCenter,
-          height: 0.18 * height,
+          height: 30,
           width: width,
-          child: Text(title, style: TextStyle(color: Colors.white)),
+          child: Align(alignment: Alignment.centerLeft, child: Text(title, style: TextStyle(color: Colors.white)),),
         ),
       ],
     ),

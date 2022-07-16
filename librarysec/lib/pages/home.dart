@@ -31,9 +31,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
-        padding: const EdgeInsets.all(20),
+        // padding: const EdgeInsets.all(20),
         content: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
             
             child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -58,27 +58,27 @@ class _HomePageState extends State<HomePage> {
                         height: 32,
                         width: 200,
                         child: TextBox(
-                          placeholder: 'Enter command or Barcode',
+                          placeholder: 'Enter command or barcode',
                         )),
                   ]),
               const SizedBox(
                 height: 30,
               ),
               Container(
-                height: MediaQuery.of(context).size.height - 125,
+                height: MediaQuery.of(context).size.height / 2.3,
                 child: GridView.count(
                   crossAxisCount: 2,
                   crossAxisSpacing: 40.0,
                   mainAxisSpacing: 40.0,
-                  childAspectRatio: (7/3),
+                  childAspectRatio: (6.5/3),
                 children: [
-                  PageBox(height: 150, width: 1400, title: 'No Patrons yet'),
-                  PageBox(height: 150, width: 1400, title: 'No Items available'),
-                  PageBox(height: 150, width: 1400, title: 'Transaction Log'),
+                  PageBox(height: 150, width: 1400, title: '  No Patrons yet'),
+                  PageBox(height: 150, width: 1400, title: '  No Items available'),
                 ],
               ),),
-              // SizedBox(height: 60),
-              // PageBox(height: 150, width: 1400, title: 'Transaction Log')
+
+              PageBox(height: MediaQuery.of(context).size.height / 3, width: 1400, title: '  Transaction Log'),
+
             ],
           )
 
