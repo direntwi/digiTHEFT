@@ -45,22 +45,27 @@ Widget PageBox(
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    // ignore: sort_child_properties_last
-                    child: Icon(
-                      lbottomicon,
-                      color: Colors.white,
-                      size: 20,
+                  Padding(
+                      padding: EdgeInsets.all(6),
+                      child: GestureDetector(
+                        // ignore: sort_child_properties_last
+                        child: Icon(
+                          lbottomicon,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onTap: lfx,
+                      )),
+                  Padding(
+                    padding: EdgeInsets.all(6),
+                    child: GestureDetector(
+                      child: Icon(
+                        rbottomicon,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onTap: rfx,
                     ),
-                    onTap: lfx,
-                  ),
-                  GestureDetector(
-                    child: Icon(
-                      rbottomicon,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    onTap: rfx,
                   ),
                 ])),
       ],

@@ -70,15 +70,15 @@ class _HomePageState extends State<HomePage> {
                           height: 150,
                           width: 1400,
                           title: '  No Patrons yet',
-                          lbottomicon: FluentIcons.print,
-                          rbottomicon: FluentIcons.pen_workspace,
+                          lbottomicon: FluentIcons.generic_scan,
+                          rbottomicon: FluentIcons.pencil_reply,
                           rfx: studenttypeId),
                       PageBox(
                         height: 150,
                         width: 1400,
                         title: '  No Items available',
-                        lbottomicon: FluentIcons.print,
-                        rbottomicon: FluentIcons.pen_workspace,
+                        lbottomicon: FluentIcons.generic_scan,
+                        rbottomicon: FluentIcons.pencil_reply,
                         rfx: itemtypeId,
                       ),
                     ],
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
                     title: '  Transaction Log',
-                    lbottomicon: FluentIcons.clear),
+                    lbottomicon: FluentIcons.cancel),
               ],
             )));
   }
@@ -98,17 +98,17 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return ContentDialog(
-            title: Text('Patron id'),
-            content: TextBox(),
+            title: Text('Manual input'),
+            content: TextBox(placeholder: "Enter reference number",),
             backgroundDismiss: true,
             actions: [
               Button(
-                  child: Text('CANCEL'),
+                  child: Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }),
               Button(
-                  child: Text('SAVE'),
+                  child: Text('Search'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   })
@@ -122,17 +122,17 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return ContentDialog(
-            title: Text('Book id'),
-            content: TextBox(),
+            title: Text('Manual Input'),
+            content: TextBox(placeholder: "Enter book ID"),
             backgroundDismiss: true,
             actions: [
               Button(
-                  child: Text('CANCEL'),
+                  child: Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }),
               Button(
-                  child: Text('SAVE'),
+                  child: Text('Search'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   })
