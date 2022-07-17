@@ -15,8 +15,8 @@ Widget PageBox(
     IconData? rbottomicon,
     required double height,
     required double width,
-    Widget Function()? rfx,
-    Widget Function()? lfx}) {
+    Future Function()? rfx,
+    Future Function()? lfx}) {
   return Container(
     decoration: BoxDecoration(border: Border.all(color: appColor)),
     height: height,

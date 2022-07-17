@@ -1,11 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart';
+import 'package:librarysec/main.dart';
 import 'package:librarysec/navi.dart';
-
-//import 'package:flutter/material.dart';
-//import 'package:flutter/material.dart';
-//import 'package:flutter/material.dart';
-//import 'package:librarysec/main.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -77,14 +72,15 @@ class _HomePageState extends State<HomePage> {
                           title: '  No Patrons yet',
                           lbottomicon: FluentIcons.print,
                           rbottomicon: FluentIcons.pen_workspace,
-                          rfx: typeId,
-                          lfx: ScanId),
+                          rfx: studenttypeId),
                       PageBox(
-                          height: 150,
-                          width: 1400,
-                          title: '  No Items available',
-                          lbottomicon: FluentIcons.print,
-                          rbottomicon: FluentIcons.pen_workspace),
+                        height: 150,
+                        width: 1400,
+                        title: '  No Items available',
+                        lbottomicon: FluentIcons.print,
+                        rbottomicon: FluentIcons.pen_workspace,
+                        rfx: itemtypeId,
+                      ),
                     ],
                   ),
                 ),
@@ -92,79 +88,68 @@ class _HomePageState extends State<HomePage> {
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
                     title: '  Transaction Log',
-                    lbottomicon: Icons.clear),
+                    lbottomicon: FluentIcons.clear),
               ],
-            )
-
-            // Container(
-            //   height: 40,
-            //   child: GridView.count(
-            //     crossAxisCount: 2,
-            //   crossAxisSpacing: 40.0,
-            //   mainAxisSpacing: 40.0,
-            //     childAspectRatio: (7/3),
-            //   children: [
-            //     PageBox(height: 150, width: 1400, title: 'No Patrons yet'),
-            //     PageBox(height: 150, width: 1400, title: 'No Items available'),
-            //     PageBox(height: 150, width: 1400, title: 'Transaction Log')
-            //   ],
-            // ),)
-
-            // child:
-            // Column(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           DropDownButton(
-            //               //menuColor: Color.fromARGB(153, 64, 24, 100),
-            //               title: const Text('Check out'),
-            //               items: [
-            //                 MenuFlyoutItem(
-            //                     text: const Text('Check out'),
-            //                     onPressed: () {}),
-            //                 MenuFlyoutItem(
-            //                     text: const Text('Return'),
-            //                     onPressed: () {
-            //                       setState(() {});
-            //                     })
-            //               ]),
-            //           const SizedBox(
-            //               height: 32,
-            //               width: 200,
-            //               child: TextBox(
-            //                 placeholder: 'Enter command or Barcode',
-            //               )),
-            //         ]),
-            //     const SizedBox(
-            //       height: 30,
-            //     ),
-            //     Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         PageBox(height: 200, width: 400, title: 'No Patrons yet'),
-            //         PageBox(height: 200, width: 400, title: 'No item Available')
-            //       ],
-            //     ),
-            //     SizedBox(height: 60),
-            //     PageBox(height: 150, width: 1400, title: 'Transaction Log')
-            //   ],
-            // )
-            ));
+            )));
   }
 
-  Widget typeId() {
-    print('Type');
-    return const ContentDialog(
-      title: Text("Enter Patron's id"),
-    );
+  Future studenttypeId() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return ContentDialog(
+            title: Text('Patron id'),
+            content: TextBox(),
+            backgroundDismiss: true,
+            actions: [
+              Button(
+                  child: Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                  }),
+              Button(
+                  child: Text('SAVE'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                  })
+            ],
+          );
+        });
   }
 
-  Widget ScanId() {
-    print('Scan');
-    return ContentDialog(
-      title: Text("Enter Patron's id"),
-    );
+  Future itemtypeId() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return ContentDialog(
+            title: Text('Book id'),
+            content: TextBox(),
+            backgroundDismiss: true,
+            actions: [
+              Button(
+                  child: Text('CANCEL'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                  }),
+              Button(
+                  child: Text('SAVE'),
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop(true);
+                  })
+            ],
+          );
+        });
+  }
+
+  Future scanId() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return const ContentDialog(
+            title: Text('Patron id'),
+            content: TextBox(),
+            backgroundDismiss: false,
+          );
+        });
   }
 }

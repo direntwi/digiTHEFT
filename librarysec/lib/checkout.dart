@@ -1,5 +1,6 @@
 //import 'package:flutter/material.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:librarysec/pages/add_book.dart';
 import 'package:librarysec/pages/home.dart';
 import 'package:librarysec/pages/items.dart';
 import 'package:librarysec/pages/profile.dart';
@@ -22,10 +23,13 @@ class Checkout extends StatefulWidget {
 class _Checkout extends State<Checkout> with WindowListener {
   final List<Navigat> pages = const [
     Navigat(title: 'Home', iconData: FluentIcons.home),
+    Navigat(title: 'Add Book', iconData: FluentIcons.add),
     Navigat(title: 'Patrons', iconData: FluentIcons.people),
     Navigat(title: 'Items', iconData: FluentIcons.history),
     Navigat(title: 'Search', iconData: FluentIcons.search),
     Navigat(title: 'Settings', iconData: FluentIcons.settings),
+  ];
+  final List<Navigat> footerpages = const [
     Navigat(title: 'Log Out', iconData: FluentIcons.sign_out),
   ];
 
@@ -78,55 +82,60 @@ class _Checkout extends State<Checkout> with WindowListener {
     return NavigationView(
       key: viewKey,
       pane: NavigationPane(
-          selected: index,
-          onChanged: (i) => setState(() {
-                index = i;
-              }),
-          displayMode: PaneDisplayMode.compact,
-          items: pages
-              .map<NavigationPaneItem>(((e) =>
-                  PaneItem(icon: Icon(e.iconData), title: Text(e.title))))
-              .toList()),
+        selected: index,
+        onChanged: (i) => setState(() {
+          index = i;
+        }),
+        displayMode: PaneDisplayMode.compact,
+        items: pages
+            .map<NavigationPaneItem>(
+                ((e) => PaneItem(icon: Icon(e.iconData), title: Text(e.title))))
+            .toList(),
+        footerItems: footerpages
+            .map<NavigationPaneItem>(
+                ((e) => PaneItem(icon: Icon(e.iconData), title: Text(e.title))))
+            .toList(),
+      ),
       content: NavigationBody(
         index: index,
         children: [
           HomePage(title: 'Home'),
+          AddBook(),
           Items(),
           Profile(),
           Search(),
           Settings(),
-          logout(),
+          logout(index)
         ],
       ),
-      // content: NavigationBody.builder(
-      //     index: index,
-      //     itemBuilder: (ctx, index) {
-      //       print(pages[index].title);
-      //       return HomePage(title: pages[index].title);
-      //     }),
     );
   }
 
-  Widget logout() {
-    return ContentDialog(
-        title: const Text('Confirm Logout'),
-        content: const Text('Are you sure want to logout of the app?'),
-        actions: [
-          FilledButton(
-            child: const Text('Yes'),
-            onPressed: () {
-              Navigator.push(
-                context,
-                FluentPageRoute(builder: (context) => const Login()),
-              );
-            },
-          ),
-          FilledButton(
-            child: const Text('No'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          )
-        ]);
+  Widget logout(int index) {
+    return Container(
+      child: ContentDialog(
+          title: const Text('Confirm Logout'),
+          content: const Text('Are you sure want to logout of the app?'),
+          actions: [
+            FilledButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  FluentPageRoute(builder: (context) => const Login()),
+                );
+              },
+            ),
+            FilledButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  FluentPageRoute(builder: (context) => Checkout()),
+                );
+              },
+            )
+          ]),
+    );
   }
 }
