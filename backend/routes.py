@@ -7,54 +7,54 @@ app = Flask(__name__)
 # @app.route("/", methods=[""])
 # details = request.get_json()
 
-#For Author Table
-@app.route("/new-author", methods=["POST"])
-def addAuthor():
-    details = request.get_json()
-    authorName = details["authorName"]
-    result = queries.newAuthor(authorName)
-    return jsonify(result)
-
-# ---THIS WAS CREATED TO ALLOW MULTIPLE AUTHORS TO BE ADDED TO THE DATABASE. WILL BE TESTED LATER---
-# @app.route("/new-authors", methods=["POST"])
+# #For Author Table
+# @app.route("/new-author", methods=["POST"])
 # def addAuthor():
 #     details = request.get_json()
-#     created_authors = []
-#     for author in details["authors"]:
-#         response = queries.newAuthor(author["authorName"])
-#         created_authors.append(response)
-#     return jsonify({"created_authors": created_authors, "message":"Success"}), 200
+#     authorName = details["authorName"]
+#     result = queries.newAuthor(authorName)
+#     return jsonify(result)
+
+# # ---THIS WAS CREATED TO ALLOW MULTIPLE AUTHORS TO BE ADDED TO THE DATABASE. WILL BE TESTED LATER---
+# # @app.route("/new-authors", methods=["POST"])
+# # def addAuthor():
+# #     details = request.get_json()
+# #     created_authors = []
+# #     for author in details["authors"]:
+# #         response = queries.newAuthor(author["authorName"])
+# #         created_authors.append(response)
+# #     return jsonify({"created_authors": created_authors, "message":"Success"}), 200
 
 
 
-@app.route("/update-author-info", methods=["PUT"])
-def reviseAuthor():
-    details = request.get_json()
-    authorName = details["authorName"]
-    authorID = details["authorID"]
-    result = queries.updateAuthor(authorName, authorID)
-    return jsonify(result)
+# @app.route("/update-author-info", methods=["PUT"])
+# def reviseAuthor():
+#     details = request.get_json()
+#     authorName = details["authorName"]
+#     authorID = details["authorID"]
+#     result = queries.updateAuthor(authorName, authorID)
+#     return jsonify(result)
 
-@app.route("/get-author/<authorID>", methods=["GET"])
-def findAuthor(authorID):
-    result = queries.getAuthor(authorID)
-    return jsonify(result)
+# @app.route("/get-author/<authorID>", methods=["GET"])
+# def findAuthor(authorID):
+#     result = queries.getAuthor(authorID)
+#     return jsonify(result)
 
-@app.route("/search-author/<authorName>", methods=["GET"])
-def traverseAuthor(authorName):
-    result = queries.searchAuthor(authorName)
-    return jsonify(result)
+# @app.route("/search-author/<authorName>", methods=["GET"])
+# def traverseAuthor(authorName):
+#     result = queries.searchAuthor(authorName)
+#     return jsonify(result)
 
-@app.route("/authors", methods = ["GET"])
-def allAuthors():
-    result = queries.getAllAuthors()
-    return jsonify(result)
+# @app.route("/authors", methods = ["GET"])
+# def allAuthors():
+#     result = queries.getAllAuthors()
+#     return jsonify(result)
 
 
-@app.route("/delete-author/<authorID>", methods=["DELETE"])
-def removeAuthor(authorID):
-    result = queries.deleteAuthor(authorID)
-    return jsonify(result)
+# @app.route("/delete-author/<authorID>", methods=["DELETE"])
+# def removeAuthor(authorID):
+#     result = queries.deleteAuthor(authorID)
+#     return jsonify(result)
 
 #For Category Table
 @app.route("/new-category", methods=["POST"])

@@ -1,74 +1,74 @@
 from db import get_db
 
 #For Author Table
-def newAuthor(authorName):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "INSERT INTO Author(authorName) VALUES (?)"
-    cursor.execute(statement, [authorName])
-    db.commit()
-    return {"status": 201, "message": "new author added"}
+# def newAuthor(authorName):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "INSERT INTO Author(authorName) VALUES (?)"
+#     cursor.execute(statement, [authorName])
+#     db.commit()
+#     return {"status": 201, "message": "new author added"}
 
 
-def updateAuthor(authorName, authorID):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "UPDATE Author SET authorName=? WHERE authorID = ?"
-    cursor.execute(statement, [authorName, authorID])
-    db.commit()
-    return {"status": 202, "message": "author info updated"}
+# def updateAuthor(authorName, authorID):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "UPDATE Author SET authorName=? WHERE authorID = ?"
+#     cursor.execute(statement, [authorName, authorID])
+#     db.commit()
+#     return {"status": 202, "message": "author info updated"}
 
-def getAuthor(authorID=None):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "SELECT authorName FROM Author WHERE authorID =?"
-    cursor.execute(statement, [authorID])
-    result = cursor.fetchone()
-    return{
-        "authorName" : f"{result[0]}"
-    }
+# def getAuthor(authorID=None):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "SELECT authorName FROM Author WHERE authorID =?"
+#     cursor.execute(statement, [authorID])
+#     result = cursor.fetchone()
+#     return{
+#         "authorName" : f"{result[0]}"
+#     }
 
-def searchAuthor(authorName=None): ##to be continued
-    db = get_db()
-    cursor = db.cursor()
-    statement = "SELECT authorID,authorName FROM Author WHERE authorName = ?"
-    cursor.execute(statement, [authorName])
-    result = cursor.fetchall()
-    resultDict = []
-    for resultItem in result:
-        resultDict.append(
-            {
-               "authorID" : f"{resultItem[0]}",
-               "authorName": resultItem[1]
-            }
-        )
-    return resultDict
+# def searchAuthor(authorName=None): ##to be continued
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "SELECT authorID,authorName FROM Author WHERE authorName = ?"
+#     cursor.execute(statement, [authorName])
+#     result = cursor.fetchall()
+#     resultDict = []
+#     for resultItem in result:
+#         resultDict.append(
+#             {
+#                "authorID" : f"{resultItem[0]}",
+#                "authorName": resultItem[1]
+#             }
+#         )
+#     return resultDict
 
-def getAllAuthors():
-    db = get_db()
-    cursor = db.cursor()
-    query = "SELECT * FROM Author"
-    cursor.execute(query)
-    result = cursor.fetchall()
-    resultDict = []
-    for resultItem in result:
-        resultDict.append(
-            {
-               "authorID" : f"{resultItem[0]}",
-               "authorName": resultItem[1]
-            }
-        )
+# def getAllAuthors():
+#     db = get_db()
+#     cursor = db.cursor()
+#     query = "SELECT * FROM Author"
+#     cursor.execute(query)
+#     result = cursor.fetchall()
+#     resultDict = []
+#     for resultItem in result:
+#         resultDict.append(
+#             {
+#                "authorID" : f"{resultItem[0]}",
+#                "authorName": resultItem[1]
+#             }
+#         )
 
-    return resultDict
+#     return resultDict
 
 
-def deleteAuthor(authorID):
-    db = get_db()
-    cursor = db.cursor()
-    statement =  "DELETE FROM Author WHERE authorID=?"
-    cursor.execute(statement, [authorID])
-    db.commit()
-    return {"status": 201, "message": "author successfully deleted"}
+# def deleteAuthor(authorID):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement =  "DELETE FROM Author WHERE authorID=?"
+#     cursor.execute(statement, [authorID])
+#     db.commit()
+#     return {"status": 201, "message": "author successfully deleted"}
 
 
 

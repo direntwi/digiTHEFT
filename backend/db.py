@@ -8,13 +8,6 @@ def get_db():
 def create_tables():
     tables = [
         """
-        CREATE TABLE IF NOT EXISTS Author(
-            authorID INTEGER PRIMARY KEY,
-            authorName TEXT NOT NULL
-
-        )
-        """,
-        """
         CREATE TABLE IF NOT EXISTS Categories(
             categoryID INTEGER PRIMARY KEY,
             category TEXT NOT NULL
@@ -97,3 +90,11 @@ def create_tables():
 #             paymentID
 #         )
 #         """  
+
+# """
+#         CREATE TABLE IF NOT EXISTS Author(
+#             authorID INTEGER PRIMARY KEY,
+#             authorName TEXT NOT NULL
+
+#         )
+#         """,
