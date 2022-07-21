@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:librarysec/main.dart';
 import 'package:librarysec/navi.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,6 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool hasdata = false;
     return ScaffoldPage(
         // padding: const EdgeInsets.all(20),
         content: Padding(
@@ -69,14 +69,16 @@ class _HomePageState extends State<HomePage> {
                       PageBox(
                           height: 150,
                           width: 1400,
-                          title: '  No Patrons yet',
+                          title: 'Patrons',
+                          check: hasdata,
                           lbottomicon: FluentIcons.generic_scan,
                           rbottomicon: FluentIcons.pencil_reply,
                           rfx: studenttypeId),
                       PageBox(
                         height: 150,
                         width: 1400,
-                        title: '  No Items available',
+                        title: 'Books',
+                        check: !hasdata,
                         lbottomicon: FluentIcons.generic_scan,
                         rbottomicon: FluentIcons.pencil_reply,
                         rfx: itemtypeId,
@@ -87,7 +89,8 @@ class _HomePageState extends State<HomePage> {
                 PageBox(
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
-                    title: '  Transaction Log',
+                    title: 'Transaction Log',
+                    check: !hasdata,
                     lbottomicon: FluentIcons.cancel),
               ],
             )));

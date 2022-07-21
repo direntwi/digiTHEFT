@@ -15,6 +15,7 @@ Widget PageBox(
     IconData? rbottomicon,
     required double height,
     required double width,
+    required bool check,
     Future Function()? rfx,
     Future Function()? lfx}) {
   return Container(
@@ -30,13 +31,17 @@ Widget PageBox(
           width: width,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text(title!, style: TextStyle(color: Colors.white)),
+            child: Text("  ${title}", style: TextStyle(color: Colors.white)),
           ),
         ),
-        // Container(
-        //   width: width ,
-        //   height: height,
-        // ),
+        Container(
+            child: check
+                ? Column(
+                    children: [
+                      Text("I'm Here"),
+                    ],
+                  )
+                : Text("No ${title} available")),
         Container(
             color: Color.fromARGB(255, 207, 124, 124),
             // alignment: AlignmentDirectional.bottomCenter,
