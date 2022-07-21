@@ -24,8 +24,9 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS Member(
             memberID INTEGER PRIMARY KEY,
+            referenceID TEXT UNIQUE NOT NULL,
             memberName TEXT NOT NULL,
-            memberStatus TEXT NOT NULL
+            memberStatus TEXT NOT NULL            
 
         )
         """,

@@ -31,7 +31,7 @@ def getAuthor(authorID=None):
 def searchAuthor(authorName=None): ##to be continued
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT authorName, FROM Author WHERE authorName = %s"
+    statement = "SELECT authorID,authorName FROM Author WHERE authorName = ?"
     cursor.execute(statement, [authorName])
     result = cursor.fetchall()
     resultDict = []
@@ -43,6 +43,24 @@ def searchAuthor(authorName=None): ##to be continued
             }
         )
     return resultDict
+
+def getAllAuthors():
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT * FROM Author"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "authorID" : f"{resultItem[0]}",
+               "authorName": resultItem[1]
+            }
+        )
+
+    return resultDict
+
 
 def deleteAuthor(authorID):
     db = get_db()
@@ -84,6 +102,24 @@ def getCategory(categoryID=None):
         "category" : result[1]
     }
 
+def getAllCategories():
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT * FROM Categories"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "categoryID" : f"{resultItem[0]}",
+               "category": resultItem[1]
+            }
+        )
+
+    return resultDict
+
+
 def deleteCategory(categoryID):
     db = get_db()
     cursor = db.cursor()
@@ -95,32 +131,54 @@ def deleteCategory(categoryID):
 
 
 #For Member Table
-def newMember(memberName, memberStatus):
+def newMember(referenceID, memberName, memberStatus):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Member(memberName, memberStatus) VALUES (?,?)"
-    cursor.execute(statement, [memberName, memberStatus])
+    statement = "INSERT INTO Member(referenceID, memberName, memberStatus) VALUES (?,?,?)"
+    cursor.execute(statement, [referenceID, memberName, memberStatus])
     db.commit()
     return {"status": 201, "message": "new Member added"}
 
 
-def updateMember(memberName, memberStatus, memberID):
+def updateMemberbyMemberID(referenceID, memberName, memberStatus, memberID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Member SET memberName=?, memberStatus=? WHERE memberID = ?"
-    cursor.execute(statement, [memberName, memberStatus, memberID])
+    statement = "UPDATE Member SET referenceID=?,memberName=?, memberStatus=? WHERE memberID = ?"
+    cursor.execute(statement, [referenceID, memberName, memberStatus, memberID])
     db.commit()
     return {"status": 202, "message": "Member info updated"}
 
-def getMember(memberID=None):
+def updateMemberbyReferenceID(memberName, memberStatus, referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT memberName, memberStatus FROM Member WHERE memberID =?"
+    statement = "UPDATE Member SET memberName=?, memberStatus=? WHERE referenceID = ?"
+    cursor.execute(statement, [memberName, memberStatus, referenceID])
+    db.commit()
+    return {"status": 202, "message": "Member info updated"}
+
+def getMemberByMemberID(memberID=None):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT referenceID, memberName, memberStatus FROM Member WHERE memberID =?"
     cursor.execute(statement, [memberID])
     result = cursor.fetchone()
     return{
-        "memberName" : f"{result[0]}",
-        "memberStatus": result[1]
+        "referenceID" : f"{result[0]}",
+        "memberName": result[1],
+        "memberStatus": result[2]
+    }
+
+def getMemberByReferenceID(referenceID=None):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT memberID, referenceID, memberName, memberStatus FROM Member WHERE referenceID =?"
+    cursor.execute(statement, [referenceID])
+    result = cursor.fetchone()
+    return{
+        "memberID" : f"{result[0]}",
+        "referenceID": result[1],
+        "memberName": result[2],
+        "memberStatus": result[3]
     }
 
 def searchMember(memberName=None): ##to be continued
@@ -134,18 +192,46 @@ def searchMember(memberName=None): ##to be continued
         resultDict.append(
             {
                "memberID" : f"{resultItem[0]}",
-               "memberName": resultItem[1],
-               "memberStatus": resultItem[2]
+               "referenceID": resultItem[1],
+               "memberName": resultItem[2],
+               "memberStatus": resultItem[3]
             }
         )
     return resultDict
 
+def getAllMembers():
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT * FROM Member"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "memberID" : f"{resultItem[0]}",
+               "referenceID": resultItem[1],
+               "memberName": resultItem[2],
+               "memberStatus": resultItem[3]
+            }
+        )
 
-def deleteMember(memberID):
+    return resultDict
+
+
+def deleteMemberbyMemberID(memberID):
     db = get_db()
     cursor = db.cursor()
     statement =  "DELETE FROM Member WHERE memberID=?"
     cursor.execute(statement, [memberID])
+    db.commit()
+    return {"status": 201, "message": "Member successfully deleted"}
+
+def deleteMemberbyReferenceID(referenceID):
+    db = get_db()
+    cursor = db.cursor()
+    statement =  "DELETE FROM Member WHERE referenceID=?"
+    cursor.execute(statement, [referenceID])
     db.commit()
     return {"status": 201, "message": "Member successfully deleted"}
 
@@ -175,6 +261,7 @@ def updateBookByBarCodeID(bookTitle, authorID, dateAdded, rfID, borrowStatus, av
     cursor.execute(statement, [bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
+
 
 def getBookByBookID(bookID=None):
     db = get_db()
@@ -214,6 +301,34 @@ def getBookByBarCodeID(barCodeID=None):
         "callNumber": result[9]        
     }
 
+def getAllBooks():
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT * FROM Book"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    resultDict = []
+    for resultItem in result:
+        resultDict.append(
+            {
+               "bookID" : f"{resultItem[0]}",
+               "barCodeID" : resultItem[1],
+               "bookTitle" : resultItem[2],
+               "authorID": resultItem[3],
+               "dateAdded": resultItem[4],
+               "rfID": resultItem[5],
+               "borrowStatus": resultItem[6],
+               "availability": resultItem[7],
+               "publicationYear": resultItem[8],
+               "categoryID": resultItem[9],
+               "location": resultItem[10],
+               "callNumber": resultItem[11]  
+            }
+        )
+
+    return resultDict
+
+
 def deleteBookByBookID(bookID):
     db = get_db()
     cursor = db.cursor()
@@ -230,5 +345,14 @@ def deleteBookByBarCodeID(barCodeID):
     db.commit()
     return {"status": 201, "message": "Book successfully deleted"}
 
-
+# def authorize_librarian_login(librarianEmail, librarianPassword):
+#     db = get_db()
+#     cursor = db.cursor()
+#     query = "SELECT * FROM librarianInfo WHERE librarianEmail = ? AND librarianPassword =?"
+#     cursor.execute(query, [librarianEmail, librarianPassword])
+#     result = cursor.fetchone()
+#     if result:
+#         return 'Verified. Welcome'
+#     else:
+#         return 'Wrong E-mail or Password. Please try again'
     

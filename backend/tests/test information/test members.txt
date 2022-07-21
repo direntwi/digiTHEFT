@@ -1,0 +1,20 @@
+[
+    {
+        "memberID": "1",
+        "memberName": "Yoocee Direntwi Ansah",
+        "memberStatus": "Student",
+        "referenceID": "20601225"
+    },
+    {
+        "memberID": "2",
+        "memberName": "Valdo Ato Kekeli Abruquah",
+        "memberStatus": "Student",
+        "referenceID": "20590393"
+    },
+    {
+        "memberID": "3",
+        "memberName": "Ing. Benjamin Kommey",
+        "memberStatus": "Lecturer",
+        "referenceID": "101063030"
+    }
+]
