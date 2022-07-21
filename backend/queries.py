@@ -250,27 +250,27 @@ def deleteMemberbyReferenceID(referenceID):
 
 #For Book Table
 
-def newBook(barCodeID, bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber):
+def newBook(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Book(barCodeID, bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(statement, [barCodeID, bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber])
+    statement = "INSERT INTO Book(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(statement, [barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber])
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
-def updateBookByBookID(bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID):
+def updateBookByBookID(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorID=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE bookID=?"
-    cursor.execute(statement, [bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID])
+    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE bookID=?"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
-def updateBookByBarCodeID(bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID):
+def updateBookByBarCodeID(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorID=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE barCodeID=?"
-    cursor.execute(statement, [bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID])
+    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE barCodeID=?"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
@@ -278,12 +278,31 @@ def updateBookByBarCodeID(bookTitle, authorID, dateAdded, rfID, borrowStatus, av
 def getBookByBookID(bookID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookID=?"
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookID=?"
     cursor.execute(statement, [bookID])
     result = cursor.fetchone()
     return{
         "bookTitle": f"{result[0]}",
-        "authorID": result[1],
+        "authorName": result[1],
+        "dateAdded": result[2],
+        "rfID": result[3],
+        "borrowStatus": result[4],
+        "availability": result[5],
+        "publicationYear": result[6],
+        "categoryID": result[7],
+        "location": result[8],
+        "callNumber": result[9]        
+    }
+
+def searchBook(bookTitle=None):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookTitle LIKE %?%"
+    cursor.execute(statement, [bookTitle])
+    result = cursor.fetchone()
+    return{
+        "bookTitle": f"{result[0]}",
+        "authorName": result[1],
         "dateAdded": result[2],
         "rfID": result[3],
         "borrowStatus": result[4],
@@ -297,12 +316,12 @@ def getBookByBookID(bookID=None):
 def getBookByBarCodeID(barCodeID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorID, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE barCodeID=?"
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE barCodeID=?"
     cursor.execute(statement, [barCodeID])
     result = cursor.fetchone()
     return{
         "bookTitle": f"{result[0]}",
-        "authorID": result[1],
+        "authorName": result[1],
         "dateAdded": result[2],
         "rfID": result[3],
         "borrowStatus": result[4],
@@ -326,7 +345,7 @@ def getAllBooks():
                "bookID" : f"{resultItem[0]}",
                "barCodeID" : resultItem[1],
                "bookTitle" : resultItem[2],
-               "authorID": resultItem[3],
+               "authorName": resultItem[3],
                "dateAdded": resultItem[4],
                "rfID": resultItem[5],
                "borrowStatus": resultItem[6],

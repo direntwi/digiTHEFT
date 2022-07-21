@@ -28,7 +28,7 @@ def create_tables():
             bookID INTEGER PRIMARY KEY,
             barCodeID TEXT NOT NUll,
             bookTitle TEXT NOT NULL,
-            authorID INTEGER NOT NULL,
+            authorName INTEGER NOT NULL,
             dateAdded DATETIME,
             rfID TEXT NOT NULL,
             borrowStatus BOOLEAN NOT NULL,
@@ -37,7 +37,6 @@ def create_tables():
             categoryID INTEGER NOT NULL,
             location TEXT NOT NULL,
             callNumber TEXT NOT NULL,
-            FOREIGN KEY (authorID) REFERENCES Author (authorID),
             FOREIGN KEY (categoryID) REFERENCES Categories (categoryID)
          
         )
