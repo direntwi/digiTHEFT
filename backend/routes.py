@@ -87,6 +87,8 @@ def allCategories():
     result = queries.getAllCategories()
     return jsonify(result)
 
+
+
 @app.route("/delete-category/<categoryID>", methods=["DELETE"])
 def removeCategory(categoryID):
     result = queries.deleteCategory(categoryID)
@@ -229,6 +231,11 @@ def findBookByBarCodeID(barCodeID):
 def allBooks():
     result = queries.getAllBooks()
     return jsonify(result)
+
+@app.route("/search-book/<bookTitle>", methods = ["GET"])
+def findBook(bookTitle):
+    result = queries.searchBook(bookTitle)
+    return result
 
 @app.route("/delete-book-by-book-id/<bookID>", methods=["DELETE"])
 def removeBookByBookID(bookID):

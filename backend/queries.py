@@ -132,6 +132,8 @@ def getAllCategories():
     return resultDict
 
 
+
+
 def deleteCategory(categoryID):
     db = get_db()
     cursor = db.cursor()
@@ -297,8 +299,8 @@ def getBookByBookID(bookID=None):
 def searchBook(bookTitle=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookTitle LIKE %?%"
-    cursor.execute(statement, [bookTitle])
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookTitle LIKE ? "
+    cursor.execute(statement, ('%' + bookTitle + '%',))
     result = cursor.fetchone()
     return{
         "bookTitle": f"{result[0]}",
