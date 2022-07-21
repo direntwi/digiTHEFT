@@ -163,7 +163,7 @@ def addBook():
     details = request.get_json()
     barCodeID = details["barCodeID"]
     bookTitle= details["bookTitle"]
-    authorID = details["authorID"]
+    authorName = details["authorName"]
     dateAdded = details["dateAdded"]
     rfID = details ["rfID"]
     borrowStatus = details ["borrowStatus"]
@@ -172,7 +172,7 @@ def addBook():
     categoryID = details ["categoryID"]
     location = details ["location"]
     callNumber = details ["callNumber"]
-    result = queries.newBook(barCodeID, bookTitle, authorID, dateAdded, rfID, borrowStatus,
+    result = queries.newBook(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus,
                      availability, publicationYear, categoryID, location, callNumber)
     return jsonify(result)
 
@@ -180,7 +180,7 @@ def addBook():
 def reviseBookByBookID():
     details = request.get_json()
     bookTitle= details["bookTitle"]
-    authorID = details["authorID"]
+    authorName = details["authorName"]
     dateAdded = details["dateAdded"]
     rfID = details["rfID"]
     borrowStatus = details["borrowStatus"]
@@ -190,7 +190,7 @@ def reviseBookByBookID():
     location = details["location"]
     callNumber = details["callNumber"]
     bookID = details["bookID"]
-    result = queries.updateBookByBookID(bookTitle, authorID, dateAdded, rfID, borrowStatus,
+    result = queries.updateBookByBookID(bookTitle, authorName, dateAdded, rfID, borrowStatus,
                      availability, publicationYear, categoryID, location, callNumber, bookID)
     return jsonify(result)
 
@@ -198,7 +198,7 @@ def reviseBookByBookID():
 def reviseBookByBarCodeID():
     details = request.get_json()
     bookTitle= details["bookTitle"]
-    authorID = details["authorID"]
+    authorName = details["authorName"]
     dateAdded = details["dateAdded"]
     rfID = details["rfID"]
     borrowStatus = details["borrowStatus"]
@@ -208,7 +208,7 @@ def reviseBookByBarCodeID():
     location = details["location"]
     callNumber = details["callNumber"]
     barCodeID = details["barCodeID"]
-    result = queries.updateBookByBarCodeID(bookTitle, authorID, dateAdded, rfID, borrowStatus,
+    result = queries.updateBookByBarCodeID(bookTitle, authorName, dateAdded, rfID, borrowStatus,
                      availability, publicationYear, categoryID, location, callNumber, barCodeID)
     return jsonify(result)
 
