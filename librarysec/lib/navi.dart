@@ -34,14 +34,25 @@ Widget PageBox(
             child: Text("  ${title}", style: TextStyle(color: Colors.white)),
           ),
         ),
-        Container(
-            child: check
-                ? Column(
-                    children: [
-                      Text("I'm Here"),
-                    ],
-                  )
-                : Text("No ${title} available")),
+        Expanded(
+          child: Container(
+              height: height,
+              width: width,
+              child: check
+                  ? Scrollbar(
+                      controller: ScrollController(),
+                      child: ListView.builder(
+                          controller: ScrollController(),
+
+                          /// You can add a padding to the view to avoid having the scrollbar over the UI elements
+                          //padding: EdgeInsets.only(right: 16.0),
+                          itemCount: 100,
+                          itemBuilder: (context, index) {
+                            return ListTile(title: Text('$index'));
+                          }),
+                    )
+                  : Text("No ${title} available")),
+        ),
         Container(
             color: Color.fromARGB(255, 207, 124, 124),
             // alignment: AlignmentDirectional.bottomCenter,

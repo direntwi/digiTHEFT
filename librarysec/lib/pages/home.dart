@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
                     title: 'Transaction Log',
-                    check: !hasdata,
+                    check: hasdata,
                     lbottomicon: FluentIcons.cancel),
               ],
             )));
@@ -102,7 +102,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return ContentDialog(
             title: Text('Manual input'),
-            content: TextBox(placeholder: "Enter reference number",),
+            content: TextBox(
+              placeholder: "Enter reference number",
+            ),
             backgroundDismiss: true,
             actions: [
               Button(
