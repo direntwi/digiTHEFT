@@ -102,6 +102,18 @@ def getCategory(categoryID=None):
         "category" : result[1]
     }
 
+def getCategoryID(category=None):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT categoryID, category FROM Categories WHERE category=?"
+    cursor.execute(statement, [category])
+    result = cursor.fetchone()
+    return{
+        "categoryID" : f"{result[0]}",
+        "category" : result[1]
+    }
+
+
 def getAllCategories():
     db = get_db()
     cursor = db.cursor()

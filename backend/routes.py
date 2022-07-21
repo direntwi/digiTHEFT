@@ -77,6 +77,11 @@ def findCategory(categoryID):
     result = queries.getCategory(categoryID)
     return jsonify(result)
 
+@app.route("/categoryid/<category>", methods=["GET"])
+def findCategoryID(category):
+    result = queries.getCategoryID(category)
+    return jsonify(result)
+
 @app.route("/categories", methods = ["GET"])
 def allCategories():
     result = queries.getAllCategories()
