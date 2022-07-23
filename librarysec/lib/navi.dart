@@ -10,9 +10,13 @@ class Navigat {
 }
 
 Widget PageBox(
+    // to be worked on -- separated into different boxes
     {String? title,
     IconData? lbottomicon,
     IconData? rbottomicon,
+      String? name,
+      String? id,
+      String? status,
     required double height,
     required double width,
     required bool check,
@@ -35,10 +39,13 @@ Widget PageBox(
           ),
         ),
         Container(
+          // to be worked on
             child: check
                 ? Column(
                     children: [
-                      Text("I'm Here"),
+                      Text(name!),
+                      Text(id!),
+                      Text(status!),
                     ],
                   )
                 : Text("No ${title} available")),

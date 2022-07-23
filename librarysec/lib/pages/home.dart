@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:librarysec/navi.dart';
+import 'package:http/http.dart' as http;
+import 'package:librarysec/backend_link.dart' as link;
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -13,14 +16,20 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   _HomePageState({required String txt});
   final autoSuggestBox = TextEditingController();
+  var _refNumberController = TextEditingController();
 
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+  String name = '';
+  String id = '';
+  String status = '';
+
+
+  // var items = [
+  //   'Item 1',
+  //   'Item 2',
+  //   'Item 3',
+  //   'Item 4',
+  //   'Item 5',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +79,10 @@ class _HomePageState extends State<HomePage> {
                           height: 150,
                           width: 1400,
                           title: 'Patrons',
-                          check: hasdata,
+                          check: !hasdata,
+                          name: name,
+                          id: id,
+                          status: status,
                           lbottomicon: FluentIcons.generic_scan,
                           rbottomicon: FluentIcons.pencil_reply,
                           rfx: studenttypeId),
@@ -79,6 +91,9 @@ class _HomePageState extends State<HomePage> {
                         width: 1400,
                         title: 'Books',
                         check: !hasdata,
+                        name: name,
+                        id: id,
+                        status: status,
                         lbottomicon: FluentIcons.generic_scan,
                         rbottomicon: FluentIcons.pencil_reply,
                         rfx: itemtypeId,
@@ -89,6 +104,9 @@ class _HomePageState extends State<HomePage> {
                 PageBox(
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
+                    name: name,
+                    id: id,
+                    status: status,
                     title: 'Transaction Log',
                     check: !hasdata,
                     lbottomicon: FluentIcons.cancel),
@@ -102,7 +120,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return ContentDialog(
             title: Text('Manual input'),
-            content: TextBox(placeholder: "Enter reference number",),
+            content: TextBox(
+              controller: _refNumberController,
+              placeholder: "Enter reference number",),
             backgroundDismiss: true,
             actions: [
               Button(
@@ -112,8 +132,24 @@ class _HomePageState extends State<HomePage> {
                   }),
               Button(
                   child: Text('Search'),
-                  onPressed: () {
-                    Navigator.of(context, rootNavigator: true).pop(true);
+
+                  // FUNCTION - to handle the input of patron reference number
+                  onPressed: () async {
+
+                    final response = await http.get(Uri.parse("${link.server}/get-refid/${_refNumberController.text}"));
+
+                    final decoded = json.decode(response.body) as Map<String, dynamic>;
+
+                    setState(() {
+                      name = decoded['memberName'];
+                      id = decoded["referenceID"];
+                      status = decoded["memberStatus"];
+                    });
+
+                    // to be worked on
+                    Navigator.of(context).pop();
+
+
                   })
             ],
           );
