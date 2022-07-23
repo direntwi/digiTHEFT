@@ -14,9 +14,7 @@ Widget PageBox(
     {String? title,
     IconData? lbottomicon,
     IconData? rbottomicon,
-      String? name,
-      String? id,
-      String? status,
+    required Widget boxType,
     required double height,
     required double width,
     required bool check,
@@ -39,15 +37,9 @@ Widget PageBox(
           ),
         ),
         Container(
-          // to be worked on
+            // to be worked on
             child: check
-                ? Column(
-                    children: [
-                      Text(name!),
-                      Text(id!),
-                      Text(status!),
-                    ],
-                  )
+                ? boxType
                 : Text("No ${title} available")),
         Container(
             color: Color.fromARGB(255, 207, 124, 124),

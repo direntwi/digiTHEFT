@@ -42,31 +42,15 @@ class _TempAllMembersPageState extends State<TempAllMembersPage> {
                     child: Stack(
                       children: <Widget>[
                         new Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             new Container(
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
                               child: Text(
-                                '${snapshot.data!.toList()[position].memberName}',
-                                style: new TextStyle(
-                                    fontSize: 20),
-                                textAlign: TextAlign.center,
+                                '${snapshot.data!.toList()[position].authorName}',
                               ),
                             ),
                             new Container(
-                              padding: EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
                               child: new Text(
-                                '${snapshot.data!.toList()[position].referenceId}',
-                                style: new TextStyle(
-                                    fontSize: 20),
+                                '${snapshot.data!.toList()[position].bookTitle}',
                               ),
                             ),
                           ],
@@ -92,7 +76,7 @@ class _TempAllMembersPageState extends State<TempAllMembersPage> {
 Future<List<dynamic>> fetchAlbums() async {
 
   final response =
-  await http.get(Uri.parse("${link.server}/members"));
+  await http.get(Uri.parse("${link.server}/books"));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -106,32 +90,62 @@ Future<List<dynamic>> fetchAlbums() async {
   }
 }
 
-
-
 class Album {
   Album({
-    required this.memberId,
-    required this.memberName,
-    required this.memberStatus,
-    required this.referenceId,
+    required this.authorName,
+    required this.availability,
+    required this.barCodeId,
+    required this.bookId,
+    required this.bookTitle,
+    required this.borrowStatus,
+    required this.callNumber,
+    required this.categoryId,
+    required this.dateAdded,
+    required this.location,
+    required this.publicationYear,
+    required this.rfId,
   });
 
-  final String memberId;
-  final String memberName;
-  final String memberStatus;
-  final String referenceId;
+  final String authorName;
+  final int availability;
+  final String barCodeId;
+  final String bookId;
+  final String bookTitle;
+  final int borrowStatus;
+  final String callNumber;
+  final int categoryId;
+  final DateTime dateAdded;
+  final String location;
+  final String publicationYear;
+  final String rfId;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
-    memberId: json["memberID"],
-    memberName: json["memberName"],
-    memberStatus: json["memberStatus"],
-    referenceId: json["referenceID"],
+    authorName: json["authorName"],
+    availability: json["availability"],
+    barCodeId: json["barCodeID"],
+    bookId: json["bookID"],
+    bookTitle: json["bookTitle"],
+    borrowStatus: json["borrowStatus"],
+    callNumber: json["callNumber"],
+    categoryId: json["categoryID"],
+    dateAdded: DateTime.parse(json["dateAdded"]),
+    location: json["location"],
+    publicationYear: json["publicationYear"],
+    rfId: json["rfID"],
   );
 
   Map<String, dynamic> toJson() => {
-    "memberID": memberId,
-    "memberName": memberName,
-    "memberStatus": memberStatus,
-    "referenceID": referenceId,
+    "authorName": authorName,
+    "availability": availability,
+    "barCodeID": barCodeId,
+    "bookID": bookId,
+    "bookTitle": bookTitle,
+    "borrowStatus": borrowStatus,
+    "callNumber": callNumber,
+    "categoryID": categoryId,
+    "dateAdded": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
+    "location": location,
+    "publicationYear": publicationYear,
+    "rfID": rfId,
   };
 }
