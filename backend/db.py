@@ -15,22 +15,24 @@ def create_tables():
         )
         """, 
         """
-        CREATE TABLE IF NOT EXISTS Member(
-            memberID INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS Patron(
+            patronID INTEGER PRIMARY KEY,
             referenceID TEXT UNIQUE NOT NULL,
-            memberName TEXT NOT NULL,
-            memberStatus TEXT NOT NULL            
-
+            patronName TEXT NOT NULL,
+            patronStatus TEXT NOT NULL,
+            programme TEXT,
+            nationality TEXT NOT NULL
+                     
         )
         """,
         """
         CREATE TABLE IF NOT EXISTS Book(
             bookID INTEGER PRIMARY KEY,
-            barCodeID TEXT NOT NUll,
+            barCodeID TEXT UNIQUE NOT NULL,
             bookTitle TEXT NOT NULL,
-            authorName INTEGER NOT NULL,
+            authorName TEXT NOT NULL,
             dateAdded DATETIME,
-            rfID TEXT NOT NULL,
+            rfID TEXT UNIQUE NOT NULL,
             borrowStatus BOOLEAN NOT NULL,
             availability BOOLEAN NOT NULL,
             publicationYear TEXT NOT NULL,
@@ -38,9 +40,26 @@ def create_tables():
             location TEXT NOT NULL,
             callNumber TEXT NOT NULL,
             FOREIGN KEY (categoryID) REFERENCES Categories (categoryID)
-         
+
         )
+        
+        """,
         """
+        CREATE TABLE IF NOT EXISTS Transactions(
+            transactionID INTEGER PRIMARY KEY,
+            referenceID TEXT NOT NULL,
+            bookID INTEGER NOT NULL,
+            transactionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            returnDate TIMESTAMP DEFAULT 0,
+            dueDate DATE,
+            isReturned BOOLEAN DEFAULT 0,
+            FOREIGN KEY (referenceID) REFERENCES Patron (referenceID),
+            FOREIGN KEY (bookID) REFERENCES Book (bookID)
+
+        ) 
+        """
+        
+    
 
     ]
 
@@ -61,20 +80,9 @@ def create_tables():
 #         )
 #         """,
 #         """
-#         CREATE TABLE IF NOT EXISTS Loan(
-#             memberID
-#             loanID
-#             bookID
-#             loanDate
-#             returnDate
-#             dueDate
-
-#         ) 
-#         """,
-#         """
 #         CREATE TABLE IF NOT EXISTS Fine(
-#             memberID
-#             loanID
+#             patronID
+#             transactionID
 #             fineID
 #             fineAmount
 #             fineDate
@@ -84,7 +92,7 @@ def create_tables():
 #         """
 #         CREATE TABLE IF NOT EXISTS Payment(
 #             fineID
-#             memberID
+#             patronID
 #             paymentDate
 #             paymentID
 #         )

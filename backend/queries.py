@@ -32,7 +32,7 @@ from db import get_db
 #     db = get_db()
 #     cursor = db.cursor()
 #     statement = "SELECT authorID,authorName FROM Author WHERE authorName = ?"
-#     cursor.execute(statement, [authorName])
+#     cursor.execute(statement, ('%' + authorName + '%',))
 #     result = cursor.fetchall()
 #     resultDict = []
 #     for resultItem in result:
@@ -140,114 +140,122 @@ def deleteCategory(categoryID):
     statement =  "DELETE FROM Categories WHERE categoryID=?"
     cursor.execute(statement, [categoryID])
     db.commit()
-    return {"status": 201, "message": "Member successfully deleted"}
+    return {"status": 201, "message": "Category successfully deleted"}
 
 
 
-#For Member Table
-def newMember(referenceID, memberName, memberStatus):
+#For Patron Table
+def newPatron(referenceID, patronName, patronStatus, programme, nationality):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Member(referenceID, memberName, memberStatus) VALUES (?,?,?)"
-    cursor.execute(statement, [referenceID, memberName, memberStatus])
+    statement = "INSERT INTO Patron(referenceID, patronName, patronStatus, programme, nationality) VALUES (?,?,?,?,?)"
+    cursor.execute(statement, [referenceID, patronName, patronStatus, programme, nationality])
     db.commit()
-    return {"status": 201, "message": "new Member added"}
+    return {"status": 201, "message": "new patron added"}
 
 
-def updateMemberbyMemberID(referenceID, memberName, memberStatus, memberID):
+def updatePatronbyPatronID(referenceID, patronName, patronStatus, programme, nationality, patronID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Member SET referenceID=?,memberName=?, memberStatus=? WHERE memberID = ?"
-    cursor.execute(statement, [referenceID, memberName, memberStatus, memberID])
+    statement = "UPDATE Patron SET referenceID=?,patronName=?, patronStatus=?, programme=?, nationality=? WHERE patronID = ?"
+    cursor.execute(statement, [referenceID, patronName, patronStatus, programme, nationality, patronID])
     db.commit()
-    return {"status": 202, "message": "Member info updated"}
+    return {"status": 202, "message": "patron info updated"}
 
-def updateMemberbyReferenceID(memberName, memberStatus, referenceID):
+def updatePatronbyReferenceID(patronName, patronStatus, programme, nationality, referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Member SET memberName=?, memberStatus=? WHERE referenceID = ?"
-    cursor.execute(statement, [memberName, memberStatus, referenceID])
+    statement = "UPDATE Patron SET patronName=?, patronStatus=?, programme=?, nationality=? WHERE referenceID = ?"
+    cursor.execute(statement, [patronName, patronStatus, programme, nationality, referenceID])
     db.commit()
-    return {"status": 202, "message": "Member info updated"}
+    return {"status": 202, "message": "patron info updated"}
 
-def getMemberByMemberID(memberID=None):
+def getPatronByPatronID(patronID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT referenceID, memberName, memberStatus FROM Member WHERE memberID =?"
-    cursor.execute(statement, [memberID])
+    statement = "SELECT referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE patronID =?"
+    cursor.execute(statement, [patronID])
     result = cursor.fetchone()
     return{
         "referenceID" : f"{result[0]}",
-        "memberName": result[1],
-        "memberStatus": result[2]
+        "patronName": result[1],
+        "patronStatus": result[2],
+        "programme": result[3],
+        "nationality": result[4]
     }
 
-def getMemberByReferenceID(referenceID=None):
+def getPatronByReferenceID(referenceID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT memberID, referenceID, memberName, memberStatus FROM Member WHERE referenceID =?"
+    statement = "SELECT patronID, referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE referenceID =?"
     cursor.execute(statement, [referenceID])
     result = cursor.fetchone()
     return{
-        "memberID" : f"{result[0]}",
+        "patronID" : f"{result[0]}",
         "referenceID": result[1],
-        "memberName": result[2],
-        "memberStatus": result[3]
+        "patronName": result[2],
+        "patronStatus": result[3],
+        "programme": result[4],
+        "nationality": result[5]
     }
 
-def searchMember(memberName=None): ##to be continued
+def searchPatron(patronName=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT * FROM Member WHERE memberName = %s"
-    cursor.execute(statement, [memberName])
+    statement = "SELECT * FROM Patron WHERE patronName LIKE ?"
+    cursor.execute(statement, ('%' + patronName + '%',))
     result = cursor.fetchall()
     resultDict = []
     for resultItem in result:
         resultDict.append(
             {
-               "memberID" : f"{resultItem[0]}",
+               "patronID" : f"{resultItem[0]}",
                "referenceID": resultItem[1],
-               "memberName": resultItem[2],
-               "memberStatus": resultItem[3]
+               "patronName": resultItem[2],
+               "patronStatus": resultItem[3],
+               "programme": resultItem[4],
+               "nationality": resultItem[5]
             }
         )
     return resultDict
 
-def getAllMembers():
+def getAllPatrons():
     db = get_db()
     cursor = db.cursor()
-    query = "SELECT * FROM Member"
+    query = "SELECT * FROM Patron"
     cursor.execute(query)
     result = cursor.fetchall()
     resultDict = []
     for resultItem in result:
         resultDict.append(
             {
-               "memberID" : f"{resultItem[0]}",
+               "patronID" : f"{resultItem[0]}",
                "referenceID": resultItem[1],
-               "memberName": resultItem[2],
-               "memberStatus": resultItem[3]
+               "patronName": resultItem[2],
+               "patronStatus": resultItem[3],
+               "programme": resultItem[4],
+               "nationality": resultItem[5]
             }
         )
 
     return resultDict
 
 
-def deleteMemberbyMemberID(memberID):
+def deletePatronBypPatronID(patronID):
     db = get_db()
     cursor = db.cursor()
-    statement =  "DELETE FROM Member WHERE memberID=?"
-    cursor.execute(statement, [memberID])
+    statement =  "DELETE FROM Patron WHERE patronID=?"
+    cursor.execute(statement, [patronID])
     db.commit()
-    return {"status": 201, "message": "Member successfully deleted"}
+    return {"status": 201, "message": "patron successfully deleted"}
 
-def deleteMemberbyReferenceID(referenceID):
+def deletePatronByReferenceID(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement =  "DELETE FROM Member WHERE referenceID=?"
+    statement =  "DELETE FROM Patron WHERE referenceID=?"
     cursor.execute(statement, [referenceID])
     db.commit()
-    return {"status": 201, "message": "Member successfully deleted"}
+    return {"status": 201, "message": "patron successfully deleted"}
 
 
 #For Book Table
@@ -377,6 +385,112 @@ def deleteBookByBarCodeID(barCodeID):
     cursor.execute(statement, [barCodeID])
     db.commit()
     return {"status": 201, "message": "Book successfully deleted"}
+
+
+# For Transactions Table
+#This is to verify if a patron has any borrowed books in their possession
+#It is currently incomplete .Trying to find a way to set a limit to the number of books that can be borrowed
+def checkPatronAccount(referenceID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT * FROM Transactions WHERE referenceID=? AND isReturned = 0"
+    cursor.execute(statement, [referenceID])
+    result = cursor.fetchall()
+    resultDict=[]
+    if result:
+        for resultItem in result:
+            resultDict.append(
+            {
+               "transactionID" : f"{resultItem[0]}",
+               "referenceID" : resultItem[1],
+               "bookID" : resultItem[2],
+               "transactionDate": resultItem[3],
+               "returnDate": resultItem[4],
+               "dueDate": resultItem[5],
+               "isReturned": resultItem[6] 
+            }
+        )
+        return resultDict
+    else:
+        return "No Books are in Patron's Possession"
+##if result[4]:
+# return "You have reached the maximum borrowing limit"   
+
+def checkAvailability(bookID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT bookTitle FROM Book WHERE bookID = ? and availability = 1"
+    cursor.execute(statement, [bookID])
+    result = cursor.fetchone()
+    if result:
+        return "Book can be borrowed"
+    else:
+        return "Book cannot be borrowed" 
+
+def checkIfBorrowed(bookID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT bookTitle FROM Book WHERE bookID = ? and borrowStatus = 0"
+    cursor.execute(statement, [bookID])
+    result = cursor.fetchone()
+    if result:
+        return "Book is available for borrowing"
+    else:
+        return "Book is currently unavailable. A patron has borrowed it" 
+
+    
+
+def updateBorrowStatusTo1(bookID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "UPDATE Book SET borrowStatus=1 WHERE bookID=?"
+    cursor.execute(statement, [bookID])
+    db.commit()
+    return {"status": 201, "message": "book has been borrowed"}
+
+
+
+def borrowBook(referenceID, bookID):
+    db = get_db()
+    cursor = db.cursor()
+    statement1 = "INSERT INTO Transactions(referenceID, bookID) VALUES (?,?)"
+    cursor.execute(statement1, [referenceID, bookID])
+    db.commit()
+
+    return {"status": 201, "message": "book successfully borrowed"}
+
+def getTransactionInfo(transactionID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT * FROM Transactions WHERE transactionID = ?"
+    cursor.execute(statement, [transactionID])
+    result = cursor.fetchone()
+    return{
+        "transactionID" : f"{result[0]}",
+        "referenceID": result[1],
+        "bookID": result[2],
+        "transactionDate": result[3],
+        "returnDate": result[4],
+        "dueDate": result[5],
+        "isReturned": result[6]
+    }
+    
+
+def updateBorrowStatusTo0(bookID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "UPDATE Book SET borrowStatus=0 WHERE bookID=?"
+    cursor.execute(statement, [bookID])
+    db.commit()
+    return {"status": 201, "message": "book is in the library"}
+
+def returnBook(transactionID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "UPDATE Transactions SET returnDate=CURRENT_TIMESTAMP, isReturned=1 WHERE transactionID = ?"
+    cursor.execute(statement, [transactionID])
+    db.commit()
+    return {"status": 201, "message": "book successfully returned"}
 
 # def authorize_librarian_login(librarianEmail, librarianPassword):
 #     db = get_db()

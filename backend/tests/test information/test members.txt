@@ -1,20 +1,26 @@
 [
     {
-        "memberID": "1",
-        "memberName": "Yoocee Direntwi Ansah",
-        "memberStatus": "Student",
-        "referenceID": "20601225"
+        "patronID": "1",
+        "patronName": "Yoocee Direntwi Ansah",
+        "patronStatus": "Student",
+        "referenceID": "20601225",
+        "programme" : "computer engineering",
+        "nationality" : "ghanaian"
     },
     {
-        "memberID": "2",
-        "memberName": "Valdo Ato Kekeli Abruquah",
-        "memberStatus": "Student",
-        "referenceID": "20590393"
+        "patronID": "2",
+        "patronName": "Valdo Ato Kekeli Abruquah",
+        "patronStatus": "Student",
+        "referenceID": "20590393",
+        "programme" : "computer engineering",
+        "nationality" : "ghanaian"
     },
     {
-        "memberID": "3",
-        "memberName": "Ing. Benjamin Kommey",
-        "memberStatus": "Lecturer",
-        "referenceID": "101063030"
+        "patronID": "3",
+        "patronName": "Ing. Benjamin Kommey",
+        "patronStatus": "Lecturer",
+        "referenceID": "101063030",
+        "programme" : "computer engineering"
+        "nationality" : "non-ghanaian"
     }
 ]

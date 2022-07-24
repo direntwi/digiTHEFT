@@ -99,64 +99,70 @@ def removeCategory(categoryID):
 
 
 
-#For Member Table
-@app.route("/new-member", methods=["POST"])
-def addMember():
+#For patron Table
+@app.route("/new-patron", methods=["POST"])
+def addPatron():
     details = request.get_json()
     referenceID = details["referenceID"]
-    memberName = details["memberName"]
-    memberStatus = details["memberStatus"]
-    result = queries.newMember(referenceID, memberName, memberStatus)
+    patronName = details["patronName"]
+    patronStatus = details["patronStatus"]
+    programme = details["programme"]
+    nationality = details["nationality"]
+    result = queries.newPatron(referenceID, patronName, patronStatus, programme, nationality)
     return jsonify(result)
 
 
-@app.route("/update-member/memberid", methods=["PUT"])
-def reviseMemberByMemberID():
+@app.route("/update-patron/patronid", methods=["PUT"])
+def revisePatronByPatronID():
     details = request.get_json()
     referenceID = details["referenceID"]
-    memberName = details["memberName"]
-    memberStatus = details["memberStatus"]
-    memberID = details["memberID"]
-    result = queries.updateMemberbyMemberID(referenceID, memberName, memberStatus, memberID)
+    patronName = details["patronName"]
+    patronStatus = details["patronStatus"]
+    patronID = details["patronID"]
+    programme = details["programme"]
+    nationality = details["nationality"]
+    result = queries.updatePatronbyPatronID(referenceID, patronName, patronStatus, patronID, programme, nationality)
     return jsonify(result)
 
-@app.route("/update-member/refid", methods=["PUT"])
-def reviseMemberByRefID():
+@app.route("/update-patron/refid", methods=["PUT"])
+def revisePatronByReferenceID():
     details = request.get_json()
-    memberName = details["memberName"]
-    memberStatus = details["memberStatus"]
+    patronName = details["patronName"]
+    patronStatus = details["patronStatus"]
     referenceID = details["referenceID"]
-    result = queries.updateMemberbyReferenceID(memberName, memberStatus, referenceID)
+    programme = details["programme"]
+    nationality = details["nationality"]
+    result = queries.updatePatronbyReferenceID(patronName, patronStatus, referenceID, programme, nationality)
     return jsonify(result)
 
-@app.route("/get-memberid/<memberID>", methods=["GET"])
-def findMemberByMemberID(memberID):
-    result = queries.getMemberByMemberID(memberID)
+@app.route("/get-patronid/<patronID>", methods=["GET"])
+def findPatronByPatronID(patronID):
+    result = queries.getPatronByPatronID(patronID)
     return jsonify(result)
 
 @app.route("/get-refid/<referenceID>", methods=["GET"])
-def findMemberbyRefID(referenceID):
-    result = queries.getMemberByReferenceID(referenceID)
+def findPatronByReferenceID(referenceID):
+    result = queries.getPatronByReferenceID(referenceID)
     return jsonify(result)
 
-@app.route("/search-member/<memberName>", methods=["GET"])
-def traverseMember(memberName):
-    result = queries.searchMember(memberName)
+@app.route("/search-patron/<patronName>", methods=["GET"])
+def traversePatron(patronName):
+    result = queries.searchPatron(patronName)
     return jsonify(result)
 
-@app.route("/members", methods = ["GET"])
-def allMembers():
-    result = queries.getAllMembers()
+@app.route("/patrons", methods = ["GET"])
+def allPatrons():
+    result = queries.getAllPatrons()
     return jsonify(result)
 
-@app.route("/delete-memberid/<memberID>", methods=["DELETE"])
-def removeMemberByMemberID(memberID):
-    result = queries.deleteMember(memberID)
+@app.route("/delete-patronid/<patronID>", methods=["DELETE"])
+def removePatronByPatronID(patronID):
+    result = queries.deletePatronBypPatronID(patronID)
     return jsonify(result)
 
 @app.route("/delete-refid/<referenceID>", methods=["DELETE"])
-def removeMemberByRefID(referenceID):
-    result = queries.deleteMemberbyReferenceID(referenceID)
+def removepatronByRefID(referenceID):
+    result = queries.deletePatronByReferenceID(referenceID)
     return jsonify(result)
 
 #For Book table
@@ -246,6 +252,47 @@ def removeBookByBookID(bookID):
 def removeBookByBarCodeID(barCodeID):
     result = queries.deleteBookByBarCodeID(barCodeID)
     return result
+
+#FOR THE TRANSACTIONS TABLE
+
+@app.route("/borrowstatus/<bookID>", methods=["GET"])
+def status(bookID):
+    result = queries.checkIfBorrowed(bookID)
+    return jsonify(result)
+
+@app.route("/availability/<bookID>", methods=["GET"])
+def isAvailable(bookID):
+    result = queries.checkAvailability(bookID)
+    return jsonify(result)
+
+
+
+@app.route("/borrow-book", methods = ["POST", "PUT"])
+def borrow1():
+    details = request.json
+    referenceID = details["referenceID"]
+    bookID = details["bookID"]
+    if request.method == "POST":
+        result = queries.borrowBook(referenceID, bookID)
+        return jsonify(result)
+    elif request.method == "PUT":
+        result1 = queries.updateBorrowStatusTo1(bookID)
+        return jsonify(result1)
+    
+@app.route("/return-book", methods = ["PUT"])
+def returned():
+    details = request.json
+    transactionID = details["transactionID"]
+    bookID = details["bookID"]
+    result = queries.returnBook(transactionID)
+    result1 = queries.updateBorrowStatusTo0(bookID)
+    return jsonify(result, result1)
+
+@app.route("/transaction/<transactionID>", methods = ["GET"])
+def oneTransaction(transactionID):
+    result = queries.getTransactionInfo(transactionID)
+    return jsonify(result)
+
 
 
 if __name__ == "__main__":
