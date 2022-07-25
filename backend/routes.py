@@ -1,3 +1,4 @@
+from unittest import result
 from flask import Flask, jsonify, request
 import queries
 from db import create_tables
@@ -241,19 +242,29 @@ def allBooks():
 @app.route("/search-book/<bookTitle>", methods = ["GET"])
 def findBook(bookTitle):
     result = queries.searchBook(bookTitle)
-    return result
+    return jsonify(result)
 
 @app.route("/delete-book-by-book-id/<bookID>", methods=["DELETE"])
 def removeBookByBookID(bookID):
     result = queries.deleteBookByBookID(bookID)
-    return result
+    return jsonify(result)
 
 @app.route("/delete-book-by-barcode-id/<barCodeID>", methods=["DELETE"])
 def removeBookByBarCodeID(barCodeID):
     result = queries.deleteBookByBarCodeID(barCodeID)
-    return result
+    return jsonify(result)
 
 #FOR THE TRANSACTIONS TABLE
+@app.route("/patron-account/<referenceID>", methods=['GET'])
+def displayAccount(referenceID):
+    result = queries.checkPatronAccount(referenceID)
+    result1 = queries.checkPatronLimit(referenceID)
+    return jsonify(result, result1)
+
+@app.route("/limit/<referenceID>", methods=['GET'])
+def displayLimit(referenceID):
+    result = queries.checkPatronLimit(referenceID)
+    return jsonify(result)
 
 @app.route("/borrowstatus/<bookID>", methods=["GET"])
 def status(bookID):

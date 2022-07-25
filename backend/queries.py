@@ -1,3 +1,4 @@
+from operator import index
 from db import get_db
 
 #For Author Table
@@ -393,7 +394,7 @@ def deleteBookByBarCodeID(barCodeID):
 def checkPatronAccount(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT * FROM Transactions WHERE referenceID=? AND isReturned = 0"
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.bookID =t.bookID AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     resultDict=[]
@@ -403,11 +404,9 @@ def checkPatronAccount(referenceID):
             {
                "transactionID" : f"{resultItem[0]}",
                "referenceID" : resultItem[1],
-               "bookID" : resultItem[2],
-               "transactionDate": resultItem[3],
-               "returnDate": resultItem[4],
-               "dueDate": resultItem[5],
-               "isReturned": resultItem[6] 
+               "patronName" : resultItem[2],
+               "bookTitle": resultItem[3],
+               "dueDate": resultItem[4]
             }
         )
         return resultDict
@@ -415,6 +414,19 @@ def checkPatronAccount(referenceID):
         return "No Books are in Patron's Possession"
 ##if result[4]:
 # return "You have reached the maximum borrowing limit"   
+
+def checkPatronLimit(referenceID):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.bookID =t.bookID AND t.isReturned = 0 AND t.referenceID=? "
+    cursor.execute(statement, [referenceID])
+    result = cursor.fetchall()
+    r = len(result)
+    if r < 5:
+        return "Patron can still borrow " +str(5-r)+ " more book(s)"
+    else:
+        return "Patron has reached the maximum borrowing limit"
+
 
 def checkAvailability(bookID):
     db = get_db()
@@ -502,4 +514,16 @@ def returnBook(transactionID):
 #         return 'Verified. Welcome'
 #     else:
 #         return 'Wrong E-mail or Password. Please try again'
+    
+# def checkPatronAccount(referenceID):
+#     db = get_db()
+#     cursor = db.cursor()
+#     query = "SELECT bookTitle, referenceID FROM Book b, Transactions t WHERE b.bookID =t.bookID AND referenceID=?"
+#     cursor.execute(query, [referenceID])
+#     result = cursor.fetchone()
+#     return{
+#                 "bookTitle": f"{result[0]}",
+#                 "referenceID" : result[1]
+#             }
+        
     
