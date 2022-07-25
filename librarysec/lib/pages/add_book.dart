@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:librarysec/main.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:librarysec/classes.dart';
+import 'package:librarysec/DBConnector.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -16,6 +20,9 @@ class _AddBookState extends State<AddBook> {
   String? bookid;
   String? bookauthor;
   String? category;
+  String? date;
+  static const int timeout = 30;
+  late Book book;
   DateTime dateToday =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -36,23 +43,43 @@ class _AddBookState extends State<AddBook> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Texty('BOOK NAME'),
+                  Texty(
+                      text: 'BOOK NAME',
+                      onChanged: (value) {
+                        bookname = value;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
-                  Texty('BOOK ID'),
+                  Texty(
+                      text: 'BOOK ID',
+                      onChanged: (value) {
+                        bookid = value;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
-                  Texty('DATE OF ENTRY'),
+                  Texty(
+                      text: 'DATE OF ENTRY',
+                      onChanged: (value) {
+                        date = value;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
-                  Texty('NAME OF AUTHOR'),
+                  Texty(
+                      text: 'NAME OF AUTHOR',
+                      onChanged: (value) {
+                        bookauthor = value;
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
-                  Texty('BOOK CATEGORY'),
+                  Texty(
+                      text: 'BOOK CATEGORY',
+                      onChanged: (value) {
+                        category = value;
+                      }),
                   SizedBox(
                     height: 50,
                   ),
@@ -63,7 +90,29 @@ class _AddBookState extends State<AddBook> {
                             'ENTER',
                             style: TextStyle(color: Colors.blue),
                           ),
-                          onPressed: () {}),
+                          onPressed: () async {
+                            book = Book(
+                              authorName: bookauthor!,
+                              availability: 3,
+                              barCodeId: bookid!,
+                              bookId: bookid!,
+                              bookTitle: bookname!,
+                              borrowStatus: 3,
+                              callNumber: 'NULL',
+                              categoryId: 1234,
+                              dateAdded: dateToday,
+                              location: 'KUMASI',
+                              publicationYear: '2000',
+                              rfId: 'NULL',
+                            );
+                            try {
+                              if (await add_book(book)
+                                  .timeout(Duration(seconds: timeout)))
+                                print('ADDED');
+                            } on TimeoutException catch (e) {
+                              print('[INFO] $e');
+                            }
+                          }),
                       // SizedBox(
                       //   width: 50,
                       // ),
@@ -90,28 +139,34 @@ class _AddBookState extends State<AddBook> {
           )),
     );
   }
-}
 
-Widget Texty(String text) {
-  return Container(
-    child: Row(
-      children: [
-        Container(
-            width: 200,
-            child: Text(
-              text,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            )),
-        SizedBox(
-          width: 70,
-        ),
-        Container(
-            width: 400,
-            height: 35,
-            child: TextBox(
-              controller: null,
-            ))
-      ],
-    ),
-  );
+  Widget Texty({required String text, Function(String value)? onChanged}) {
+    return Container(
+      child: Row(
+        children: [
+          Container(
+              width: 200,
+              child: Text(
+                text,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              )),
+          SizedBox(
+            width: 70,
+          ),
+          Container(
+              width: 400,
+              height: 35,
+              child: TextBox(
+                onChanged: onChanged,
+              ))
+        ],
+      ),
+    );
+  }
+
+  Future<bool> add_book(book) async {
+    var db = Backend_link();
+    bool status = await db.add_book(book).timeout(Duration(seconds: timeout));
+    return status;
+  }
 }
