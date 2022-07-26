@@ -7,6 +7,7 @@ import 'package:librarysec/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
+import 'package:intl/intl.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -20,11 +21,11 @@ class _AddBookState extends State<AddBook> {
   String? bookid;
   String? bookauthor;
   String? category;
-  String? date;
+  DateTime? date;
+  late Future<DateTime?> calender;
   static const int timeout = 30;
   late Book book;
-  DateTime dateToday =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  String dateToday = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +63,19 @@ class _AddBookState extends State<AddBook> {
                   Texty(
                       text: 'DATE OF ENTRY',
                       onChanged: (value) {
-                        date = value;
-                      }),
+                        date = DateTime.parse(value);
+                      },
+                      suffix: IconButton(
+                        icon: Icon(FluentIcons.edit),
+                        onPressed: () {
+                          calender = material.showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.utc(2000),
+                              lastDate: DateTime.now());
+                        },
+                      ),
+                      def: dateToday.toString()),
                   const SizedBox(
                     height: 20,
                   ),
@@ -92,6 +104,7 @@ class _AddBookState extends State<AddBook> {
                           ),
                           onPressed: () async {
                             book = Book(
+                              //IGNORE FIXED VALUES
                               authorName: bookauthor!,
                               availability: 3,
                               barCodeId: bookid!,
@@ -100,7 +113,7 @@ class _AddBookState extends State<AddBook> {
                               borrowStatus: 3,
                               callNumber: 'NULL',
                               categoryId: 1234,
-                              dateAdded: dateToday,
+                              dateAdded: DateTime.parse(dateToday),
                               location: 'KUMASI',
                               publicationYear: '2000',
                               rfId: 'NULL',
@@ -140,7 +153,12 @@ class _AddBookState extends State<AddBook> {
     );
   }
 
-  Widget Texty({required String text, Function(String value)? onChanged}) {
+  Widget Texty(
+      {required String text,
+      Function(String value)? onChanged,
+      Widget? suffix,
+      String? def,
+      TextEditingController? controller}) {
     return Container(
       child: Row(
         children: [
@@ -157,7 +175,10 @@ class _AddBookState extends State<AddBook> {
               width: 400,
               height: 35,
               child: TextBox(
+                controller: controller,
                 onChanged: onChanged,
+                suffix: suffix,
+                placeholder: def,
               ))
         ],
       ),
