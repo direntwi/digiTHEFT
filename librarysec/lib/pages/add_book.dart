@@ -8,6 +8,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
 import 'package:intl/intl.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -17,15 +18,23 @@ class AddBook extends StatefulWidget {
 }
 
 class _AddBookState extends State<AddBook> {
+  @override
+  void initState() {
+    super.initState();
+    date = _selectedDate;
+    e.text = DateFormat("yMMMMd").format(DateTime.now()).toString();
+  }
+
+  TextEditingController doe = TextEditingController();
+  TextEditingController e = TextEditingController();
   String? bookname;
   String? bookid;
   String? bookauthor;
   String? category;
   DateTime? date;
-  late Future<DateTime?> calender;
+  final DateTime _selectedDate = (DateTime.now());
   static const int timeout = 30;
   late Book book;
-  String dateToday = DateFormat(('yyyy-MM-dd')).format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -61,21 +70,18 @@ class _AddBookState extends State<AddBook> {
                     height: 20,
                   ),
                   Texty(
-                      text: 'DATE OF ENTRY',
-                      onChanged: (value) {
-                        date = DateTime.parse(value);
+                    controller: e,
+                    text: 'DATE OF ENTRY',
+                    onChanged: (value) {
+                      date = DateTime.parse(value);
+                    },
+                    suffix: IconButton(
+                      icon: Icon(FluentIcons.edit),
+                      onPressed: () {
+                        _selectDate(context);
                       },
-                      suffix: IconButton(
-                        icon: Icon(FluentIcons.edit),
-                        onPressed: () {
-                          calender = material.showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.utc(2000),
-                              lastDate: DateTime.now());
-                        },
-                      ),
-                      def: dateToday.toString()),
+                    ),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -113,7 +119,7 @@ class _AddBookState extends State<AddBook> {
                               borrowStatus: 3,
                               callNumber: 'NULL',
                               categoryId: 1234,
-                              dateAdded: DateTime.parse(dateToday),
+                              dateAdded: date!,
                               location: 'KUMASI',
                               publicationYear: '2000',
                               rfId: 'NULL',
@@ -189,5 +195,19 @@ class _AddBookState extends State<AddBook> {
     var db = Backend_link();
     bool status = await db.add_book(book).timeout(Duration(seconds: timeout));
     return status;
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await material.showDatePicker(
+        context: context,
+        initialDate: _selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null) {
+      setState(() {
+        date = picked;
+        e.text = DateFormat("yMMMMd").format(date!).toString();
+      }); //&& picked != _selectedDate
+    }
   }
 }
