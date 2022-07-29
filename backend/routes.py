@@ -1,4 +1,3 @@
-from unittest import result
 from flask import Flask, jsonify, request
 import queries
 from db import create_tables
@@ -259,12 +258,12 @@ def removeBookByBarCodeID(barCodeID):
 def displayAccount(referenceID):
     result = queries.checkPatronAccount(referenceID)
     result1 = queries.checkPatronLimit(referenceID)
-    return jsonify(result, result1)
+    return jsonify(result, result1) #checks all books in patron's possession and tells the amount of books they can still borrow
 
 @app.route("/limit/<referenceID>", methods=['GET'])
 def displayLimit(referenceID):
     result = queries.checkPatronLimit(referenceID)
-    return jsonify(result)
+    return jsonify(result) #only checks how many more books user can borrow
 
 @app.route("/borrowstatus/<bookID>", methods=["GET"])
 def status(bookID):
@@ -305,6 +304,22 @@ def oneTransaction(transactionID):
     return jsonify(result)
 
 
+#Librarian Table
+@app.route("/new-lib", methods = ["POST"])
+def addLibrarian():
+    details = request.get_json()
+    libUsername = details["libUsername"]
+    libPassword = details["libPassword"]
+    result = queries.newLibrarian(libUsername, libPassword)
+    return jsonify(result)
+
+@app.route("/login", methods = ["POST"])
+def login():
+    details = request.get_json()
+    libUsername = details["libUsername"]
+    libPassword = details["libPassword"]
+    result = queries.authorizeLibrarianLogin(libUsername, libPassword)
+    return jsonify(result)
 
 if __name__ == "__main__":
     create_tables()

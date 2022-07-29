@@ -20,7 +20,7 @@
         "patronName": "Ing. Benjamin Kommey",
         "patronStatus": "Lecturer",
         "referenceID": "101063030",
-        "programme" : "computer engineering"
+        "programme" : "computer engineering",
         "nationality" : "non-ghanaian"
     }
 ]

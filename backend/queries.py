@@ -504,16 +504,25 @@ def returnBook(transactionID):
     db.commit()
     return {"status": 201, "message": "book successfully returned"}
 
-# def authorize_librarian_login(librarianEmail, librarianPassword):
-#     db = get_db()
-#     cursor = db.cursor()
-#     query = "SELECT * FROM librarianInfo WHERE librarianEmail = ? AND librarianPassword =?"
-#     cursor.execute(query, [librarianEmail, librarianPassword])
-#     result = cursor.fetchone()
-#     if result:
-#         return 'Verified. Welcome'
-#     else:
-#         return 'Wrong E-mail or Password. Please try again'
+#For the Librarian Table
+def newLibrarian(libUsername, libPassword):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "INSERT INTO Librarian(libUsername, libPassword) VALUES (?,?)"
+    cursor.execute(statement, [libUsername, libPassword])
+    db.commit()
+    return {"status": 200, "message": "New librarian added"}
+
+def authorizeLibrarianLogin(libUsername, libPassword):
+    db = get_db()
+    cursor = db.cursor()
+    query = "SELECT * FROM librarian WHERE libUsername = ? AND libPassword =?"
+    cursor.execute(query, [libUsername, libPassword])
+    result = cursor.fetchone()
+    if result:
+        return 'Verified. Welcome'
+    else:
+        return 'Wrong Username or Password. Please try again'
     
 # def checkPatronAccount(referenceID):
 #     db = get_db()

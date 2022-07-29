@@ -44,21 +44,21 @@
     {
         "authorName": "John Ajvide Lindqvist",
         "availability": 1,
-        "barCodeID": "WR9565767",
+        "barCodeID": "PO08765767",
         "bookID": "4",
         "bookTitle": "Let The Right One In",
         "borrowStatus": 0,
-        "callNumber": "68TGG9643",
+        "callNumber": "68T9643",
         "categoryID": 5,
         "dateAdded": "2022-07-21",
         "location": "Second Floor",
         "publicationYear": "2004",
-        "rfID": "57677854"
+        "rfID": "57677P8Y6854"
     },
     {
         "authorName": "Soman Chainani",
         "availability": 1,
-        "barCodeID": "WR4565sda767",
+        "barCodeID": "T384565sda767",
         "bookID": "5",
         "bookTitle": "The School For Good and Evil",
         "borrowStatus": 0,
@@ -67,12 +67,12 @@
         "dateAdded": "2022-07-21",
         "location": "Second Floor",
         "publicationYear": "2013",
-        "rfID": "576787854"
+        "rfID": "576787ZCD854"
     },
     {
         "authorName": "Peter James",
         "availability": 1,
-        "barCodeID": "45656746567",
+        "barCodeID": "45656DA746567",
         "bookID": "6",
         "bookTitle": "Perfect People",
         "borrowStatus": 0,
@@ -81,12 +81,12 @@
         "dateAdded": "2022-07-21",
         "location": "Second Floor",
         "publicationYear": "2011",
-        "rfID": "576Y7I87"
+        "rfID": "576Y7I8AER7"
     },
     {
         "authorName": "James Patterson",
         "availability": 1,
-        "barCodeID": "273437472",
+        "barCodeID": "27343744272",
         "bookID": "7",
         "bookTitle": "Middle School: Get Me Out of Here!",
         "borrowStatus": 0,
@@ -95,21 +95,21 @@
         "dateAdded": "2022-07-21",
         "location": "Ground Floor",
         "publicationYear": "201",
-        "rfID": "5444D68Y99"
+        "rfID": "5444D68Y9A9"
     },
     {
         "authorName": "Danielle Steel",
         "availability": 1,
-        "barCodeID": "736468374G",
+        "barCodeID": "7364628374G",
         "bookID": "8",
         "bookTitle": "Invisible",
         "borrowStatus": 0,
-        "callNumber": "6R7G98779G00",
+        "callNumber": "6R7G928779G00",
         "categoryID": 8,
         "dateAdded": "2022-07-21",
         "location": "Ground Floor",
         "publicationYear": "2022",
-        "rfID": "466767T78"
+        "rfID": "466767T7348"
     }
 ]
 

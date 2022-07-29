@@ -57,6 +57,13 @@ def create_tables():
             FOREIGN KEY (bookID) REFERENCES Book (bookID)
 
         ) 
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Librarian(
+            libID INTEGER PRIMARY KEY,
+            libUsername TEXT NOT NULL,
+            libPassword PASSWORD
+        )
         """
         
     
