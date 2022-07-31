@@ -275,7 +275,6 @@ def isAvailable(bookID):
     return jsonify(result)
 
 
-
 @app.route("/borrow-book", methods = ["POST", "PUT"])
 def borrow1():
     details = request.json
