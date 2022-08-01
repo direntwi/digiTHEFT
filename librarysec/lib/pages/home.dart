@@ -3,9 +3,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:librarysec/navi.dart';
 import 'package:http/http.dart' as http;
 import 'package:librarysec/backend_link.dart' as link;
+import 'package:dio/dio.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
+
   const HomePage({Key? key, required this.title}) : super(key: key);
 
   @override
@@ -15,19 +17,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   _HomePageState({required String txt});
+
   final autoSuggestBox = TextEditingController();
   var _refNumberController = TextEditingController();
 
   String patronName = '';
-  String referenceNumber = '';
+  late String referenceNumber = '';
   String patronStatus = '';
+  String programme = '';
 
   late Future<List<dynamic>> futureAlbums;
+  Dio dio = new Dio();
 
   @override
   void initState() {
     super.initState();
   }
+
   // var items = [
   //   'Item 1',
   //   'Item 2',
@@ -87,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                           check: !hasdata,
                           boxType: patronBoxData(),
                           lbottomicon: FluentIcons.generic_scan,
-                          rbottomicon: FluentIcons.pencil_reply,
+                          rbottomicon: FluentIcons.search,
                           rfx: studenttypeId),
                       PageBox(
                         height: 150,
@@ -96,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         check: !hasdata,
                         boxType: bookBoxData(),
                         lbottomicon: FluentIcons.generic_scan,
-                        rbottomicon: FluentIcons.pencil_reply,
+                        rbottomicon: FluentIcons.add,
                         rfx: itemtypeId,
                       ),
                     ],
@@ -121,7 +127,8 @@ class _HomePageState extends State<HomePage> {
             title: Text('Manual input'),
             content: TextBox(
               controller: _refNumberController,
-              placeholder: "Enter reference number",),
+              placeholder: "Enter reference number",
+            ),
             backgroundDismiss: true,
             actions: [
               Button(
@@ -134,21 +141,21 @@ class _HomePageState extends State<HomePage> {
 
                   // FUNCTION - to handle the input of patron reference number
                   onPressed: () async {
+                    final response = await http.get(Uri.parse(
+                        "${link.server}/get-refid/${_refNumberController.text}"));
 
-                    final response = await http.get(Uri.parse("${link.server}/get-refid/${_refNumberController.text}"));
-
-                    final decoded = json.decode(response.body) as Map<String, dynamic>;
+                    final decoded =
+                        json.decode(response.body) as Map<String, dynamic>;
 
                     setState(() {
-                      patronName = decoded['memberName'];
+                      patronName = decoded['patronName'];
                       referenceNumber = decoded["referenceID"];
-                      patronStatus = decoded["memberStatus"];
+                      patronStatus = decoded["patronStatus"];
+                      programme = decoded["programme"];
                     });
 
                     // to be worked on
                     Navigator.of(context).pop();
-
-
                   })
             ],
           );
@@ -172,6 +179,8 @@ class _HomePageState extends State<HomePage> {
               Button(
                   child: Text('Search'),
                   onPressed: () {
+                    _borrowBook("1");
+
                     Navigator.of(context, rootNavigator: true).pop(true);
                   })
             ],
@@ -197,6 +206,7 @@ class _HomePageState extends State<HomePage> {
         Text(patronName),
         Text(referenceNumber),
         Text(patronStatus),
+        Text(programme)
       ],
     );
   }
@@ -205,113 +215,111 @@ class _HomePageState extends State<HomePage> {
     var futureAlbums = fetchAlbums();
     return Expanded(
       child: Container(
-             child:  Scrollbar(
-            controller: ScrollController(),
-            child: FutureBuilder<List<dynamic>>(
-              future: futureAlbums,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      controller: ScrollController(),
-                      /// You can add a padding to the view to avoid having the scrollbar over the UI elements
-                      //padding: EdgeInsets.only(right: 16.0),
-                      itemCount: snapshot.data!.toList().length,
-                      itemBuilder: (BuildContext ctx, int position) {
-                        return ListTile(title: Text("${snapshot.data!.toList()[position].bookTitle} - ${snapshot.data!.toList()[position].authorName}"),
-                        subtitle: Text("${snapshot.data!.toList()[position].dateAdded}"),);
-                      });
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                return const ProgressRing();
-              }
-    )
+          child: Scrollbar(
+              controller: ScrollController(),
+              child: FutureBuilder<List<dynamic>>(
+                  future: futureAlbums,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          controller: ScrollController(),
 
-          )),
+                          /// You can add a padding to the view to avoid having the scrollbar over the UI elements
+                          //padding: EdgeInsets.only(right: 16.0),
+                          itemCount: snapshot.data!.toList().length,
+                          itemBuilder: (BuildContext ctx, int position) {
+                            return ListTile(
+                              title: Text(
+                                  "${snapshot.data!.toList()[position].bookTitle}"),
+                              subtitle: Text(
+                                  "${snapshot.data!.toList()[position].dueDate}"),
+                            );
+                          });
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    return const ProgressRing();
+                  }))),
     );
   }
 
   Widget transLogBoxData() {
-    return Container(
-            child: Text("No transaction log data available"));
+    return Container(child: Text("No transaction log data available"));
   }
 
-}
+  Future<List<dynamic>> fetchAlbums() async {
+    final response = await http
+        .get(Uri.parse("${link.server}/patron-account/${referenceNumber}"));
 
-Future<List<dynamic>> fetchAlbums() async {
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      dynamic data = jsonDecode(response.body);
+      return data.map((element) => Album.fromJson(element)).toList();
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
 
-  final response =
-  await http.get(Uri.parse("${link.server}/books"));
+  Future<void> _borrowBook(String bookID) async {
+    // dynamic data = {"referenceID": "$referenceNumber", "bookID": bookID};
 
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    dynamic data = jsonDecode(response.body);
-    return data.map((element) => Album.fromJson(element)).toList();
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    // var response = await dio.post("${link.server}add-to-wishlist",
+    //     data: data, options: Options());
+
+    /// taken from instashop project to reproduce dio.post
+    // if (response.statusCode == 200) {
+    //   final addedToWishlist = SnackBar(
+    //     content: new Text("Item added to wishlist!"),
+    //     action: SnackBarAction(
+    //       label: "View",
+    //       onPressed: () {
+    //         var router = new MaterialPageRoute(
+    //             builder: (BuildContext context) => new WishlistPage());
+    //         Navigator.of(context).push(router);
+    //
+    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    //       },
+    //     ),
+    //   );
+    //   ScaffoldMessenger.of(context).showSnackBar(addedToWishlist);
+    // } else {
+    //   ScaffoldMessenger.of(context)
+    //       .showSnackBar(SnackBar(content: Text("Unable to add to wishlist")));
+    // }
   }
 }
 
 class Album {
   Album({
-    required this.authorName,
-    required this.availability,
-    required this.barCodeId,
-    required this.bookId,
     required this.bookTitle,
-    required this.borrowStatus,
-    required this.callNumber,
-    required this.categoryId,
-    required this.dateAdded,
-    required this.location,
-    required this.publicationYear,
-    required this.rfId,
+    required this.dueDate,
+    required this.patronName,
+    required this.referenceId,
+    required this.transactionId,
   });
 
-  final String authorName;
-  final int availability;
-  final String barCodeId;
-  final String bookId;
   final String bookTitle;
-  final int borrowStatus;
-  final String callNumber;
-  final int categoryId;
-  final DateTime dateAdded;
-  final String location;
-  final String publicationYear;
-  final String rfId;
+  final dynamic dueDate;
+  final String patronName;
+  final String referenceId;
+  final String transactionId;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
-    authorName: json["authorName"],
-    availability: json["availability"],
-    barCodeId: json["barCodeID"],
-    bookId: json["bookID"],
-    bookTitle: json["bookTitle"],
-    borrowStatus: json["borrowStatus"],
-    callNumber: json["callNumber"],
-    categoryId: json["categoryID"],
-    dateAdded: DateTime.parse(json["dateAdded"]),
-    location: json["location"],
-    publicationYear: json["publicationYear"],
-    rfId: json["rfID"],
-  );
+        bookTitle: json["bookTitle"],
+        dueDate: json["dueDate"],
+        patronName: json["patronName"],
+        referenceId: json["referenceID"],
+        transactionId: json["transactionID"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "authorName": authorName,
-    "availability": availability,
-    "barCodeID": barCodeId,
-    "bookID": bookId,
-    "bookTitle": bookTitle,
-    "borrowStatus": borrowStatus,
-    "callNumber": callNumber,
-    "categoryID": categoryId,
-    "dateAdded": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
-    "location": location,
-    "publicationYear": publicationYear,
-    "rfID": rfId,
-  };
+        "bookTitle": bookTitle,
+        "dueDate": dueDate,
+        "patronName": patronName,
+        "referenceID": referenceId,
+        "transactionID": transactionId,
+      };
 }
-
