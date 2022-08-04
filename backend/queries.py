@@ -504,6 +504,32 @@ def returnBook(transactionID):
     db.commit()
     return {"status": 201, "message": "book successfully returned"}
 
+def getAllTransactions():
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT * FROM Transactions"
+    cursor.execute(statement)
+    result = cursor.fetchall()
+    resultDict=[]
+    if result:
+        for resultItem in result:
+            resultDict.append(
+            {
+               "transactionID" : f"{resultItem[0]}",
+                "referenceID": resultItem[1],
+                "bookID": resultItem[2],
+                "transactionDate": resultItem[3],
+                "returnDate": resultItem[4],
+                "dueDate": resultItem[5],
+                "isReturned": resultItem[6]
+
+            }
+        )
+        return resultDict
+    else:
+        return "No Books are in Patron's Possession"
+
+
 #For the Librarian Table
 def newLibrarian(libUsername, libPassword):
     db = get_db()

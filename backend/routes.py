@@ -1,3 +1,4 @@
+from unittest import result
 from flask import Flask, jsonify, request
 import queries
 from db import create_tables
@@ -301,6 +302,10 @@ def oneTransaction(transactionID):
     result = queries.getTransactionInfo(transactionID)
     return jsonify(result)
 
+@app.route("/transactions", methods=["GET"])
+def allTransactions():
+    result=queries.getAllTransactions()
+    return jsonify(result)
 
 #Librarian Table
 @app.route("/new-lib", methods = ["POST"])
