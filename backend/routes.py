@@ -257,8 +257,7 @@ def removeBookByBarCodeID(barCodeID):
 @app.route("/patron-account/<referenceID>", methods=['GET'])
 def displayAccount(referenceID):
     result = queries.checkPatronAccount(referenceID)
-    result1 = queries.checkPatronLimit(referenceID)
-    return jsonify(result, result1) #checks all books in patron's possession and tells the amount of books they can still borrow
+    return jsonify(result) #checks all books in patron's possession
 
 @app.route("/limit/<referenceID>", methods=['GET'])
 def displayLimit(referenceID):
