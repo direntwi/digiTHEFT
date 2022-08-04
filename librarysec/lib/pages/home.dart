@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
 
   final autoSuggestBox = TextEditingController();
   var _refNumberController = TextEditingController();
+  var _bookIdController = TextEditingController();
 
   String patronName = '';
   late String referenceNumber = '';
@@ -171,7 +172,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return ContentDialog(
             title: Text('Manual Input'),
-            content: TextBox(placeholder: "Enter book ID"),
+            content: TextBox(
+              controller: _bookIdController,
+                placeholder: "Enter book ID"),
             backgroundDismiss: true,
             actions: [
               Button(
@@ -182,7 +185,7 @@ class _HomePageState extends State<HomePage> {
               Button(
                   child: Text('Search'),
                   onPressed: () {
-                    _borrowBook("1");
+                    _borrowBook(_bookIdController.text);
 
                     Navigator.of(context, rootNavigator: true).pop(true);
                   })
@@ -267,13 +270,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _borrowBook(String bookID) async {
-    // dynamic data = {"referenceID": "$referenceNumber", "bookID": bookID};
+    dynamic data = {"referenceID": referenceNumber, "bookID": bookID};
 
-    // var response = await dio.post("${link.server}add-to-wishlist",
-    //     data: data, options: Options());
+    var response = await dio.post("${link.server}/borrow-book",
+        data: data, options: Options());
 
     /// taken from instashop project to reproduce dio.post
-    // if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
+      print(referenceNumber);
+    }
     //   final addedToWishlist = SnackBar(
     //     content: new Text("Item added to wishlist!"),
     //     action: SnackBarAction(
