@@ -4,6 +4,7 @@ import 'package:librarysec/navi.dart';
 import 'package:http/http.dart' as http;
 import 'package:librarysec/backend_link.dart' as link;
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart' as material;
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -34,7 +35,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
   }
-
 
   // NEW PUSH
 
@@ -173,8 +173,7 @@ class _HomePageState extends State<HomePage> {
           return ContentDialog(
             title: Text('Manual Input'),
             content: TextBox(
-              controller: _bookIdController,
-                placeholder: "Enter book ID"),
+                controller: _bookIdController, placeholder: "Enter book ID"),
             backgroundDismiss: true,
             actions: [
               Button(
@@ -218,7 +217,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Expanded bookBoxData() {
-    var futureAlbums = fetchAlbums();
+    futureAlbums = fetchAlbums();
     return Expanded(
       child: Container(
           child: Scrollbar(
@@ -239,6 +238,32 @@ class _HomePageState extends State<HomePage> {
                                   "${snapshot.data!.toList()[position].bookTitle}"),
                               subtitle: Text(
                                   "${snapshot.data!.toList()[position].dueDate}"),
+                              trailing: IconButton(
+                                icon: Icon(FluentIcons.remove),
+                                onPressed: () {
+                                  material.showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return ContentDialog(
+                                          content: Text('Return Book?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  _returnBook(
+                                                      _bookIdController.text);
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('YES')),
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text('CANCEL'))
+                                          ],
+                                        );
+                                      });
+                                },
+                              ),
                             );
                           });
                     } else if (snapshot.hasError) {
@@ -277,7 +302,12 @@ class _HomePageState extends State<HomePage> {
 
     /// taken from instashop project to reproduce dio.post
     if (response.statusCode == 200) {
-      print(referenceNumber);
+      setState(() {
+        futureAlbums = fetchAlbums();
+      });
+      print('yeahhhh');
+    } else {
+      print('noooooooooooo');
     }
     //   final addedToWishlist = SnackBar(
     //     content: new Text("Item added to wishlist!"),
@@ -297,6 +327,25 @@ class _HomePageState extends State<HomePage> {
     //   ScaffoldMessenger.of(context)
     //       .showSnackBar(SnackBar(content: Text("Unable to add to wishlist")));
     // }
+  }
+
+  Future<void> _returnBook(bookID) async {
+    //get transactionID
+    var response1 = await http.get(Uri.parse(
+      "${link.server}/patron-account/$referenceNumber",
+    ));
+    final decoded = json.decode(response1.body); //as Map<String, dynamic>;
+    var transID = decoded[0]['transactionID'];
+    //return book
+    dynamic data = {"transactionID": transID, "bookID": bookID};
+    var response2 = await dio.put("${link.server}/return-book",
+        data: data, options: Options());
+    if (response2.statusCode == 200) {
+      print('done');
+      setState(() {
+        futureAlbums = fetchAlbums();
+      });
+    }
   }
 }
 
