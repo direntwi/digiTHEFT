@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage> {
   _HomePageState({required String txt});
 
   final autoSuggestBox = TextEditingController();
-  var _refNumberController = TextEditingController();
-  var _bookIdController = TextEditingController();
+  final _refNumberController = TextEditingController();
+  final _bookIdController = TextEditingController();
 
   String patronName = '';
   late String referenceNumber = '';
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
   String programme = '';
 
   late Future<List<dynamic>> futureAlbums;
-  Dio dio = new Dio();
+  Dio dio = Dio();
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height / 2.3,
                   child: GridView.count(
                     crossAxisCount: 2,
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return ContentDialog(
-            title: Text('Manual input'),
+            title: const Text('Manual input'),
             content: TextBox(
               controller: _refNumberController,
               placeholder: "Enter reference number",
@@ -136,12 +136,12 @@ class _HomePageState extends State<HomePage> {
             backgroundDismiss: true,
             actions: [
               Button(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }),
               Button(
-                  child: Text('Search'),
+                  child: const Text('Search'),
 
                   // FUNCTION - to handle the input of patron reference number
                   onPressed: () async {
@@ -151,12 +151,30 @@ class _HomePageState extends State<HomePage> {
                     final decoded =
                         json.decode(response.body) as Map<String, dynamic>;
 
-                    setState(() {
-                      patronName = decoded['patronName'];
-                      referenceNumber = decoded["referenceID"];
-                      patronStatus = decoded["patronStatus"];
-                      programme = decoded["programme"];
-                    });
+                    if (response.statusCode == 200) {
+                      print("running it");
+                      setState(() {
+                        patronName = decoded['patronName'];
+                        referenceNumber = decoded["referenceID"];
+                        patronStatus = decoded["patronStatus"];
+                        programme = decoded["programme"];
+                      });
+                    } else {
+                      print("No response");
+
+                      // void onButtonTapped() async {
+                      //   // await Future.delayed(const Duration(seconds: 1));
+                      //
+                      //   if (!mounted) return;
+                      //   showSnackbar(
+                      //     context,
+                      //     const Snackbar(
+                      //       content: Text('A new update is available!'),
+                      //     ),
+                      //   );
+                      // }
+                      // onButtonTapped();
+                    }
 
                     // to be worked on
                     Navigator.of(context).pop();
@@ -171,18 +189,18 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return ContentDialog(
-            title: Text('Manual Input'),
+            title: const Text('Manual Input'),
             content: TextBox(
                 controller: _bookIdController, placeholder: "Enter book ID"),
             backgroundDismiss: true,
             actions: [
               Button(
-                  child: Text('Cancel'),
+                  child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.of(context, rootNavigator: true).pop(true);
                   }),
               Button(
-                  child: Text('Search'),
+                  child: const Text('Add'),
                   onPressed: () {
                     _borrowBook(_bookIdController.text);
 
@@ -219,68 +237,68 @@ class _HomePageState extends State<HomePage> {
   Expanded bookBoxData() {
     futureAlbums = fetchAlbums();
     return Expanded(
-      child: Container(
-          child: Scrollbar(
-              controller: ScrollController(),
-              child: FutureBuilder<List<dynamic>>(
-                  future: futureAlbums,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          controller: ScrollController(),
+      child: Scrollbar(
+          controller: ScrollController(),
+          child: FutureBuilder<List<dynamic>>(
+              future: futureAlbums,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      controller: ScrollController(),
 
-                          /// You can add a padding to the view to avoid having the scrollbar over the UI elements
-                          //padding: EdgeInsets.only(right: 16.0),
-                          itemCount: snapshot.data!.toList().length,
-                          itemBuilder: (BuildContext ctx, int position) {
-                            return ListTile(
-                              title: Text(
-                                  "${snapshot.data!.toList()[position].bookTitle}"),
-                              subtitle: Text(
-                                  "${snapshot.data!.toList()[position].dueDate}"),
-                              trailing: IconButton(
-                                icon: Icon(FluentIcons.remove),
-                                onPressed: () {
-                                  material.showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return ContentDialog(
-                                          content: Text('Return Book?'),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  _returnBook(
-                                                      _bookIdController.text);
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text('YES')),
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text('CANCEL'))
-                                          ],
-                                        );
-                                      });
-                                },
-                              ),
-                            );
-                          });
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
-                    return const ProgressRing();
-                  }))),
+                      /// You can add a padding to the view to avoid having the scrollbar over the UI elements
+                      //padding: EdgeInsets.only(right: 16.0),
+                      itemCount: snapshot.data!.toList().length,
+                      itemBuilder: (BuildContext ctx, int position) {
+                        return ListTile(
+                          title: Text(
+                              "${snapshot.data!.toList()[position].bookTitle}"),
+                          subtitle: Text(
+                              "${snapshot.data!.toList()[position].dueDate}"),
+                          trailing: IconButton(
+                            icon: const Icon(FluentIcons.remove),
+                            onPressed: () {
+                              material.showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ContentDialog(
+                                      content: const Text('Return Book?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              _returnBook(
+                                                  _bookIdController.text);
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('YES')),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('CANCEL'))
+                                      ],
+                                    );
+                                  });
+                            },
+                          ),
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return const Text("No books found in patron's account");
+                  // return Text('${snapshot.error}');
+                }
+                return const ProgressRing();
+              })),
     );
   }
 
   Widget transLogBoxData() {
-    return Container(child: Text("No transaction log data available"));
+    return const Text("No transaction log data available");
   }
 
   Future<List<dynamic>> fetchAlbums() async {
     final response = await http
-        .get(Uri.parse("${link.server}/patron-account/${referenceNumber}"));
+        .get(Uri.parse("${link.server}/patron-account/$referenceNumber"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -290,7 +308,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      throw Exception('No patron data found');
     }
   }
 
