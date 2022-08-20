@@ -343,6 +343,25 @@ def getBookByBarCodeID(barCodeID=None):
         "callNumber": result[9]        
     }
 
+def getBookByRFID(rfID=None):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE rfID=?"
+    cursor.execute(statement, [rfID])
+    result = cursor.fetchone()
+    return{
+        "bookTitle": f"{result[0]}",
+        "authorName": result[1],
+        "dateAdded": result[2],
+        "rfID": result[3],
+        "borrowStatus": result[4],
+        "availability": result[5],
+        "publicationYear": result[6],
+        "categoryID": result[7],
+        "location": result[8],
+        "callNumber": result[9]  
+    }
+
 def getAllBooks():
     db = get_db()
     cursor = db.cursor()
@@ -428,22 +447,22 @@ def checkPatronLimit(referenceID):
         return "Patron has reached the maximum borrowing limit"
 
 
-def checkAvailability(bookID):
+def checkAvailability(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle FROM Book WHERE bookID = ? and availability = 1"
-    cursor.execute(statement, [bookID])
+    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and availability = 1"
+    cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
         return "Book can be borrowed"
     else:
         return "Book cannot be borrowed" 
 
-def checkIfBorrowed(bookID):
+def checkIfBorrowed(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle FROM Book WHERE bookID = ? and borrowStatus = 0"
-    cursor.execute(statement, [bookID])
+    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and borrowStatus = 0"
+    cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
         return "Book is available for borrowing"
@@ -452,21 +471,21 @@ def checkIfBorrowed(bookID):
 
     
 
-def updateBorrowStatusTo1(bookID):
+def updateBorrowStatusTo1(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET borrowStatus=1 WHERE bookID=?"
-    cursor.execute(statement, [bookID])
+    statement = "UPDATE Book SET borrowStatus=1 WHERE rfID=?"
+    cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "book has been borrowed"}
 
 
 
-def borrowBook(referenceID, bookID):
+def borrowBook(referenceID, rfID):
     db = get_db()
     cursor = db.cursor()
-    statement1 = "INSERT INTO Transactions(referenceID, bookID) VALUES (?,?)"
-    cursor.execute(statement1, [referenceID, bookID])
+    statement1 = "INSERT INTO Transactions(referenceID, rfID) VALUES (?,?)"
+    cursor.execute(statement1, [referenceID, rfID])
     db.commit()
 
     return {"status": 201, "message": "book successfully borrowed"}
@@ -488,11 +507,11 @@ def getTransactionInfo(transactionID):
     }
     
 
-def updateBorrowStatusTo0(bookID):
+def updateBorrowStatusTo0(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET borrowStatus=0 WHERE bookID=?"
-    cursor.execute(statement, [bookID])
+    statement = "UPDATE Book SET borrowStatus=0 WHERE rfID=?"
+    cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "book is in the library"}
 

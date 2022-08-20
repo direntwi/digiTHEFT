@@ -234,6 +234,11 @@ def findBookByBarCodeID(barCodeID):
     result = queries.getBookByBarCodeID(barCodeID)
     return result
 
+@app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
+def findBookByRFID(rfID):
+    result = queries.getBookByRFID(rfID)
+    return result
+
 @app.route("/books", methods = ["GET"])
 def allBooks():
     result = queries.getAllBooks()
@@ -265,14 +270,14 @@ def displayLimit(referenceID):
     result = queries.checkPatronLimit(referenceID)
     return jsonify(result) #only checks how many more books user can borrow
 
-@app.route("/borrowstatus/<bookID>", methods=["GET"])
-def status(bookID):
-    result = queries.checkIfBorrowed(bookID)
+@app.route("/borrowstatus/<rfID>", methods=["GET"])
+def status(rfID):
+    result = queries.checkIfBorrowed(rfID)
     return jsonify(result)
 
-@app.route("/availability/<bookID>", methods=["GET"])
-def isAvailable(bookID):
-    result = queries.checkAvailability(bookID)
+@app.route("/availability/<rfID>", methods=["GET"])
+def isAvailable(rfID):
+    result = queries.checkAvailability(rfID)
     return jsonify(result)
 
 
@@ -280,21 +285,21 @@ def isAvailable(bookID):
 def borrow1():
     details = request.json
     referenceID = details["referenceID"]
-    bookID = details["bookID"]
+    rfID = details["rfID"]
     if request.method == "POST":
-        result = queries.borrowBook(referenceID, bookID)
+        result = queries.borrowBook(referenceID, rfID)
         return jsonify(result)
     elif request.method == "PUT":
-        result1 = queries.updateBorrowStatusTo1(bookID)
+        result1 = queries.updateBorrowStatusTo1(rfID)
         return jsonify(result1)
     
 @app.route("/return-book", methods = ["PUT"])
 def returned():
     details = request.json
     transactionID = details["transactionID"]
-    bookID = details["bookID"]
+    rfID = details["rfID"]
     result = queries.returnBook(transactionID)
-    result1 = queries.updateBorrowStatusTo0(bookID)
+    result1 = queries.updateBorrowStatusTo0(rfID)
     return jsonify(result, result1)
 
 @app.route("/transaction/<transactionID>", methods = ["GET"])
