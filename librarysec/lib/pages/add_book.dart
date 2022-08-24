@@ -8,7 +8,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
 import 'package:intl/intl.dart';
-import 'package:scroll_date_picker/scroll_date_picker.dart';
+// import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -28,7 +28,7 @@ class _AddBookState extends State<AddBook> {
   TextEditingController doe = TextEditingController();
   TextEditingController e = TextEditingController();
   String? bookname;
-  String? bookid;
+  String? rfid;
   String? bookauthor;
   String? category;
   DateTime? date;
@@ -64,7 +64,7 @@ class _AddBookState extends State<AddBook> {
                   Texty(
                       text: 'BOOK ID',
                       onChanged: (value) {
-                        bookid = value;
+                        rfid = value;
                       }),
                   const SizedBox(
                     height: 20,
@@ -113,8 +113,8 @@ class _AddBookState extends State<AddBook> {
                               //IGNORE FIXED VALUES
                               authorName: bookauthor!,
                               availability: 3,
-                              barCodeId: bookid!,
-                              bookId: bookid!,
+                              barCodeId: rfid!,
+                              bookId: rfid!,
                               bookTitle: bookname!,
                               borrowStatus: 3,
                               callNumber: 'NULL',
@@ -122,7 +122,7 @@ class _AddBookState extends State<AddBook> {
                               dateAdded: date!,
                               location: 'KUMASI',
                               publicationYear: '2000',
-                              rfId: 'NULL',
+                              rfId: rfid!,
                             );
                             try {
                               if (await add_book(book)
