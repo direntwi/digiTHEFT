@@ -27,7 +27,7 @@ def create_tables():
         """,
         """
         CREATE TABLE IF NOT EXISTS Book(
-            bookID INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
             barCodeID TEXT UNIQUE NOT NULL,
             bookTitle TEXT NOT NULL,
             authorName TEXT NOT NULL,
@@ -48,13 +48,13 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS Transactions(
             transactionID INTEGER PRIMARY KEY,
             referenceID TEXT NOT NULL,
-            bookID INTEGER NOT NULL,
+            id INTEGER NOT NULL,
             transactionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             returnDate TIMESTAMP DEFAULT 0,
             dueDate DATE,
             isReturned BOOLEAN DEFAULT 0,
             FOREIGN KEY (referenceID) REFERENCES Patron (referenceID),
-            FOREIGN KEY (bookID) REFERENCES Book (bookID)
+            FOREIGN KEY (id) REFERENCES Book (id)
 
         ) 
         """,
@@ -82,7 +82,7 @@ def create_tables():
 #         """
 #         CREATE TABLE IF NOT EXISTS BookAndAuthor(
 #             authorID INTEGER
-#             bookID INTEGER
+#             id INTEGER
 
 #         )
 #         """,

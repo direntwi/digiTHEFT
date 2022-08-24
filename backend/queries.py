@@ -1,4 +1,3 @@
-from operator import index
 from db import get_db
 
 #For Author Table
@@ -269,11 +268,11 @@ def newBook(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, ava
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
-def updateBookByBookID(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID):
+def updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE bookID=?"
-    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, bookID])
+    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
@@ -286,11 +285,11 @@ def updateBookByBarCodeID(bookTitle, authorName, dateAdded, rfID, borrowStatus, 
     return {"status": 202, "message": "Book information updated"}
 
 
-def getBookByBookID(bookID=None):
+def getBookByid(id=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookID=?"
-    cursor.execute(statement, [bookID])
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
+    cursor.execute(statement, [id])
     result = cursor.fetchone()
     return{
         "bookTitle": f"{result[0]}",
@@ -372,7 +371,7 @@ def getAllBooks():
     for resultItem in result:
         resultDict.append(
             {
-               "bookID" : f"{resultItem[0]}",
+               "id" : f"{resultItem[0]}",
                "barCodeID" : resultItem[1],
                "bookTitle" : resultItem[2],
                "authorName": resultItem[3],
@@ -390,11 +389,11 @@ def getAllBooks():
     return resultDict
 
 
-def deleteBookByBookID(bookID):
+def deleteBookByid(id):
     db = get_db()
     cursor = db.cursor()
-    statement =  "DELETE FROM Book WHERE bookID=?"
-    cursor.execute(statement, [bookID])
+    statement =  "DELETE FROM Book WHERE id=?"
+    cursor.execute(statement, [id])
     db.commit()
     return {"status": 201, "message": "Book successfully deleted"}
 
@@ -413,7 +412,7 @@ def deleteBookByBarCodeID(barCodeID):
 def checkPatronAccount(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.bookID =t.bookID AND t.isReturned = 0 AND t.referenceID=? "
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.id =t.id AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     resultDict=[]
@@ -437,7 +436,7 @@ def checkPatronAccount(referenceID):
 def checkPatronLimit(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.bookID =t.bookID AND t.isReturned = 0 AND t.referenceID=? "
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.id =t.id AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     r = len(result)
@@ -499,7 +498,7 @@ def getTransactionInfo(transactionID):
     return{
         "transactionID" : f"{result[0]}",
         "referenceID": result[1],
-        "bookID": result[2],
+        "id": result[2],
         "transactionDate": result[3],
         "returnDate": result[4],
         "dueDate": result[5],
@@ -523,6 +522,16 @@ def returnBook(transactionID):
     db.commit()
     return {"status": 201, "message": "book successfully returned"}
 
+def readRFIDAtGate(rfID):#to read the borrowStatus value from the rfid detected at the gate
+    db = get_db()
+    cursor = db.cursor()
+    statement = 'SELECT borrowStatus FROM Book WHERE rfID = ?'
+    cursor.execute(statement, [rfID])
+    result = cursor.fetchone()
+    return {
+        "rfID" : f"{result}"
+    }
+
 def getAllTransactions():
     db = get_db()
     cursor = db.cursor()
@@ -536,7 +545,7 @@ def getAllTransactions():
             {
                "transactionID" : f"{resultItem[0]}",
                 "referenceID": resultItem[1],
-                "bookID": resultItem[2],
+                "id": resultItem[2],
                 "transactionDate": resultItem[3],
                 "returnDate": resultItem[4],
                 "dueDate": resultItem[5],
@@ -572,7 +581,7 @@ def authorizeLibrarianLogin(libUsername, libPassword):
 # def checkPatronAccount(referenceID):
 #     db = get_db()
 #     cursor = db.cursor()
-#     query = "SELECT bookTitle, referenceID FROM Book b, Transactions t WHERE b.bookID =t.bookID AND referenceID=?"
+#     query = "SELECT bookTitle, referenceID FROM Book b, Transactions t WHERE b.id =t.id AND referenceID=?"
 #     cursor.execute(query, [referenceID])
 #     result = cursor.fetchone()
 #     return{

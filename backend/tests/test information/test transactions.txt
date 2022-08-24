@@ -1,11 +1,11 @@
     {
         "referenceID": "20601225",
-        "bookID": 1,
+        "id": 1,
         "transactionID" : 1
     }
 
     {
         "referenceID": "20590393",
-        "bookID": 1,
+        "id": 1,
         "transactionID" : 2
     }
