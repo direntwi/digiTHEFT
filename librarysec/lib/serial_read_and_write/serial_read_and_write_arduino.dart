@@ -15,7 +15,7 @@ void main() {
 
       for(final e in value){
         var currentElement = e;
-        converted.add(String.fromCharCode(int.parse(currentElement.toString())));
+          converted.add(String.fromCharCode(int.parse(currentElement.toString())));
       }
       print(converted.join());
     });
@@ -29,5 +29,3 @@ void main() {
   }
 
 }
-
-
