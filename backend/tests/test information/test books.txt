@@ -2,7 +2,6 @@
     {
         "authorName": "David Baldacci",
         "availability": 1,
-        "barCodeID": "293734602",
         "id": "1",
         "bookTitle": "True Blue",
         "borrowStatus": 1,
@@ -16,7 +15,6 @@
     {
         "authorName": "John Connolly",
         "availability": 1,
-        "barCodeID": "73974964",
         "id": "2",
         "bookTitle": "The Lovers",
         "borrowStatus": 0,
@@ -30,7 +28,6 @@
     {
         "authorName": "Daniel Silva",
         "availability": 0,
-        "barCodeID": "WR4565767",
         "id": "3",
         "bookTitle": "The English Girl",
         "borrowStatus": 1,
@@ -44,7 +41,6 @@
     {
         "authorName": "John Ajvide Lindqvist",
         "availability": 1,
-        "barCodeID": "PO08765767",
         "id": "4",
         "bookTitle": "Let The Right One In",
         "borrowStatus": 0,
@@ -58,7 +54,6 @@
     {
         "authorName": "Soman Chainani",
         "availability": 1,
-        "barCodeID": "T384565sda767",
         "id": "5",
         "bookTitle": "The School For Good and Evil",
         "borrowStatus": 0,
@@ -72,7 +67,6 @@
     {
         "authorName": "Peter James",
         "availability": 1,
-        "barCodeID": "45656DA746567",
         "id": "6",
         "bookTitle": "Perfect People",
         "borrowStatus": 0,
@@ -86,7 +80,6 @@
     {
         "authorName": "James Patterson",
         "availability": 1,
-        "barCodeID": "27343744272",
         "id": "7",
         "bookTitle": "Middle School: Get Me Out of Here!",
         "borrowStatus": 0,
@@ -100,7 +93,6 @@
     {
         "authorName": "Danielle Steel",
         "availability": 1,
-        "barCodeID": "7364628374G",
         "id": "8",
         "bookTitle": "Invisible",
         "borrowStatus": 0,

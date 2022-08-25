@@ -28,7 +28,6 @@ def create_tables():
         """
         CREATE TABLE IF NOT EXISTS Book(
             id INTEGER PRIMARY KEY,
-            barCodeID TEXT UNIQUE NOT NULL,
             bookTitle TEXT NOT NULL,
             authorName TEXT NOT NULL,
             dateAdded DATETIME,

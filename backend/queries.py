@@ -260,11 +260,11 @@ def deletePatronByReferenceID(referenceID):
 
 #For Book Table
 
-def newBook(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber):
+def newBook(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Book(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(statement, [barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber])
+    statement = "INSERT INTO Book(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber])
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
@@ -276,11 +276,11 @@ def updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus, availab
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
-def updateBookByBarCodeID(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID):
+def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availability, publicationYear, categoryID, location, callNumber, rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE barCodeID=?"
-    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, barCodeID])
+    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE rfID=?"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, borrowStatus, availability, publicationYear, categoryID, location, callNumber, rfID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
@@ -323,11 +323,11 @@ def searchBook(bookTitle=None):
         "callNumber": result[9]        
     }
 
-def getBookByBarCodeID(barCodeID=None):
+def getBookByRFID(rfID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE barCodeID=?"
-    cursor.execute(statement, [barCodeID])
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE rfID=?"
+    cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     return{
         "bookTitle": f"{result[0]}",
@@ -372,24 +372,23 @@ def getAllBooks():
         resultDict.append(
             {
                "id" : f"{resultItem[0]}",
-               "barCodeID" : resultItem[1],
-               "bookTitle" : resultItem[2],
-               "authorName": resultItem[3],
-               "dateAdded": resultItem[4],
-               "rfID": resultItem[5],
-               "borrowStatus": resultItem[6],
-               "availability": resultItem[7],
-               "publicationYear": resultItem[8],
-               "categoryID": resultItem[9],
-               "location": resultItem[10],
-               "callNumber": resultItem[11]  
+               "bookTitle" : resultItem[1],
+               "authorName": resultItem[2],
+               "dateAdded": resultItem[3],
+               "rfID": resultItem[4],
+               "borrowStatus": resultItem[5],
+               "availability": resultItem[6],
+               "publicationYear": resultItem[7],
+               "categoryID": resultItem[8],
+               "location": resultItem[9],
+               "callNumber": resultItem[10]  
             }
         )
 
     return resultDict
 
 
-def deleteBookByid(id):
+def deleteBookById(id):
     db = get_db()
     cursor = db.cursor()
     statement =  "DELETE FROM Book WHERE id=?"
@@ -397,11 +396,11 @@ def deleteBookByid(id):
     db.commit()
     return {"status": 201, "message": "Book successfully deleted"}
 
-def deleteBookByBarCodeID(barCodeID):
+def deleteBookByRFID(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement =  "DELETE FROM Book WHERE barCodeID=?"
-    cursor.execute(statement, [barCodeID])
+    statement =  "DELETE FROM Book WHERE rfID=?"
+    cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "Book successfully deleted"}
 

@@ -170,7 +170,6 @@ def removepatronByRefID(referenceID):
 @app.route("/new-book", methods=["POST"])
 def addBook():
     details = request.get_json()
-    barCodeID = details["barCodeID"]
     bookTitle= details["bookTitle"]
     authorName = details["authorName"]
     dateAdded = details["dateAdded"]
@@ -181,7 +180,7 @@ def addBook():
     categoryID = details ["categoryID"]
     location = details ["location"]
     callNumber = details ["callNumber"]
-    result = queries.newBook(barCodeID, bookTitle, authorName, dateAdded, rfID, borrowStatus,
+    result = queries.newBook(bookTitle, authorName, dateAdded, rfID, borrowStatus,
                      availability, publicationYear, categoryID, location, callNumber)
     return jsonify(result)
 
@@ -203,22 +202,21 @@ def reviseBookByid():
                      availability, publicationYear, categoryID, location, callNumber, id)
     return jsonify(result)
 
-@app.route("/update-book-by-barcode-id", methods = ["PUT"])
-def reviseBookByBarCodeID():
+@app.route("/update-book-by-rfid", methods = ["PUT"])
+def reviseBookByRFID():
     details = request.get_json()
     bookTitle= details["bookTitle"]
     authorName = details["authorName"]
     dateAdded = details["dateAdded"]
-    rfID = details["rfID"]
     borrowStatus = details["borrowStatus"]
     availability = details["availability"]
     publicationYear = details["publicationYear"]
     categoryID = details["categoryID"]
     location = details["location"]
     callNumber = details["callNumber"]
-    barCodeID = details["barCodeID"]
-    result = queries.updateBookByBarCodeID(bookTitle, authorName, dateAdded, rfID, borrowStatus,
-                     availability, publicationYear, categoryID, location, callNumber, barCodeID)
+    rfID = details["rfID"]
+    result = queries.updateBookByRFID(bookTitle, authorName, dateAdded, borrowStatus,
+                     availability, publicationYear, categoryID, location, callNumber, rfID)
     return jsonify(result)
 
 
@@ -229,9 +227,9 @@ def findBookByid(id):
     result = queries.getBookByid(id)
     return result
 
-@app.route("/get-book-by-barcode-id/<barCodeID>", methods = ["GET"])
-def findBookByBarCodeID(barCodeID):
-    result = queries.getBookByBarCodeID(barCodeID)
+@app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
+def findBookByRFID(rfID):
+    result = queries.getBookByRFID(rfID)
     return result
 
 @app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
@@ -254,9 +252,9 @@ def removeBookByid(id):
     result = queries.deleteBookByid(id)
     return jsonify(result)
 
-@app.route("/delete-book-by-barcode-id/<barCodeID>", methods=["DELETE"])
-def removeBookByBarCodeID(barCodeID):
-    result = queries.deleteBookByBarCodeID(barCodeID)
+@app.route("/delete-book-by-rfid/<rfID>", methods=["DELETE"])
+def removeBookByRFID(rfID):
+    result = queries.deleteBookByRFID(rfID)
     return jsonify(result)
 
 #FOR THE TRANSACTIONS TABLE
