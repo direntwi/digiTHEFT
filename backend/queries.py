@@ -154,11 +154,11 @@ def newPatron(referenceID, patronName, patronStatus, programme, nationality):
     return {"status": 201, "message": "new patron added"}
 
 
-def updatePatronbyPatronID(referenceID, patronName, patronStatus, programme, nationality, patronID):
+def updatePatronbyid(referenceID, patronName, patronStatus, programme, nationality, id):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Patron SET referenceID=?,patronName=?, patronStatus=?, programme=?, nationality=? WHERE patronID = ?"
-    cursor.execute(statement, [referenceID, patronName, patronStatus, programme, nationality, patronID])
+    statement = "UPDATE Patron SET referenceID=?,patronName=?, patronStatus=?, programme=?, nationality=? WHERE id = ?"
+    cursor.execute(statement, [referenceID, patronName, patronStatus, programme, nationality, id])
     db.commit()
     return {"status": 202, "message": "patron info updated"}
 
@@ -170,11 +170,11 @@ def updatePatronbyReferenceID(patronName, patronStatus, programme, nationality, 
     db.commit()
     return {"status": 202, "message": "patron info updated"}
 
-def getPatronByPatronID(patronID=None):
+def getPatronByid(id=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE patronID =?"
-    cursor.execute(statement, [patronID])
+    statement = "SELECT referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE id =?"
+    cursor.execute(statement, [id])
     result = cursor.fetchone()
     return{
         "referenceID" : f"{result[0]}",
@@ -187,11 +187,11 @@ def getPatronByPatronID(patronID=None):
 def getPatronByReferenceID(referenceID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT patronID, referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE referenceID =?"
+    statement = "SELECT id, referenceID, patronName, patronStatus, programme, nationality FROM Patron WHERE referenceID =?"
     cursor.execute(statement, [referenceID])
     result = cursor.fetchone()
     return{
-        "patronID" : f"{result[0]}",
+        "id" : f"{result[0]}",
         "referenceID": result[1],
         "patronName": result[2],
         "patronStatus": result[3],
@@ -209,7 +209,7 @@ def searchPatron(patronName=None):
     for resultItem in result:
         resultDict.append(
             {
-               "patronID" : f"{resultItem[0]}",
+               "id" : f"{resultItem[0]}",
                "referenceID": resultItem[1],
                "patronName": resultItem[2],
                "patronStatus": resultItem[3],
@@ -229,7 +229,7 @@ def getAllPatrons():
     for resultItem in result:
         resultDict.append(
             {
-               "patronID" : f"{resultItem[0]}",
+               "id" : f"{resultItem[0]}",
                "referenceID": resultItem[1],
                "patronName": resultItem[2],
                "patronStatus": resultItem[3],
@@ -241,11 +241,11 @@ def getAllPatrons():
     return resultDict
 
 
-def deletePatronBypPatronID(patronID):
+def deletePatronBypid(id):
     db = get_db()
     cursor = db.cursor()
-    statement =  "DELETE FROM Patron WHERE patronID=?"
-    cursor.execute(statement, [patronID])
+    statement =  "DELETE FROM Patron WHERE id=?"
+    cursor.execute(statement, [id])
     db.commit()
     return {"status": 201, "message": "patron successfully deleted"}
 

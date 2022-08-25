@@ -113,16 +113,16 @@ def addPatron():
     return jsonify(result)
 
 
-@app.route("/update-patron/patronid", methods=["PUT"])
-def revisePatronByPatronID():
+@app.route("/update-patron/id", methods=["PUT"])
+def revisePatronByid():
     details = request.get_json()
     referenceID = details["referenceID"]
     patronName = details["patronName"]
     patronStatus = details["patronStatus"]
-    patronID = details["patronID"]
+    id = details["id"]
     programme = details["programme"]
     nationality = details["nationality"]
-    result = queries.updatePatronbyPatronID(referenceID, patronName, patronStatus, patronID, programme, nationality)
+    result = queries.updatePatronbyid(referenceID, patronName, patronStatus, id, programme, nationality)
     return jsonify(result)
 
 @app.route("/update-patron/refid", methods=["PUT"])
@@ -136,9 +136,9 @@ def revisePatronByReferenceID():
     result = queries.updatePatronbyReferenceID(patronName, patronStatus, referenceID, programme, nationality)
     return jsonify(result)
 
-@app.route("/get-patronid/<patronID>", methods=["GET"])
-def findPatronByPatronID(patronID):
-    result = queries.getPatronByPatronID(patronID)
+@app.route("/get-id/<id>", methods=["GET"])
+def findPatronByid(id):
+    result = queries.getPatronByid(id)
     return jsonify(result)
 
 @app.route("/get-refid/<referenceID>", methods=["GET"])
@@ -156,9 +156,9 @@ def allPatrons():
     result = queries.getAllPatrons()
     return jsonify(result)
 
-@app.route("/delete-patronid/<patronID>", methods=["DELETE"])
-def removePatronByPatronID(patronID):
-    result = queries.deletePatronBypPatronID(patronID)
+@app.route("/delete-id/<id>", methods=["DELETE"])
+def removePatronByid(id):
+    result = queries.deletePatronBypid(id)
     return jsonify(result)
 
 @app.route("/delete-refid/<referenceID>", methods=["DELETE"])

@@ -16,7 +16,7 @@ def create_tables():
         """, 
         """
         CREATE TABLE IF NOT EXISTS Patron(
-            patronID INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
             referenceID TEXT UNIQUE NOT NULL,
             patronName TEXT NOT NULL,
             patronStatus TEXT NOT NULL,
@@ -87,7 +87,7 @@ def create_tables():
 #         """,
 #         """
 #         CREATE TABLE IF NOT EXISTS Fine(
-#             patronID
+#             id
 #             transactionID
 #             fineID
 #             fineAmount
@@ -98,7 +98,7 @@ def create_tables():
 #         """
 #         CREATE TABLE IF NOT EXISTS Payment(
 #             fineID
-#             patronID
+#             id
 #             paymentDate
 #             paymentID
 #         )
