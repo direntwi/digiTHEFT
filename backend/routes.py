@@ -174,13 +174,13 @@ def addBook():
     authorName = details["authorName"]
     dateAdded = details["dateAdded"]
     rfID = details ["rfID"]
-    borrowStatus = details ["borrowStatus"]
+    isBorrowed = details ["isBorrowed"]
     availability = details ["availability"]
     publicationYear = details ["publicationYear"]
     categoryID = details ["categoryID"]
     location = details ["location"]
     callNumber = details ["callNumber"]
-    result = queries.newBook(bookTitle, authorName, dateAdded, rfID, borrowStatus,
+    result = queries.newBook(bookTitle, authorName, dateAdded, rfID, isBorrowed,
                      availability, publicationYear, categoryID, location, callNumber)
     return jsonify(result)
 
@@ -191,16 +191,16 @@ def addBook():
 #     authorName = details["authorName"]
 #     dateAdded = details["dateAdded"]
 #     rfID = details["rfID"]
-#     borrowStatus = details["borrowStatus"]
+#     isBorrowed = details["isBorrowed"]
 #     availability = details["availability"]
 #     publicationYear = details["publicationYear"]
 #     categoryID = details["categoryID"]
 #     location = details["location"]
 #     callNumber = details["callNumber"]
 #     id = details["id"]
-#     result = queries.updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus,
+#     result = queries.updateBookByid(bookTitle, authorName, dateAdded, rfID, isBorrowed,
 #                      availability, publicationYear, categoryID, location, callNumber, id)
-    return jsonify(result)
+#    return jsonify(result)
 
 @app.route("/update-book-by-rfid", methods = ["PUT"])
 def reviseBookByRFID():
@@ -208,14 +208,14 @@ def reviseBookByRFID():
     bookTitle= details["bookTitle"]
     authorName = details["authorName"]
     dateAdded = details["dateAdded"]
-    borrowStatus = details["borrowStatus"]
+    isBorrowed = details["isBorrowed"]
     availability = details["availability"]
     publicationYear = details["publicationYear"]
     categoryID = details["categoryID"]
     location = details["location"]
     callNumber = details["callNumber"]
     rfID = details["rfID"]
-    result = queries.updateBookByRFID(bookTitle, authorName, dateAdded, borrowStatus,
+    result = queries.updateBookByRFID(bookTitle, authorName, dateAdded, isBorrowed,
                      availability, publicationYear, categoryID, location, callNumber, rfID)
     return jsonify(result)
 
@@ -230,7 +230,7 @@ def reviseBookByRFID():
 @app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
 def findBookByRFID(rfID):
     result = queries.getBookByRFID(rfID)
-    return result
+    return jsonify(result)
 
 
 @app.route("/books", methods = ["GET"])
@@ -264,7 +264,7 @@ def displayLimit(referenceID):
     result = queries.checkPatronLimit(referenceID)
     return jsonify(result) #only checks how many more books user can borrow
 
-@app.route("/borrowstatus/<rfID>", methods=["GET"])
+@app.route("/isBorrowed/<rfID>", methods=["GET"])
 def status(rfID):
     result = queries.checkIfBorrowed(rfID)
     return jsonify(result)
@@ -284,7 +284,7 @@ def borrow1():
         result = queries.borrowBook(referenceID, rfID)
         return jsonify(result)
     elif request.method == "PUT":
-        result1 = queries.updateBorrowStatusTo1(rfID)
+        result1 = queries.updateisBorrowedTo1(rfID)
         return jsonify(result1)
     
 @app.route("/return-book", methods = ["PUT"])
@@ -293,7 +293,7 @@ def returned():
     transactionID = details["transactionID"]
     rfID = details["rfID"]
     result = queries.returnBook(transactionID)
-    result1 = queries.updateBorrowStatusTo0(rfID)
+    result1 = queries.updateisBorrowedTo0(rfID)
     return jsonify(result, result1)
 
 

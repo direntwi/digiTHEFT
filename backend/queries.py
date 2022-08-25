@@ -260,27 +260,27 @@ def deletePatronByReferenceID(referenceID):
 
 #For Book Table
 
-def newBook(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber):
+def newBook(bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber):
     db = get_db()
     cursor = db.cursor()
-    statement = "INSERT INTO Book(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?)"
-    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber])
+    statement = "INSERT INTO Book(bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber) VALUES(?,?,?,?,?,?,?,?,?,?)"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber])
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
-# def updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id):
+# def updateBookByid(bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber, id):
 #     db = get_db()
 #     cursor = db.cursor()
-#     statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
-#     cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id])
+#     statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, isBorrowed=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
+#     cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber, id])
 #     db.commit()
 #     return {"status": 202, "message": "Book information updated"}
 
-def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availability, publicationYear, categoryID, location, callNumber, rfID):
+def updateBookByRFID(bookTitle, authorName, dateAdded,  isBorrowed, availability, publicationYear, categoryID, location, callNumber, rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE rfID=?"
-    cursor.execute(statement, [bookTitle, authorName, dateAdded, borrowStatus, availability, publicationYear, categoryID, location, callNumber, rfID])
+    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, isBorrowed=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE rfID=?"
+    cursor.execute(statement, [bookTitle, authorName, dateAdded, isBorrowed, availability, publicationYear, categoryID, location, callNumber, rfID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
 
@@ -288,7 +288,7 @@ def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availabili
 # def getBookByid(id=None):
 #     db = get_db()
 #     cursor = db.cursor()
-#     statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
+#     statement = "SELECT bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
 #     cursor.execute(statement, [id])
 #     result = cursor.fetchone()
 #     return{
@@ -296,7 +296,7 @@ def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availabili
 #         "authorName": result[1],
 #         "dateAdded": result[2],
 #         "rfID": result[3],
-#         "borrowStatus": result[4],
+#         "isBorrowed": result[4],
 #         "availability": result[5],
 #         "publicationYear": result[6],
 #         "categoryID": result[7],
@@ -307,7 +307,7 @@ def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availabili
 def searchBook(bookTitle=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookTitle LIKE ? "
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE bookTitle LIKE ? "
     cursor.execute(statement, ('%' + bookTitle + '%',))
     result = cursor.fetchone()
     return{
@@ -315,7 +315,7 @@ def searchBook(bookTitle=None):
         "authorName": result[1],
         "dateAdded": result[2],
         "rfID": result[3],
-        "borrowStatus": result[4],
+        "isBorrowed": result[4],
         "availability": result[5],
         "publicationYear": result[6],
         "categoryID": result[7],
@@ -327,7 +327,7 @@ def searchBook(bookTitle=None):
 def getBookByRFID(rfID=None):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE rfID=?"
+    statement = "SELECT bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE rfID=?"
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     return{
@@ -335,7 +335,7 @@ def getBookByRFID(rfID=None):
         "authorName": result[1],
         "dateAdded": result[2],
         "rfID": result[3],
-        "borrowStatus": result[4],
+        "isBorrowed": result[4],
         "availability": result[5],
         "publicationYear": result[6],
         "categoryID": result[7],
@@ -358,7 +358,7 @@ def getAllBooks():
                "authorName": resultItem[2],
                "dateAdded": resultItem[3],
                "rfID": resultItem[4],
-               "borrowStatus": resultItem[5],
+               "isBorrowed": resultItem[5],
                "availability": resultItem[6],
                "publicationYear": resultItem[7],
                "categoryID": resultItem[8],
@@ -438,7 +438,7 @@ def checkAvailability(rfID):
 def checkIfBorrowed(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and borrowStatus = 0"
+    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and isBorrowed = 0"
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
@@ -448,10 +448,10 @@ def checkIfBorrowed(rfID):
 
     
 
-def updateBorrowStatusTo1(rfID):
+def updateisBorrowedTo1(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET borrowStatus=1 WHERE rfID=?"
+    statement = "UPDATE Book SET isBorrowed=1 WHERE rfID=?"
     cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "book has been borrowed"}
@@ -484,10 +484,10 @@ def getTransactionInfo(transactionID):
     }
     
 
-def updateBorrowStatusTo0(rfID):
+def updateisBorrowedTo0(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Book SET borrowStatus=0 WHERE rfID=?"
+    statement = "UPDATE Book SET isBorrowed=0 WHERE rfID=?"
     cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "book is in the library"}

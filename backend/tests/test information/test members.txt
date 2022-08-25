@@ -4,7 +4,7 @@
         "patronName": "Yoocee Direntwi Ansah",
         "patronStatus": "Student",
         "referenceID": "20601225",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "ghanaian"
     },
     {
@@ -12,7 +12,7 @@
         "patronName": "Valdo Ato Kekeli Abruquah",
         "patronStatus": "Student",
         "referenceID": "20590393",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "ghanaian"
     },
     {
@@ -20,7 +20,7 @@
         "patronName": "Ing. Benjamin Kommey",
         "patronStatus": "Lecturer",
         "referenceID": "101063030",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "non-ghanaian"
     }
 ]
