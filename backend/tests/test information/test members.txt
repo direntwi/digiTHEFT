@@ -1,26 +1,26 @@
 [
     {
-        "patronID": "1",
+        "id": "1",
         "patronName": "Yoocee Direntwi Ansah",
         "patronStatus": "Student",
         "referenceID": "20601225",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "ghanaian"
     },
     {
-        "patronID": "2",
+        "id": "2",
         "patronName": "Valdo Ato Kekeli Abruquah",
         "patronStatus": "Student",
         "referenceID": "20590393",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "ghanaian"
     },
     {
-        "patronID": "3",
+        "id": "3",
         "patronName": "Ing. Benjamin Kommey",
         "patronStatus": "Lecturer",
         "referenceID": "101063030",
-        "programme" : "computer engineering",
+        "programme" : "Computer Engineering",
         "nationality" : "non-ghanaian"
     }
 ]
