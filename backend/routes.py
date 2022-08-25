@@ -230,7 +230,7 @@ def reviseBookByRFID():
 @app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
 def findBookByRFID(rfID):
     result = queries.getBookByRFID(rfID)
-    return result
+    return jsonify(result)
 
 
 @app.route("/books", methods = ["GET"])
