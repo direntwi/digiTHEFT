@@ -268,13 +268,13 @@ def newBook(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, 
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
-def updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
-    cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id])
-    db.commit()
-    return {"status": 202, "message": "Book information updated"}
+# def updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, borrowStatus=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
+#     cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber, id])
+#     db.commit()
+#     return {"status": 202, "message": "Book information updated"}
 
 def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availability, publicationYear, categoryID, location, callNumber, rfID):
     db = get_db()
@@ -285,24 +285,24 @@ def updateBookByRFID(bookTitle, authorName, dateAdded,  borrowStatus, availabili
     return {"status": 202, "message": "Book information updated"}
 
 
-def getBookByid(id=None):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
-    cursor.execute(statement, [id])
-    result = cursor.fetchone()
-    return{
-        "bookTitle": f"{result[0]}",
-        "authorName": result[1],
-        "dateAdded": result[2],
-        "rfID": result[3],
-        "borrowStatus": result[4],
-        "availability": result[5],
-        "publicationYear": result[6],
-        "categoryID": result[7],
-        "location": result[8],
-        "callNumber": result[9]        
-    }
+# def getBookByid(id=None):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
+#     cursor.execute(statement, [id])
+#     result = cursor.fetchone()
+#     return{
+#         "bookTitle": f"{result[0]}",
+#         "authorName": result[1],
+#         "dateAdded": result[2],
+#         "rfID": result[3],
+#         "borrowStatus": result[4],
+#         "availability": result[5],
+#         "publicationYear": result[6],
+#         "categoryID": result[7],
+#         "location": result[8],
+#         "callNumber": result[9]        
+#     }
 
 def searchBook(bookTitle=None):
     db = get_db()
@@ -323,24 +323,6 @@ def searchBook(bookTitle=None):
         "callNumber": result[9]        
     }
 
-def getBookByRFID(rfID=None):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "SELECT bookTitle, authorName, dateAdded, rfID, borrowStatus, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE rfID=?"
-    cursor.execute(statement, [rfID])
-    result = cursor.fetchone()
-    return{
-        "bookTitle": f"{result[0]}",
-        "authorName": result[1],
-        "dateAdded": result[2],
-        "rfID": result[3],
-        "borrowStatus": result[4],
-        "availability": result[5],
-        "publicationYear": result[6],
-        "categoryID": result[7],
-        "location": result[8],
-        "callNumber": result[9]        
-    }
 
 def getBookByRFID(rfID=None):
     db = get_db()
@@ -388,13 +370,13 @@ def getAllBooks():
     return resultDict
 
 
-def deleteBookById(id):
-    db = get_db()
-    cursor = db.cursor()
-    statement =  "DELETE FROM Book WHERE id=?"
-    cursor.execute(statement, [id])
-    db.commit()
-    return {"status": 201, "message": "Book successfully deleted"}
+# def deleteBookById(id):
+#     db = get_db()
+#     cursor = db.cursor()
+#     statement =  "DELETE FROM Book WHERE id=?"
+#     cursor.execute(statement, [id])
+#     db.commit()
+#     return {"status": 201, "message": "Book successfully deleted"}
 
 def deleteBookByRFID(rfID):
     db = get_db()
@@ -407,11 +389,10 @@ def deleteBookByRFID(rfID):
 
 # For Transactions Table
 #This is to verify if a patron has any borrowed books in their possession
-#It is currently incomplete .Trying to find a way to set a limit to the number of books that can be borrowed
 def checkPatronAccount(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.id =t.id AND t.isReturned = 0 AND t.referenceID=? "
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.rfID =t.rfID AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     resultDict=[]
@@ -429,13 +410,11 @@ def checkPatronAccount(referenceID):
         return resultDict
     else:
         return "No Books are in Patron's Possession"
-##if result[4]:
-# return "You have reached the maximum borrowing limit"   
 
 def checkPatronLimit(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.id =t.id AND t.isReturned = 0 AND t.referenceID=? "
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.rfID =t.rfID AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     r = len(result)
@@ -497,7 +476,7 @@ def getTransactionInfo(transactionID):
     return{
         "transactionID" : f"{result[0]}",
         "referenceID": result[1],
-        "id": result[2],
+        "rfID": result[2],
         "transactionDate": result[3],
         "returnDate": result[4],
         "dueDate": result[5],
@@ -521,15 +500,7 @@ def returnBook(transactionID):
     db.commit()
     return {"status": 201, "message": "book successfully returned"}
 
-def readRFIDAtGate(rfID):#to read the borrowStatus value from the rfid detected at the gate
-    db = get_db()
-    cursor = db.cursor()
-    statement = 'SELECT borrowStatus FROM Book WHERE rfID = ?'
-    cursor.execute(statement, [rfID])
-    result = cursor.fetchone()
-    return {
-        "rfID" : f"{result}"
-    }
+
 
 def getAllTransactions():
     db = get_db()
@@ -544,7 +515,7 @@ def getAllTransactions():
             {
                "transactionID" : f"{resultItem[0]}",
                 "referenceID": resultItem[1],
-                "id": resultItem[2],
+                "rfID": resultItem[2],
                 "transactionDate": resultItem[3],
                 "returnDate": resultItem[4],
                 "dueDate": resultItem[5],
@@ -577,15 +548,6 @@ def authorizeLibrarianLogin(libUsername, libPassword):
     else:
         return 'Wrong Username or Password. Please try again'
     
-# def checkPatronAccount(referenceID):
-#     db = get_db()
-#     cursor = db.cursor()
-#     query = "SELECT bookTitle, referenceID FROM Book b, Transactions t WHERE b.id =t.id AND referenceID=?"
-#     cursor.execute(query, [referenceID])
-#     result = cursor.fetchone()
-#     return{
-#                 "bookTitle": f"{result[0]}",
-#                 "referenceID" : result[1]
-#             }
+
         
     

@@ -47,13 +47,13 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS Transactions(
             transactionID INTEGER PRIMARY KEY,
             referenceID TEXT NOT NULL,
-            id INTEGER NOT NULL,
+            rfID TEXT NOT NULL,
             transactionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             returnDate TIMESTAMP DEFAULT 0,
             dueDate DATE,
             isReturned BOOLEAN DEFAULT 0,
             FOREIGN KEY (referenceID) REFERENCES Patron (referenceID),
-            FOREIGN KEY (id) REFERENCES Book (id)
+            FOREIGN KEY (rfID) REFERENCES Book (rfID)
 
         ) 
         """,

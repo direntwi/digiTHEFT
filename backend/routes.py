@@ -184,22 +184,22 @@ def addBook():
                      availability, publicationYear, categoryID, location, callNumber)
     return jsonify(result)
 
-@app.route("/update-book-by-book-id", methods = ["PUT"])
-def reviseBookByid():
-    details = request.get_json()
-    bookTitle= details["bookTitle"]
-    authorName = details["authorName"]
-    dateAdded = details["dateAdded"]
-    rfID = details["rfID"]
-    borrowStatus = details["borrowStatus"]
-    availability = details["availability"]
-    publicationYear = details["publicationYear"]
-    categoryID = details["categoryID"]
-    location = details["location"]
-    callNumber = details["callNumber"]
-    id = details["id"]
-    result = queries.updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus,
-                     availability, publicationYear, categoryID, location, callNumber, id)
+# @app.route("/update-book-by-book-id", methods = ["PUT"])
+# def reviseBookByid():
+#     details = request.get_json()
+#     bookTitle= details["bookTitle"]
+#     authorName = details["authorName"]
+#     dateAdded = details["dateAdded"]
+#     rfID = details["rfID"]
+#     borrowStatus = details["borrowStatus"]
+#     availability = details["availability"]
+#     publicationYear = details["publicationYear"]
+#     categoryID = details["categoryID"]
+#     location = details["location"]
+#     callNumber = details["callNumber"]
+#     id = details["id"]
+#     result = queries.updateBookByid(bookTitle, authorName, dateAdded, rfID, borrowStatus,
+#                      availability, publicationYear, categoryID, location, callNumber, id)
     return jsonify(result)
 
 @app.route("/update-book-by-rfid", methods = ["PUT"])
@@ -222,20 +222,16 @@ def reviseBookByRFID():
 
 
 
-@app.route("/get-book-by-book-id/<id>", methods = ["GET"])
-def findBookByid(id):
-    result = queries.getBookByid(id)
-    return result
+# @app.route("/get-book-by-book-id/<id>", methods = ["GET"])
+# def findBookByid(id):
+#     result = queries.getBookByid(id)
+#     return result
 
 @app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
 def findBookByRFID(rfID):
     result = queries.getBookByRFID(rfID)
     return result
 
-@app.route("/get-book-by-rfid/<rfID>", methods = ["GET"])
-def findBookByRFID(rfID):
-    result = queries.getBookByRFID(rfID)
-    return result
 
 @app.route("/books", methods = ["GET"])
 def allBooks():
@@ -247,10 +243,10 @@ def findBook(bookTitle):
     result = queries.searchBook(bookTitle)
     return jsonify(result)
 
-@app.route("/delete-book-by-book-id/<id>", methods=["DELETE"])
-def removeBookByid(id):
-    result = queries.deleteBookByid(id)
-    return jsonify(result)
+# @app.route("/delete-book-by-book-id/<id>", methods=["DELETE"])
+# def removeBookByid(id):
+#     result = queries.deleteBookByid(id)
+#     return jsonify(result)
 
 @app.route("/delete-book-by-rfid/<rfID>", methods=["DELETE"])
 def removeBookByRFID(rfID):
@@ -300,10 +296,7 @@ def returned():
     result1 = queries.updateBorrowStatusTo0(rfID)
     return jsonify(result, result1)
 
-@app.route("/read-rfid/<rfID>", methods = ["GET"])#to read the borrowStatus value from the rfid detected at the gate
-def reading(rfID):
-    result = queries.readRFIDAtGate(rfID)
-    return jsonify(result)
+
 
 @app.route("/transaction/<transactionID>", methods = ["GET"])
 def oneTransaction(transactionID):
