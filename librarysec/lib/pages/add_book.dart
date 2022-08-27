@@ -8,6 +8,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
 import 'package:intl/intl.dart';
+import 'package:librarysec/pages/home.dart';
 // import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class AddBook extends StatefulWidget {
@@ -112,11 +113,9 @@ class _AddBookState extends State<AddBook> {
                             book = Book(
                               //IGNORE FIXED VALUES
                               authorName: bookauthor!,
-                              availability: 3,
-                              barCodeId: rfid!,
-                              bookId: rfid!,
+                              availability: 1,
                               bookTitle: bookname!,
-                              borrowStatus: 3,
+                              isBorrowed: 0,
                               callNumber: 'NULL',
                               categoryId: 1234,
                               dateAdded: date!,
@@ -124,12 +123,41 @@ class _AddBookState extends State<AddBook> {
                               publicationYear: '2000',
                               rfId: rfid!,
                             );
-                            try {
-                              if (await add_book(book)
-                                  .timeout(Duration(seconds: timeout)))
-                                print('ADDED');
-                            } on TimeoutException catch (e) {
-                              print('[INFO] $e');
+                            if (await add_book(book)) {
+                              return material.showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ContentDialog(
+                                      title: Text('Book Added Successfully'),
+                                      actions: [
+                                        Button(
+                                            child: const Text('Cancel'),
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(true);
+                                            }),
+                                        Button(
+                                            child: const Text('Okay'),
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop(true);
+                                            })
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              return material.showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ContentDialog(
+                                      title: Text(
+                                        'Unable to add new Book',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    );
+                                  });
                             }
                           }),
                       // SizedBox(

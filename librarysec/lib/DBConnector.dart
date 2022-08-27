@@ -17,6 +17,7 @@ class Backend_link {
 
     if (response.statusCode == 200) {
       print('Book in');
+      return true;
     } else {
       print('[INFO] Status Code: ${response.statusCode}');
       return false;

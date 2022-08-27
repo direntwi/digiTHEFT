@@ -67,16 +67,13 @@ class _TempAllMembersPageState extends State<TempAllMembersPage> {
           // By default, show a loading spinner.
           return const ProgressRing();
         },
-      )
-      ,
+      ),
     );
   }
 }
 
 Future<List<dynamic>> fetchAlbums() async {
-
-  final response =
-  await http.get(Uri.parse("${link.server}/books"));
+  final response = await http.get(Uri.parse("${link.server}/books"));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -97,7 +94,7 @@ class Album {
     required this.barCodeId,
     required this.bookId,
     required this.bookTitle,
-    required this.borrowStatus,
+    required this.isBorrowed,
     required this.callNumber,
     required this.categoryId,
     required this.dateAdded,
@@ -111,7 +108,7 @@ class Album {
   final String barCodeId;
   final String bookId;
   final String bookTitle;
-  final int borrowStatus;
+  final int isBorrowed;
   final String callNumber;
   final int categoryId;
   final DateTime dateAdded;
@@ -120,32 +117,33 @@ class Album {
   final String rfId;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
-    authorName: json["authorName"],
-    availability: json["availability"],
-    barCodeId: json["barCodeID"],
-    bookId: json["bookID"],
-    bookTitle: json["bookTitle"],
-    borrowStatus: json["borrowStatus"],
-    callNumber: json["callNumber"],
-    categoryId: json["categoryID"],
-    dateAdded: DateTime.parse(json["dateAdded"]),
-    location: json["location"],
-    publicationYear: json["publicationYear"],
-    rfId: json["rfID"],
-  );
+        authorName: json["authorName"],
+        availability: json["availability"],
+        barCodeId: json["barCodeID"],
+        bookId: json["bookID"],
+        bookTitle: json["bookTitle"],
+        isBorrowed: json["isBorrowed"],
+        callNumber: json["callNumber"],
+        categoryId: json["categoryID"],
+        dateAdded: DateTime.parse(json["dateAdded"]),
+        location: json["location"],
+        publicationYear: json["publicationYear"],
+        rfId: json["rfID"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "authorName": authorName,
-    "availability": availability,
-    "barCodeID": barCodeId,
-    "bookID": bookId,
-    "bookTitle": bookTitle,
-    "borrowStatus": borrowStatus,
-    "callNumber": callNumber,
-    "categoryID": categoryId,
-    "dateAdded": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
-    "location": location,
-    "publicationYear": publicationYear,
-    "rfID": rfId,
-  };
+        "authorName": authorName,
+        "availability": availability,
+        "barCodeID": barCodeId,
+        "bookID": bookId,
+        "bookTitle": bookTitle,
+        "isBorrowed": isBorrowed,
+        "callNumber": callNumber,
+        "categoryID": categoryId,
+        "dateAdded":
+            "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
+        "location": location,
+        "publicationYear": publicationYear,
+        "rfID": rfId,
+      };
 }

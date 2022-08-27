@@ -38,9 +38,7 @@ Widget PageBox(
         ),
         Container(
             // to be worked on
-            child: check
-                ? boxType
-                : Text("No ${title} available")),
+            child: check ? boxType : Text("No ${title} available")),
         Container(
             color: Color.fromARGB(255, 207, 124, 124),
             // alignment: AlignmentDirectional.bottomCenter,

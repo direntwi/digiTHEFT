@@ -99,7 +99,7 @@ class _Checkout extends State<Checkout> with WindowListener {
       content: NavigationBody(
         index: index,
         children: [
-          HomePage(title: 'Home'),
+          HomePage(),
           AddBook(),
           Items(),
           Profile(),

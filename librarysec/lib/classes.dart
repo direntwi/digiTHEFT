@@ -1,10 +1,8 @@
 class Book {
   final String authorName;
   final int availability;
-  final String barCodeId;
-  final String bookId;
   final String bookTitle;
-  final int borrowStatus;
+  final int isBorrowed;
   final String callNumber;
   final int categoryId;
   final DateTime dateAdded;
@@ -15,10 +13,8 @@ class Book {
   Book({
     required this.authorName,
     required this.availability,
-    required this.barCodeId,
-    required this.bookId,
     required this.bookTitle,
-    required this.borrowStatus,
+    required this.isBorrowed,
     required this.callNumber,
     required this.categoryId,
     required this.dateAdded,
@@ -30,10 +26,8 @@ class Book {
   Map<String, dynamic> toJson() => {
         "authorName": authorName,
         "availability": availability,
-        "barCodeID": barCodeId,
-        "bookID": bookId,
         "bookTitle": bookTitle,
-        "borrowStatus": borrowStatus,
+        "isBorrowed": isBorrowed,
         "callNumber": callNumber,
         "categoryID": categoryId,
         "dateAdded":
