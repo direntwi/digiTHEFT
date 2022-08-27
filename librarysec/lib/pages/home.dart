@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   final autoSuggestBox = TextEditingController();
   final _refNumberController = TextEditingController();
   final _bookIdController = TextEditingController();
-  String com = "COM3";
+  String com = "COM12";
   String patronName = 'Enter patron reference number to begin process';
   late String rfID;
   late String referenceNumber = '';
