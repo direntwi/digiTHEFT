@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   late Future<List<dynamic>> futureAlbums;
   late Future<dynamic> futureAlbumScan;
-
+  String isBorrowed = '';
   Dio dio = Dio();
 
   @override
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                           lbottomicon: FluentIcons.generic_scan,
                           rbottomicon: FluentIcons.add,
                           rfx: itemtypeId,
-                          lfx: scanId),
+                          lfx: preScanDialog),
                     ],
                   ),
                 ),
@@ -222,17 +222,57 @@ class _HomePageState extends State<HomePage> {
           print(converted.join());
         }
       });
-
-      String buffer = "True";
+      // String buffer = condition;
+      String buffer = isBorrowed;
+      print(isBorrowed);
       port.writeBytesFromString(buffer);
       return Future<String>.delayed(
-          const Duration(seconds: 3), () async => converted.join());
+          const Duration(seconds: 5), () async => converted.join());
       // port.close();
 
     } else {
       print("Unable to find required COM port");
       return ('Unable to checkout');
     }
+  }
+
+  Future preScanDialog() {
+    var dialog = material.showDialog(
+        context: context,
+        builder: (context) {
+          return ContentDialog(
+            backgroundDismiss: true,
+            title: Text('Select Action'),
+            // content: Column(
+            //   children: [
+            //     Text(oneBookTitle),
+            //     Text(oneAuthorName),
+            //     Text(oneRFID)
+            //   ],
+            //),
+            actions: [
+              Button(
+                  child: Text('Return'),
+                  onPressed: () {
+                    setState(() {
+                      isBorrowed = 'False';
+                    });
+                    scanId();
+                    // Navigator.pop(context);
+                  }),
+              Button(
+                  child: Text('Borrow'),
+                  onPressed: () {
+                    setState(() {
+                      isBorrowed = 'True';
+                    });
+                    scanId();
+                    // Navigator.pop(context);
+                  })
+            ],
+          );
+        });
+    return dialog;
   }
 
   Future scanId() async {
@@ -243,33 +283,59 @@ class _HomePageState extends State<HomePage> {
     // _getbookinfo(rfidtag);
     // futureAlbumScan = fetchAlbumScan("2437539148");
 
-    var dia = showDialog(
+    var dia = material.showDialog(
         context: context,
         builder: (context) {
-                  return ContentDialog(
-                    title: Text('Scan Book With Reader'),
-                    // content: Column(
-                      // children: [
-                      //   Text(oneBookTitle),
-                      //   Text(oneAuthorName),
-                      //   Text(oneRFID)
-                      // ],
-                    // ),
-                    actions: [
-                      Button(
-                          child: Text('Okay'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          })
-                    ],
-                  );
-
+          return ContentDialog(
+            title: Text('Scan Book With Reader'),
+            // content: Column(
+            //   children: [
+            //     Text(oneBookTitle),
+            //     Text(oneAuthorName),
+            //     Text(oneRFID)
+            //   ],
+            //),
+            actions: [
+              Button(
+                  child: Text('okay'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ],
+            // actions: [
+            //   Button(
+            //       child: Text('Return'),
+            //       onPressed: () {
+            //         setState(() {
+            //           isBorrowed = 'False';
+            //           print('oh setstate $isBorrowed');
+            //         });
+            //         scanId();
+            //         Navigator.pop(context);
+            //       }),
+            //   Button(
+            //       child: Text('Borrow'),
+            //       onPressed: () {
+            //         setState(() {
+            //           isBorrowed = 'True';
+            //           print('oh setstate $isBorrowed');
+            //         });
+            //         scanId();
+            //         Navigator.pop(context);
+            //       })
+            // ],
+          );
         });
     Future<String>? rfid = scanrfid();
     String? rfidtag = await rfid;
     print('THIS IS RFID $rfidtag');
     fetchAlbumScan(rfidtag);
-    _borrowBook(rfidtag!);
+    if (isBorrowed == 'True') {
+      _borrowBook(rfidtag!);
+    } else {
+      _returnBook(rfidtag!);
+    }
+    //_borrowBook(rfidtag!);
     return dia;
   }
 
@@ -383,10 +449,10 @@ class _HomePageState extends State<HomePage> {
   // }
 
   Future fetchAlbumScan(String? rfid) async {
-    final response = await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
+    final response =
+        await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
 
-    final decoded =
-    json.decode(response.body) as Map<String, dynamic>;
+    final decoded = json.decode(response.body) as Map<String, dynamic>;
 
     if (response.statusCode == 200) {
       print("scannded");
@@ -398,9 +464,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       print("No response");
     }
-
-
-
 
     // final response =
     //     await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
@@ -456,7 +519,7 @@ class _HomePageState extends State<HomePage> {
     // }
   }
 
-  Future<void> _returnBook(bookID) async {
+  Future<void> _returnBook(rfid) async {
     //get transactionID
     var response1 = await http.get(Uri.parse(
       "${link.server}/patron-account/$referenceNumber",
@@ -464,7 +527,7 @@ class _HomePageState extends State<HomePage> {
     final decoded = json.decode(response1.body); //as Map<String, dynamic>;
     var transID = decoded[0]['transactionID'];
     //return book
-    dynamic data = {"transactionID": transID, "bookID": bookID};
+    dynamic data = {"transactionID": transID, "rfID": rfid};
     var response2 = await dio.put("${link.server}/return-book",
         data: data, options: Options());
     if (response2.statusCode == 200) {
