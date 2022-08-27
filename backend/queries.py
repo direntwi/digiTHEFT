@@ -438,13 +438,13 @@ def checkAvailability(rfID):
 def checkIfBorrowed(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and isBorrowed = 0"
+    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and isBorrowed = 1"
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
-        return "Book is available for borrowing"
+        return "Stop right there"
     else:
-        return "Book is currently unavailable. A patron has borrowed it" 
+        return "Continue" 
 
     
 
