@@ -21,16 +21,19 @@ class _HomePageState extends State<HomePage> {
   final autoSuggestBox = TextEditingController();
   final _refNumberController = TextEditingController();
   final _bookIdController = TextEditingController();
-  String com = "COM12";
-  String patronName = '';
+  String com = "COM3";
+  String patronName = 'Enter patron reference number to begin process';
   late String rfID;
   late String referenceNumber = '';
   String patronStatus = '';
   String programme = '';
   bool bookgotten = false;
+  late String oneAuthorName = 'Default';
+  late String oneBookTitle = 'Default';
+  late String oneRFID = 'Default';
 
   late Future<List<dynamic>> futureAlbums;
-  late Future<ScannedBook> futureAlbumScan;
+  late Future<dynamic> futureAlbumScan;
 
   Dio dio = Dio();
 
@@ -164,21 +167,7 @@ class _HomePageState extends State<HomePage> {
                       });
                     } else {
                       print("No response");
-
-                      // void onButtonTapped() async {
-                      //   // await Future.delayed(const Duration(seconds: 1));
-                      //
-                      //   if (!mounted) return;
-                      //   showSnackbar(
-                      //     context,
-                      //     const Snackbar(
-                      //       content: Text('A new update is available!'),
-                      //     ),
-                      //   );
-                      // }
-                      // onButtonTapped();
                     }
-
                     // to be worked on
                     Navigator.of(context).pop();
                   })
@@ -252,41 +241,36 @@ class _HomePageState extends State<HomePage> {
     // print('THIS IS RFID $rfidtag');
     // print('surely working');
     // _getbookinfo(rfidtag);
-    futureAlbumScan = fetchAlbumScan(null);
+    // futureAlbumScan = fetchAlbumScan("2437539148");
+
     var dia = showDialog(
         context: context,
         builder: (context) {
-          return Container(
-              child: FutureBuilder<dynamic>(
-                  future: futureAlbumScan,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ContentDialog(
-                        title: Text('Scan Book With Reader'),
-                        content: Column(
-                          children: [
-                            Text("${snapshot.data!.toList().bookTitle}"),
-                            Text("${snapshot.data!.toList().authorName}")
-                          ],
-                        ),
-                        actions: [
-                          Button(
-                              child: Text('Okay'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              })
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return const Text("No books found");
-                    }
-                    return const ProgressRing();
-                  }));
+                  return ContentDialog(
+                    title: Text('Scan Book With Reader'),
+                    // content: Column(
+                      // children: [
+                      //   Text(oneBookTitle),
+                      //   Text(oneAuthorName),
+                      //   Text(oneRFID)
+                      // ],
+                    // ),
+                    actions: [
+                      Button(
+                          child: Text('Okay'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          })
+                    ],
+                  );
+
         });
     Future<String>? rfid = scanrfid();
     String? rfidtag = await rfid;
     print('THIS IS RFID $rfidtag');
     fetchAlbumScan(rfidtag);
+    _borrowBook(rfidtag!);
+    return dia;
   }
 
   Column patronBoxData() {
@@ -398,24 +382,43 @@ class _HomePageState extends State<HomePage> {
   //   }
   // }
 
-  Future<ScannedBook> fetchAlbumScan(String? rfid) async {
-    final response =
-        await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
+  Future fetchAlbumScan(String? rfid) async {
+    final response = await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
+
+    final decoded =
+    json.decode(response.body) as Map<String, dynamic>;
+
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      dynamic data = jsonDecode(response.body);
+      print("scannded");
       setState(() {
-        print('poollop');
-        bookgotten = true;
+        oneAuthorName = decoded['authorName'];
+        oneBookTitle = decoded['bookTitle'];
+        oneRFID = decoded['rfID'];
       });
-      return data.map((element) => ScannedBook.fromJson(element)).toList();
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      setState(() {});
-      throw Exception('No book data found');
+      print("No response");
     }
+
+
+
+
+    // final response =
+    //     await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
+    // if (response.statusCode == 200) {
+    //   // If the server did return a 200 OK response,
+    //   // then parse the JSON.
+    //   dynamic data = jsonDecode(response.body);
+    //   setState(() {
+    //     print('poollop');
+    //     bookgotten = true;
+    //   });
+    //   return data.map((element) => ScannedBook.fromJson(element)).toList();
+    // } else {
+    //   // If the server did not return a 200 OK response,
+    //   // then throw an exception.
+    //   setState(() {});
+    //   throw Exception('No book data found');
+    // }
   }
 
   Future<void> _borrowBook(String bookrfid) async {
