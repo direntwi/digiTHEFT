@@ -267,7 +267,7 @@ def displayLimit(referenceID):
 @app.route("/isBorrowed/<rfID>", methods=["GET"])
 def status(rfID):
     result = queries.checkIfBorrowed(rfID)
-    return jsonify(result)
+    return result
 
 @app.route("/availability/<rfID>", methods=["GET"])
 def isAvailable(rfID):

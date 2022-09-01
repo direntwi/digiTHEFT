@@ -442,9 +442,9 @@ def checkIfBorrowed(rfID):
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
-        return "Stop right there"
+        return "True"
     else:
-        return "Continue" 
+        return "False"
 
     
 
