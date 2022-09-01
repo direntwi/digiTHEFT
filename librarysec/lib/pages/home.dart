@@ -486,19 +486,42 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _borrowBook(String bookrfid) async {
     dynamic data = {"referenceID": referenceNumber, "rfID": bookrfid};
+    var res = await http.get(Uri.parse(
+      "${link.server}/isBorrowed/$bookrfid",
+    ));
+    print('This is response ${res.body}');
+    if (res.body == "False") {
+      var response = await dio.post("${link.server}/borrow-book",
+          data: data, options: Options());
+      var response1 = await dio.put("${link.server}/borrow-book",
+          data: data, options: Options());
 
-    var response = await dio.post("${link.server}/borrow-book",
-        data: data, options: Options());
-
-    /// taken from instashop project to reproduce dio.post
-    if (response.statusCode == 200) {
-      setState(() {
-        futureAlbums = fetchAlbums();
-      });
-      print('yeahhhh');
+      /// taken from instashop project to reproduce dio.post
+      if (response.statusCode == 200) {
+        setState(() {
+          futureAlbums = fetchAlbums();
+        });
+        print('yeahhhh');
+      } else {
+        print('noooooooooooo');
+      }
     } else {
-      print('noooooooooooo');
+      return material.showDialog(
+          context: context,
+          builder: (context) {
+            return ContentDialog(
+              content: Text("Book Not Available for Borrowing"),
+              actions: [
+                material.TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OKAY'))
+              ],
+            );
+          });
     }
+
     //   final addedToWishlist = SnackBar(
     //     content: new Text("Item added to wishlist!"),
     //     action: SnackBarAction(
