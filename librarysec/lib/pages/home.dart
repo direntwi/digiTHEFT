@@ -404,7 +404,7 @@ class _HomePageState extends State<HomePage> {
                       });
                 } else if (snapshot.hasError) {
                   return const Center(
-                      child: Text("No books found in patron's account"));
+                      child: Text("No books to display"));
                   // return Text('${snapshot.error}');
                 }
                 return const ProgressRing();
