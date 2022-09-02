@@ -24,15 +24,16 @@ class _HomePageState extends State<HomePage> {
   String com = "COM12";
   String patronName = 'Enter patron reference number to begin process';
   late String rfID;
-  late String referenceNumber = '';
+  String referenceNumber = '';
   String patronStatus = '';
   String programme = '';
   bool bookgotten = false;
-  late String oneAuthorName = 'Default';
-  late String oneBookTitle = 'Default';
-  late String oneRFID = 'Default';
+  String oneAuthorName = 'Default';
+  String oneBookTitle = 'Default';
+  String oneRFID = 'Default';
 
   late Future<List<dynamic>> futureAlbums;
+  late List transactionAlbums = [];
   late Future<dynamic> futureAlbumScan;
   String isBorrowed = '';
   Dio dio = Dio();
@@ -41,16 +42,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
   }
-
-  // NEW PUSH
-
-  // var items = [
-  //   'Item 1',
-  //   'Item 2',
-  //   'Item 3',
-  //   'Item 4',
-  //   'Item 5',
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -257,6 +248,7 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       isBorrowed = 'False';
                     });
+                    Navigator.pop(context);
                     scanId();
                     // Navigator.pop(context);
                   }),
@@ -266,6 +258,7 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       isBorrowed = 'True';
                     });
+                    Navigator.pop(context);
                     scanId();
                     // Navigator.pop(context);
                   })
@@ -383,7 +376,7 @@ class _HomePageState extends State<HomePage> {
                                         TextButton(
                                             onPressed: () {
                                               _returnBook(
-                                                  _bookIdController.text);
+                                                  "${snapshot.data!.toList()[position].rfID}");
                                               Navigator.pop(context);
                                             },
                                             child: const Text('YES')),
@@ -408,9 +401,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget transLogBoxData() {
-    return const Text("No transaction log data available");
+  Expanded transLogBoxData() {
+    return Expanded(
+      child: Scrollbar(
+          controller: ScrollController(),
+          child: ListView(controller: ScrollController()
+              // itemBuilder: (BuildContext ctx, int position) {
+              //   return ListTile(
+              //     title: Text("${transactionAlbums[position]}"),
+              //     //trailing: Icon(icon),
+              //   );
+              // }
+              )),
+    );
   }
+
+  // return const Text("No transaction log data available");
 
   Future<List<dynamic>> fetchAlbums() async {
     final response = await http
@@ -521,25 +527,6 @@ class _HomePageState extends State<HomePage> {
             );
           });
     }
-
-    //   final addedToWishlist = SnackBar(
-    //     content: new Text("Item added to wishlist!"),
-    //     action: SnackBarAction(
-    //       label: "View",
-    //       onPressed: () {
-    //         var router = new MaterialPageRoute(
-    //             builder: (BuildContext context) => new WishlistPage());
-    //         Navigator.of(context).push(router);
-    //
-    //         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    //       },
-    //     ),
-    //   );
-    //   ScaffoldMessenger.of(context).showSnackBar(addedToWishlist);
-    // } else {
-    //   ScaffoldMessenger.of(context)
-    //       .showSnackBar(SnackBar(content: Text("Unable to add to wishlist")));
-    // }
   }
 
   Future<void> _returnBook(rfid) async {
@@ -550,7 +537,7 @@ class _HomePageState extends State<HomePage> {
     final decoded = json.decode(response1.body); //as Map<String, dynamic>;
     var transID = decoded[0]['transactionID'];
     //return book
-    dynamic data = {"transactionID": transID, "rfID": rfid};
+    dynamic data = {"rfID": rfid};
     var response2 = await dio.put("${link.server}/return-book",
         data: data, options: Options());
     if (response2.statusCode == 200) {
@@ -563,27 +550,28 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Album {
-  Album({
-    required this.bookTitle,
-    required this.dueDate,
-    required this.patronName,
-    required this.referenceId,
-    required this.transactionId,
-  });
+  Album(
+      {required this.bookTitle,
+      required this.dueDate,
+      required this.patronName,
+      required this.referenceId,
+      required this.transactionId,
+      required this.rfID});
 
   final String bookTitle;
   final dynamic dueDate;
   final String patronName;
   final String referenceId;
   final String transactionId;
+  final String rfID;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
-        bookTitle: json["bookTitle"],
-        dueDate: json["dueDate"],
-        patronName: json["patronName"],
-        referenceId: json["referenceID"],
-        transactionId: json["transactionID"],
-      );
+      bookTitle: json["bookTitle"],
+      dueDate: json["dueDate"],
+      patronName: json["patronName"],
+      referenceId: json["referenceID"],
+      transactionId: json["transactionID"],
+      rfID: json["rfID"]);
 
   Map<String, dynamic> toJson() => {
         "bookTitle": bookTitle,
@@ -591,6 +579,7 @@ class Album {
         "patronName": patronName,
         "referenceID": referenceId,
         "transactionID": transactionId,
+        "rfID": rfID
       };
 }
 
