@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:librarysec/main.dart';
 
 class Navigat {
@@ -9,7 +8,7 @@ class Navigat {
   const Navigat({required this.title, required this.iconData});
 }
 
-Widget PageBox(
+Widget pageBox(
     // to be worked on -- separated into different boxes
     {String? title,
     IconData? lbottomicon,
@@ -28,19 +27,19 @@ Widget PageBox(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          color: Color.fromARGB(255, 207, 124, 124),
+          color: const Color.fromARGB(255, 207, 124, 124),
           height: 30,
           width: width,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text("  ${title}", style: TextStyle(color: Colors.white)),
+            child: Text("  $title", style: const TextStyle(color: Colors.white)),
           ),
         ),
         Container(
             // to be worked on
-            child: check ? boxType : Text("No ${title} available")),
+            child: check ? boxType : Text("No $title available")),
         Container(
-            color: Color.fromARGB(255, 207, 124, 124),
+            color: const Color.fromARGB(255, 207, 124, 124),
             // alignment: AlignmentDirectional.bottomCenter,
             height: 30,
             width: width,
@@ -48,7 +47,7 @@ Widget PageBox(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
-                      padding: EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(6),
                       child: GestureDetector(
                         // ignore: sort_child_properties_last
                         child: Icon(
@@ -59,14 +58,14 @@ Widget PageBox(
                         onTap: lfx,
                       )),
                   Padding(
-                    padding: EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(6),
                     child: GestureDetector(
+                      onTap: rfx,
                       child: Icon(
                         rbottomicon,
                         color: Colors.white,
                         size: 20,
                       ),
-                      onTap: rfx,
                     ),
                   ),
                 ])),

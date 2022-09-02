@@ -71,6 +71,7 @@ flutter:
     - images/knust_logo_transparent.png
     - images/stackbooks.png
     - images/bookimages.png
+    - images/knust_icon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

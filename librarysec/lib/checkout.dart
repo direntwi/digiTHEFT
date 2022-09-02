@@ -25,8 +25,8 @@ class _Checkout extends State<Checkout> with WindowListener {
     Navigat(title: 'Home', iconData: FluentIcons.home),
     Navigat(title: 'Add Book', iconData: FluentIcons.add),
     Navigat(title: 'Patrons', iconData: FluentIcons.people),
-    Navigat(title: 'Items', iconData: FluentIcons.history),
-    Navigat(title: 'Search', iconData: FluentIcons.search),
+    Navigat(title: 'View Books', iconData: FluentIcons.library),
+    Navigat(title: 'Monitor', iconData: FluentIcons.view),
     Navigat(title: 'Settings', iconData: FluentIcons.settings),
   ];
   final List<Navigat> footerpages = const [

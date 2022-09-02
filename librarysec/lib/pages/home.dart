@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:librarysec/main.dart';
 import 'package:librarysec/navi.dart';
 import 'package:http/http.dart' as http;
 import 'package:librarysec/backend_link.dart' as link;
@@ -21,11 +22,11 @@ class _HomePageState extends State<HomePage> {
   final autoSuggestBox = TextEditingController();
   final _refNumberController = TextEditingController();
   final _bookIdController = TextEditingController();
-  String com = "COM12";
-  String patronName = 'Enter patron reference number to begin process';
+  String com = "COM3";
+  String patronName = '';
   late String rfID;
   String referenceNumber = '';
-  String patronStatus = '';
+  String patronStatus = 'Enter patron reference number to begin process';
   String programme = '';
   bool bookgotten = false;
   String oneAuthorName = 'Default';
@@ -53,29 +54,41 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      DropDownButton(
-                          //menuColor: Color.fromARGB(153, 64, 24, 100),
-                          title: const Text('Check out'),
-                          items: [
-                            MenuFlyoutItem(
-                                text: const Text('Check out'),
-                                onPressed: () {}),
-                            MenuFlyoutItem(
-                                text: const Text('Return'),
-                                onPressed: () {
-                                  setState(() {});
-                                })
-                          ]),
-                      const SizedBox(
-                          height: 32,
-                          width: 200,
-                          child: TextBox(
-                            placeholder: 'Enter command or barcode',
-                          )),
-                    ]),
+                Center(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                      Image.asset('images/knust_icon.png',
+                          height: 50, width: 50),
+                      const Text(
+                        "KNUST LIBRARY PORTAL",
+                        style: TextStyle(color: appColor, fontSize: 25),
+                      ),
+                    ])),
+
+                // Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       DropDownButton(
+                //           //menuColor: Color.fromARGB(153, 64, 24, 100),
+                //           title: const Text('Check out'),
+                //           items: [
+                //             MenuFlyoutItem(
+                //                 text: const Text('Check out'),
+                //                 onPressed: () {}),
+                //             MenuFlyoutItem(
+                //                 text: const Text('Return'),
+                //                 onPressed: () {
+                //                   setState(() {});
+                //                 })
+                //           ]),
+                //       const SizedBox(
+                //           height: 32,
+                //           width: 200,
+                //           child: TextBox(
+                //             placeholder: 'Enter command or barcode',
+                //           )),
+                //     ]),
                 const SizedBox(
                   height: 30,
                 ),
@@ -87,16 +100,16 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 40.0,
                     childAspectRatio: (6.5 / 3),
                     children: [
-                      PageBox(
+                      pageBox(
                           height: 150,
                           width: 1400,
                           title: 'Patrons',
                           check: !hasdata,
                           boxType: patronBoxData(),
-                          lbottomicon: FluentIcons.generic_scan,
+                          // lbottomicon: FluentIcons.generic_scan,
                           rbottomicon: FluentIcons.search,
                           rfx: studenttypeId),
-                      PageBox(
+                      pageBox(
                           height: 150,
                           width: 1400,
                           title: 'Books',
@@ -109,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                PageBox(
+                pageBox(
                     height: MediaQuery.of(context).size.height / 3,
                     width: 1400,
                     boxType: transLogBoxData(),
@@ -217,8 +230,10 @@ class _HomePageState extends State<HomePage> {
       String buffer = isBorrowed;
       print(isBorrowed);
       port.writeBytesFromString(buffer);
-      return Future<String>.delayed(
-          const Duration(seconds: 5), () async => converted.join());
+      return Future<String>.delayed(const Duration(seconds: 5), () async {
+        port.close();
+        return converted.join();
+      });
       // port.close();
 
     } else {
@@ -233,7 +248,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return ContentDialog(
             backgroundDismiss: true,
-            title: Text('Select Action'),
+            title: const Text('Connect the RFID Reader'),
             // content: Column(
             //   children: [
             //     Text(oneBookTitle),
@@ -243,7 +258,7 @@ class _HomePageState extends State<HomePage> {
             //),
             actions: [
               Button(
-                  child: Text('Return'),
+                  child: const Text('Return a Book'),
                   onPressed: () {
                     setState(() {
                       isBorrowed = 'False';
@@ -253,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                     // Navigator.pop(context);
                   }),
               Button(
-                  child: Text('Borrow'),
+                  child: const Text('Borrow a Book'),
                   onPressed: () {
                     setState(() {
                       isBorrowed = 'True';
@@ -280,17 +295,12 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (context) {
           return ContentDialog(
-            title: Text('Scan Book With Reader'),
-            // content: Column(
-            //   children: [
-            //     Text(oneBookTitle),
-            //     Text(oneAuthorName),
-            //     Text(oneRFID)
-            //   ],
-            //),
+            title: const Text('Scan Book With Reader'),
+            content:
+                Text("Disconnect RFID reader after scanning"),
             actions: [
               Button(
-                  child: Text('okay'),
+                  child: const Text('Done'),
                   onPressed: () {
                     Navigator.pop(context);
                   })
@@ -393,7 +403,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else if (snapshot.hasError) {
-                  return const Text("No books found in patron's account");
+                  return const Center(
+                      child: Text("No books found in patron's account"));
                   // return Text('${snapshot.error}');
                 }
                 return const ProgressRing();
@@ -516,13 +527,13 @@ class _HomePageState extends State<HomePage> {
           context: context,
           builder: (context) {
             return ContentDialog(
-              content: Text("Book Not Available for Borrowing"),
+              content: const Text("Book Not Available for Borrowing"),
               actions: [
                 material.TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('OKAY'))
+                    child: const Text('OKAY'))
               ],
             );
           });

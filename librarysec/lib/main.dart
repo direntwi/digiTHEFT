@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
       darkTheme:
           ThemeData(brightness: Brightness.dark, accentColor: Colors.orange),
       home: const Checkout(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
