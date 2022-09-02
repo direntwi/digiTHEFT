@@ -2,9 +2,9 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:librarysec/pages/add_book.dart';
 import 'package:librarysec/pages/home.dart';
-import 'package:librarysec/pages/items.dart';
-import 'package:librarysec/pages/profile.dart';
-import 'package:librarysec/pages/search.dart';
+import 'package:librarysec/pages/view_books.dart';
+import 'package:librarysec/pages/patrons.dart';
+import 'package:librarysec/pages/monitor.dart';
 import 'package:librarysec/pages/settings.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:librarysec/navi.dart';
@@ -101,9 +101,9 @@ class _Checkout extends State<Checkout> with WindowListener {
         children: [
           HomePage(),
           AddBook(),
+          Patrons(),
           Items(),
-          Profile(),
-          Search(),
+          Monitor(),
           Settings(),
           logout(index)
         ],
