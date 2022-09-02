@@ -617,3 +617,5 @@ class ScannedBook {
         "rfID": rfId,
       };
 }
+
+// fixing conflicts
