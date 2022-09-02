@@ -438,13 +438,13 @@ def checkAvailability(rfID):
 def checkIfBorrowed(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and isBorrowed = 0"
+    statement = "SELECT bookTitle FROM Book WHERE rfID = ? and isBorrowed = 1"
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
-        return "Book is available for borrowing"
+        return True
     else:
-        return "Book is currently unavailable. A patron has borrowed it" 
+        return False
 
     
 
@@ -549,5 +549,15 @@ def authorizeLibrarianLogin(libUsername, libPassword):
         return 'Wrong Username or Password. Please try again'
     
 
-        
-    
+#For the Exit table
+def newExit(isBorrowed):
+    db = get_db()
+    cursor = db.cursor()
+    statement = "INSERT INTO Exit(isBorrowed) VALUES (?)"
+    cursor.execute(statement, [isBorrowed])
+    db.commit()
+    return {"status": 201, "message": "new category added"}
+
+def getExit():
+    db = get_db()
+    cursor = db.cursor()

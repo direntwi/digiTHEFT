@@ -111,3 +111,15 @@ def create_tables():
 
 #         )
 #         """,
+
+# ,
+#         """
+#         CREATE TABLE IF NOT EXISTS Exit(
+#             id INTEGER PRIMARY KEY,
+#             rfID TEXT UNIQUE NOT NULL,
+#             time transactionDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+#             isBorrowed BOOLEAN,
+#             FOREIGN KEY (rfID) REFERENCES Book (rfID),
+#             FOREIGN KEY (isBorrowed) REFERENCES Book (isBorrowed)
+#         )
+#         """
