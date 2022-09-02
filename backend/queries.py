@@ -392,7 +392,7 @@ def deleteBookByRFID(rfID):
 def checkPatronAccount(referenceID):
     db = get_db()
     cursor = db.cursor()
-    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.rfID =t.rfID AND t.isReturned = 0 AND t.referenceID=? "
+    statement = "SELECT t.transactionID, p.referenceID, p.patronName, b.rfID, b.bookTitle, t.dueDate FROM Book b, Patron p, Transactions t WHERE t.referenceID = p.referenceID AND b.rfID =t.rfID AND t.isReturned = 0 AND t.referenceID=? "
     cursor.execute(statement, [referenceID])
     result = cursor.fetchall()
     resultDict=[]
@@ -403,8 +403,9 @@ def checkPatronAccount(referenceID):
                "transactionID" : f"{resultItem[0]}",
                "referenceID" : resultItem[1],
                "patronName" : resultItem[2],
-               "bookTitle": resultItem[3],
-               "dueDate": resultItem[4]
+               "rfID" : resultItem[3],
+               "bookTitle": resultItem[4],
+               "dueDate": resultItem[5]
             }
         )
         return resultDict
@@ -492,11 +493,11 @@ def updateisBorrowedTo0(rfID):
     db.commit()
     return {"status": 201, "message": "book is in the library"}
 
-def returnBook(transactionID):
+def returnBook(rfID):
     db = get_db()
     cursor = db.cursor()
-    statement = "UPDATE Transactions SET returnDate=CURRENT_TIMESTAMP, isReturned=1 WHERE transactionID = ?"
-    cursor.execute(statement, [transactionID])
+    statement = "UPDATE Transactions SET returnDate=CURRENT_TIMESTAMP, isReturned=1 WHERE rfID = ?"
+    cursor.execute(statement, [rfID])
     db.commit()
     return {"status": 201, "message": "book successfully returned"}
 

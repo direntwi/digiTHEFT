@@ -290,9 +290,9 @@ def borrow1():
 @app.route("/return-book", methods = ["PUT"])
 def returned():
     details = request.json
-    transactionID = details["transactionID"]
+    # transactionID = details["transactionID"]
     rfID = details["rfID"]
-    result = queries.returnBook(transactionID)
+    result = queries.returnBook(rfID)
     result1 = queries.updateisBorrowedTo0(rfID)
     return jsonify(result, result1)
 
