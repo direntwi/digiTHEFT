@@ -1,77 +1,5 @@
 from db import get_db
 
-#For Author Table
-# def newAuthor(authorName):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "INSERT INTO Author(authorName) VALUES (?)"
-#     cursor.execute(statement, [authorName])
-#     db.commit()
-#     return {"status": 201, "message": "new author added"}
-
-
-# def updateAuthor(authorName, authorID):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "UPDATE Author SET authorName=? WHERE authorID = ?"
-#     cursor.execute(statement, [authorName, authorID])
-#     db.commit()
-#     return {"status": 202, "message": "author info updated"}
-
-# def getAuthor(authorID=None):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "SELECT authorName FROM Author WHERE authorID =?"
-#     cursor.execute(statement, [authorID])
-#     result = cursor.fetchone()
-#     return{
-#         "authorName" : f"{result[0]}"
-#     }
-
-# def searchAuthor(authorName=None): ##to be continued
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "SELECT authorID,authorName FROM Author WHERE authorName = ?"
-#     cursor.execute(statement, ('%' + authorName + '%',))
-#     result = cursor.fetchall()
-#     resultDict = []
-#     for resultItem in result:
-#         resultDict.append(
-#             {
-#                "authorID" : f"{resultItem[0]}",
-#                "authorName": resultItem[1]
-#             }
-#         )
-#     return resultDict
-
-# def getAllAuthors():
-#     db = get_db()
-#     cursor = db.cursor()
-#     query = "SELECT * FROM Author"
-#     cursor.execute(query)
-#     result = cursor.fetchall()
-#     resultDict = []
-#     for resultItem in result:
-#         resultDict.append(
-#             {
-#                "authorID" : f"{resultItem[0]}",
-#                "authorName": resultItem[1]
-#             }
-#         )
-
-#     return resultDict
-
-
-# def deleteAuthor(authorID):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement =  "DELETE FROM Author WHERE authorID=?"
-#     cursor.execute(statement, [authorID])
-#     db.commit()
-#     return {"status": 201, "message": "author successfully deleted"}
-
-
-
 #For Category table
 def newCategory(category):
     db = get_db()
@@ -144,7 +72,7 @@ def deleteCategory(categoryID):
 
 
 
-#For Patron Table
+#For the Patron Table
 def newPatron(referenceID, patronName, patronStatus, programme, nationality):
     db = get_db()
     cursor = db.cursor()
@@ -268,14 +196,6 @@ def newBook(bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, pu
     db.commit()
     return {"status": 201, "message": "new Book added"}
 
-# def updateBookByid(bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber, id):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "UPDATE Book SET bookTitle=?, authorName=?, dateAdded=?, rfID=?, isBorrowed=?, availability=?, publicationYear=?, categoryID=?, location=?, callNumber=? WHERE id=?"
-#     cursor.execute(statement, [bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber, id])
-#     db.commit()
-#     return {"status": 202, "message": "Book information updated"}
-
 def updateBookByRFID(bookTitle, authorName, dateAdded,  isBorrowed, availability, publicationYear, categoryID, location, callNumber, rfID):
     db = get_db()
     cursor = db.cursor()
@@ -283,26 +203,6 @@ def updateBookByRFID(bookTitle, authorName, dateAdded,  isBorrowed, availability
     cursor.execute(statement, [bookTitle, authorName, dateAdded, isBorrowed, availability, publicationYear, categoryID, location, callNumber, rfID])
     db.commit()
     return {"status": 202, "message": "Book information updated"}
-
-
-# def getBookByid(id=None):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement = "SELECT bookTitle, authorName, dateAdded, rfID, isBorrowed, availability, publicationYear, categoryID, location, callNumber FROM Book WHERE id=?"
-#     cursor.execute(statement, [id])
-#     result = cursor.fetchone()
-#     return{
-#         "bookTitle": f"{result[0]}",
-#         "authorName": result[1],
-#         "dateAdded": result[2],
-#         "rfID": result[3],
-#         "isBorrowed": result[4],
-#         "availability": result[5],
-#         "publicationYear": result[6],
-#         "categoryID": result[7],
-#         "location": result[8],
-#         "callNumber": result[9]        
-#     }
 
 def searchBook(bookTitle=None):
     db = get_db()
@@ -369,14 +269,6 @@ def getAllBooks():
 
     return resultDict
 
-
-# def deleteBookById(id):
-#     db = get_db()
-#     cursor = db.cursor()
-#     statement =  "DELETE FROM Book WHERE id=?"
-#     cursor.execute(statement, [id])
-#     db.commit()
-#     return {"status": 201, "message": "Book successfully deleted"}
 
 def deleteBookByRFID(rfID):
     db = get_db()
@@ -547,17 +439,3 @@ def authorizeLibrarianLogin(libUsername, libPassword):
         return 'Verified. Welcome'
     else:
         return 'Wrong Username or Password. Please try again'
-    
-
-#For the Exit table
-def newExit(isBorrowed):
-    db = get_db()
-    cursor = db.cursor()
-    statement = "INSERT INTO Exit(isBorrowed) VALUES (?)"
-    cursor.execute(statement, [isBorrowed])
-    db.commit()
-    return {"status": 201, "message": "new category added"}
-
-def getExit():
-    db = get_db()
-    cursor = db.cursor()
