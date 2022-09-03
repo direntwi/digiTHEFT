@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final autoSuggestBox = TextEditingController();
   final _refNumberController = TextEditingController();
   final _bookIdController = TextEditingController();
-  String com = "COM3";
+  String com = "COM12";
   String patronName = '';
   late String rfID;
   String referenceNumber = '';
@@ -296,8 +296,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return ContentDialog(
             title: const Text('Scan Book With Reader'),
-            content:
-                Text("Disconnect RFID reader after scanning"),
+            content: Text("Disconnect RFID reader after scanning"),
             actions: [
               Button(
                   child: const Text('Done'),
@@ -403,8 +402,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       });
                 } else if (snapshot.hasError) {
-                  return const Center(
-                      child: Text("No books to display"));
+                  return const Center(child: Text("No books to display"));
                   // return Text('${snapshot.error}');
                 }
                 return const ProgressRing();

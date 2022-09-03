@@ -8,6 +8,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
 import 'package:intl/intl.dart';
+import 'package:serial_port_win32/serial_port_win32.dart';
 
 class AddBook extends StatefulWidget {
   const AddBook({Key? key}) : super(key: key);
@@ -16,16 +17,32 @@ class AddBook extends StatefulWidget {
   State<AddBook> createState() => _AddBookState();
 }
 
-class _AddBookState extends State<AddBook> {
+class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
   @override
   void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat(reverse: true);
+    super.initState();
     super.initState();
     date = _selectedDate;
     e.text = DateFormat("yMMMMd").format(DateTime.now()).toString();
   }
 
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  late AnimationController controller;
   TextEditingController doe = TextEditingController();
   TextEditingController e = TextEditingController();
+  TextEditingController bookid = TextEditingController();
   String? bookname;
   String? rfid;
   String? bookauthor;
@@ -34,6 +51,7 @@ class _AddBookState extends State<AddBook> {
   final DateTime _selectedDate = (DateTime.now());
   static const int timeout = 30;
   late Book book;
+  String com = "COM12";
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +82,19 @@ class _AddBookState extends State<AddBook> {
               height: 20,
             ),
             Texty(
+                controller: bookid,
                 text: 'BOOK ID',
                 onChanged: (value) {
                   rfid = value;
-                }),
+                },
+                suffix: IconButton(
+                    onPressed: () {
+                      _scanBook();
+                    },
+                    icon: const Icon(
+                      FluentIcons.generic_scan,
+                      semanticLabel: "Scan Book with rfid",
+                    ))),
             const SizedBox(
               height: 20,
             ),
@@ -189,12 +216,13 @@ class _AddBookState extends State<AddBook> {
         );
   }
 
-  Widget Texty(
-      {required String text,
-      Function(String value)? onChanged,
-      Widget? suffix,
-      String? def,
-      TextEditingController? controller}) {
+  Widget Texty({
+    required String text,
+    Function(String value)? onChanged,
+    Widget? suffix,
+    String? def,
+    TextEditingController? controller,
+  }) {
     return Container(
       child: Row(
         children: [
@@ -238,6 +266,74 @@ class _AddBookState extends State<AddBook> {
         date = picked;
         e.text = DateFormat("yMMMMd").format(date!).toString();
       }); //&& picked != _selectedDate
+    }
+  }
+
+  Future _scanBook() async {
+    var dia = material.showDialog(
+        context: context,
+        builder: (context) {
+          return ContentDialog(
+            title: const Text('Scanning Book With Reader'),
+            // content: bookid.text == ''
+            //     ? material.LinearProgressIndicator(
+            //         value:
+            // controller.value,
+            //      semanticsLabel: 'Linear progress indicator',
+            //    )
+            content: TextBox(
+              controller: bookid,
+            ),
+            actions: [
+              Button(
+                  child: const Text('Done'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              Button(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  })
+            ],
+          );
+        });
+    Future<String>? rfid = scanrfid();
+    String? rfidtag = await rfid;
+    bookid.text = rfidtag!;
+    return dia;
+  }
+
+  Future<String>? scanrfid() async {
+    var ports = SerialPort.getAvailablePorts();
+    print(ports);
+
+    var converted = [];
+
+    if (ports.contains(com)) {
+      final port = SerialPort(com, openNow: false, BaudRate: 9600);
+      port.open();
+      print("$com port isOpened?: ${port.isOpened}");
+
+      port.readBytesOnListen(32, (value) {
+        for (final e in value) {
+          var currentElement = e;
+          converted
+              .add(String.fromCharCode(int.parse(currentElement.toString())));
+          print(converted.join());
+        }
+      });
+      // String buffer = condition;
+      port.writeBytesFromString('False');
+      return Future<String>.delayed(const Duration(seconds: 5), () async {
+        port.close();
+        return converted.join();
+      });
+      // port.close();
+
+    } else {
+      print("Unable to find required COM port");
+      return ('');
     }
   }
 }
