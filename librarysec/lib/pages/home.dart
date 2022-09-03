@@ -49,35 +49,11 @@ class _HomePageState extends State<HomePage> {
     bool hasdata = false;
     return ScaffoldPage(
         header: headerWidget(""),
-        // padding: const EdgeInsets.all(20),
         content: Padding(
             padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       DropDownButton(
-                //           //menuColor: Color.fromARGB(153, 64, 24, 100),
-                //           title: const Text('Check out'),
-                //           items: [
-                //             MenuFlyoutItem(
-                //                 text: const Text('Check out'),
-                //                 onPressed: () {}),
-                //             MenuFlyoutItem(
-                //                 text: const Text('Return'),
-                //                 onPressed: () {
-                //                   setState(() {});
-                //                 })
-                //           ]),
-                //       const SizedBox(
-                //           height: 32,
-                //           width: 200,
-                //           child: TextBox(
-                //             placeholder: 'Enter command or barcode',
-                //           )),
-                //     ]),
                 const SizedBox(
                   height: 30,
                 ),
@@ -95,7 +71,6 @@ class _HomePageState extends State<HomePage> {
                           title: 'Patrons',
                           check: !hasdata,
                           boxType: patronBoxData(),
-                          // lbottomicon: FluentIcons.generic_scan,
                           rbottomicon: FluentIcons.search,
                           rfx: studenttypeId),
                       pageBox(
@@ -161,8 +136,6 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       print("No response");
                     }
-                    // to be worked on
-                    Navigator.of(context).pop();
                   })
             ],
           );

@@ -49,7 +49,6 @@ class _MonitorState extends State<Monitor> {
   Widget monitor() {
     return Container(
       child: ContentDialog(
-          //title: const Text('Confirm Logout'),
           content: const Text('Follow this link to monitor Gate'),
           actions: [
             TextButton(

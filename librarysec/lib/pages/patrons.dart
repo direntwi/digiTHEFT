@@ -7,7 +7,6 @@ import 'package:flutter/material.dart' as material;
 import 'package:librarysec/pages/header_widget.dart';
 import 'dart:convert';
 
-
 class Patrons extends StatefulWidget {
   const Patrons({Key? key}) : super(key: key);
 
@@ -35,7 +34,6 @@ class _PatronsState extends State<Patrons> {
                         controller: ScrollController(),
 
                         /// You can add a padding to the view to avoid having the scrollbar over the UI elements
-                        //padding: EdgeInsets.only(right: 16.0),
                         itemCount: snapshot.data!.toList().length,
                         itemBuilder: (BuildContext ctx, int position) {
                           return ListTile(
@@ -43,35 +41,10 @@ class _PatronsState extends State<Patrons> {
                                 "${snapshot.data!.toList()[position].patronName} - ${snapshot.data!.toList()[position].patronStatus}"),
                             subtitle: Text(
                                 "${snapshot.data!.toList()[position].referenceId}"),
-                            // trailing: Text(
-                            //     "${snapshot.data!.toList()[position].patronStatus}"),
-                            // trailing: IconButton(
-                            //   icon: const Icon(FluentIcons.remove),
-                            //   onPressed: () {
-                            //     material.showDialog(
-                            //         context: context,
-                            //         builder: (context) {
-                            //           return ContentDialog(
-                            //             content: const Text('Return Book?'),
-                            //             actions: [
-                            //               TextButton(
-                            //                   onPressed: () {},
-                            //                   child: const Text('YES')),
-                            //               TextButton(
-                            //                   onPressed: () {
-                            //                     Navigator.pop(context);
-                            //                   },
-                            //                   child: const Text('CANCEL'))
-                            //             ],
-                            //           );
-                            //         });
-                            //   },
-                            // ),
                           );
                         });
                   } else if (snapshot.hasError) {
                     return const Center(child: Text("No books to display"));
-                    // return Text('${snapshot.error}');
                   }
                   return const ProgressRing();
                 })),

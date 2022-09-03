@@ -32,7 +32,8 @@ Widget pageBox(
           width: width,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text("  $title", style: const TextStyle(color: Colors.white)),
+            child:
+                Text("  $title", style: const TextStyle(color: Colors.white)),
           ),
         ),
         Container(
@@ -40,7 +41,6 @@ Widget pageBox(
             child: check ? boxType : Text("No $title available")),
         Container(
             color: const Color.fromARGB(255, 207, 124, 124),
-            // alignment: AlignmentDirectional.bottomCenter,
             height: 30,
             width: width,
             child: Row(

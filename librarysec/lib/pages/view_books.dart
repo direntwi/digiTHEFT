@@ -35,7 +35,6 @@ class _ItemsState extends State<Items> {
                         controller: ScrollController(),
 
                         /// You can add a padding to the view to avoid having the scrollbar over the UI elements
-                        //padding: EdgeInsets.only(right: 16.0),
                         itemCount: snapshot.data!.toList().length,
                         itemBuilder: (BuildContext ctx, int position) {
                           return ListTile(
@@ -43,33 +42,10 @@ class _ItemsState extends State<Items> {
                                 "${snapshot.data!.toList()[position].bookTitle} - ${snapshot.data!.toList()[position].authorName}"),
                             subtitle: Text(
                                 "RFID: ${snapshot.data!.toList()[position].rfId}"),
-                            // trailing: IconButton(
-                            //   icon: const Icon(FluentIcons.remove),
-                            //   onPressed: () {
-                            //     material.showDialog(
-                            //         context: context,
-                            //         builder: (context) {
-                            //           return ContentDialog(
-                            //             content: const Text('Return Book?'),
-                            //             actions: [
-                            //               TextButton(
-                            //                   onPressed: () {},
-                            //                   child: const Text('YES')),
-                            //               TextButton(
-                            //                   onPressed: () {
-                            //                     Navigator.pop(context);
-                            //                   },
-                            //                   child: const Text('CANCEL'))
-                            //             ],
-                            //           );
-                            //         });
-                            //   },
-                            // ),
                           );
                         });
                   } else if (snapshot.hasError) {
                     return const Center(child: Text("No books to display"));
-                    // return Text('${snapshot.error}');
                   }
                   return const ProgressRing();
                 })),

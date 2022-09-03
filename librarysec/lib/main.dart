@@ -33,8 +33,6 @@ class MyApp extends StatelessWidget {
       color: appColor,
       theme: ThemeData(
         brightness: Brightness.light,
-        // accentColor: Colors.
-        // accentColor: Color.fromRGBO(3, 4, 5, 1.2),
       ),
       darkTheme:
           ThemeData(brightness: Brightness.dark, accentColor: Colors.orange),
