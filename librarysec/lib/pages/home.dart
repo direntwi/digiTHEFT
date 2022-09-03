@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:librarysec/main.dart';
 import 'package:librarysec/navi.dart';
 import 'package:http/http.dart' as http;
 import 'package:librarysec/backend_link.dart' as link;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:librarysec/pages/header_widget.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 
 class HomePage extends StatefulWidget {
@@ -48,24 +48,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool hasdata = false;
     return ScaffoldPage(
+      header: headerWidget(""),
         // padding: const EdgeInsets.all(20),
         content: Padding(
             padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                      Image.asset('images/knust_icon.png',
-                          height: 50, width: 50),
-                      const Text(
-                        "KNUST LIBRARY PORTAL",
-                        style: TextStyle(color: appColor, fontSize: 25),
-                      ),
-                    ])),
-
                 // Row(
                 //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 //     children: [

@@ -6,6 +6,8 @@ import 'package:librarysec/backend_link.dart' as link;
 import 'package:flutter/material.dart' as material;
 import 'dart:convert';
 
+import 'package:librarysec/pages/header_widget.dart';
+
 class Items extends StatefulWidget {
   const Items({Key? key}) : super(key: key);
 
@@ -20,6 +22,7 @@ class _ItemsState extends State<Items> {
   Widget build(BuildContext context) {
     futurebooks = fetchBooks();
     return ScaffoldPage(
+      header: headerWidget(" - All Books"),
       content: Padding(
         padding: EdgeInsets.all(10),
         child: Scrollbar(

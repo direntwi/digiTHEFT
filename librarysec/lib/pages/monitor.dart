@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:librarysec/pages/header_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Monitor extends StatefulWidget {
@@ -16,22 +17,23 @@ class _MonitorState extends State<Monitor> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
+      header: headerWidget(" - Monitor"),
       content: Padding(
           padding: EdgeInsets.all(8.0),
           child: Stack(
             children: [
-              Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image:
-                              AssetImage("images/knust_logo_transparent.png"),
-                          fit: BoxFit.fill)),
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width),
+              // Container(
+              //     decoration: BoxDecoration(
+              //         image: DecorationImage(
+              //             image:
+              //                 AssetImage("images/knust_logo_transparent.png"),
+              //             fit: BoxFit.fill)),
+              //     height: MediaQuery.of(context).size.height,
+              //     width: MediaQuery.of(context).size.width),
               Container(
                 child: ContentDialog(
                     //title: const Text('Confirm Logout'),
-                    content: const Text('Follow this link to monitor Gate'),
+                    content: const Text('Follow this link to monitor the RFID gate'),
                     actions: [
                       TextButton(
                         child: const Text('RFID GATE MONITOR'),

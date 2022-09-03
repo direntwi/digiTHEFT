@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:librarysec/main.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:librarysec/classes.dart';
 import 'package:librarysec/DBConnector.dart';
 import 'package:intl/intl.dart';
+import 'package:librarysec/pages/header_widget.dart';
 import 'package:serial_port_win32/serial_port_win32.dart';
 
 class AddBook extends StatefulWidget {
@@ -56,6 +56,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
+      header: headerWidget(" - Add New Book"),
         // content: Padding(
         //     padding:
         //     EdgeInsets.only(left: 40, right: 40, bottom: 20),
@@ -65,11 +66,6 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
       children: [
         Column(
           children: [
-            const Center(
-                child: Text(
-              'ADD NEW BOOK',
-              style: TextStyle(color: appColor, fontSize: 25),
-            )),
             const SizedBox(
               height: 20,
             ),

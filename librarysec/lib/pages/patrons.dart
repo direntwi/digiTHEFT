@@ -1,14 +1,12 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart' as http;
 import 'package:librarysec/backend_link.dart' as link;
 import 'package:flutter/material.dart' as material;
+import 'package:librarysec/pages/header_widget.dart';
 import 'dart:convert';
+
 
 class Patrons extends StatefulWidget {
   const Patrons({Key? key}) : super(key: key);
@@ -24,6 +22,7 @@ class _PatronsState extends State<Patrons> {
   Widget build(BuildContext context) {
     futurepatrons = fetchPatrons();
     return ScaffoldPage(
+      header: headerWidget(" - Patrons"),
       content: Padding(
         padding: EdgeInsets.all(10),
         child: Scrollbar(
