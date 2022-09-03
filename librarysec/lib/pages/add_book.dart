@@ -43,6 +43,9 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
   TextEditingController doe = TextEditingController();
   TextEditingController e = TextEditingController();
   TextEditingController bookid = TextEditingController();
+  TextEditingController booknamecontroller = TextEditingController();
+  TextEditingController bookauthorcontroller = TextEditingController();
+  TextEditingController bookcategorycontroller = TextEditingController();
   String? bookname;
   String? rfid;
   String? bookauthor;
@@ -52,162 +55,172 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
   static const int timeout = 30;
   late Book book;
   String com = "COM12";
+  String? value2 = null;
 
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
-      header: headerWidget(" - Add New Book"),
+        header: headerWidget(" - Add New Book"),
         // content: Padding(
         //     padding:
         //     EdgeInsets.only(left: 40, right: 40, bottom: 20),
         //     child:
         content: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Texty(
-                text: 'BOOK NAME',
-                onChanged: (value) {
-                  bookname = value;
-                }),
-            const SizedBox(
-              height: 20,
-            ),
-            Texty(
-                controller: bookid,
-                text: 'BOOK ID',
-                onChanged: (value) {
-                  rfid = value;
-                },
-                suffix: IconButton(
-                    onPressed: () {
-                      _scanBook();
-                    },
-                    icon: const Icon(
-                      FluentIcons.generic_scan,
-                      semanticLabel: "Scan Book with rfid",
-                    ))),
-            const SizedBox(
-              height: 20,
-            ),
-            Texty(
-              controller: e,
-              text: 'DATE OF ENTRY',
-              onChanged: (value) {
-                date = DateTime.parse(value);
-              },
-              suffix: IconButton(
-                icon: Icon(FluentIcons.edit),
-                onPressed: () {
-                  _selectDate(context);
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Texty(
-                text: 'NAME OF AUTHOR',
-                onChanged: (value) {
-                  bookauthor = value;
-                }),
-            const SizedBox(
-              height: 20,
-            ),
-            Texty(
-                text: 'BOOK CATEGORY',
-                onChanged: (value) {
-                  category = value;
-                }),
-            SizedBox(
-              height: 50,
-            ),
-            Row(
+            Column(
               children: [
-                FilledButton(
-                    child: Text(
-                      'ENTER',
-                      style: TextStyle(),
-                    ),
-                    onPressed: () async {
-                      book = Book(
-                        //IGNORE FIXED VALUES
-                        authorName: bookauthor!,
-                        availability: 1,
-                        bookTitle: bookname!,
-                        isBorrowed: 0,
-                        callNumber: 'NULL',
-                        categoryId: 1234,
-                        dateAdded: date!,
-                        location: 'KUMASI',
-                        publicationYear: '2000',
-                        rfId: rfid!,
-                      );
-                      if (await add_book(book)) {
-                        return material.showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ContentDialog(
-                                title: Text('Book Added Successfully'),
-                                actions: [
-                                  Button(
-                                      child: const Text('Cancel'),
-                                      onPressed: () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop(true);
-                                      }),
-                                  Button(
-                                      child: const Text('Okay'),
-                                      onPressed: () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop(true);
-                                      })
-                                ],
-                              );
-                            });
-                      } else {
-                        return material.showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ContentDialog(
-                                title: Text(
-                                  'Unable to add new Book',
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                              );
-                            });
-                      }
+                const SizedBox(
+                  height: 20,
+                ),
+                Texty(
+                    controller: booknamecontroller,
+                    text: 'BOOK NAME',
+                    onChanged: (value) {
+                      bookname = value;
                     }),
-                // SizedBox(
-                //   width: 50,
-                // ),
-                TextButton(
-                    child: Text(
-                      'CLEAR',
-                      style: TextStyle(color: Colors.red),
+                const SizedBox(
+                  height: 20,
+                ),
+                Texty(
+                    controller: bookid,
+                    text: 'BOOK ID',
+                    // onChanged: (value) {
+                    //   rfid = value;
+                    //   print('THIS IS VALUUEEE $rfid');
+                    // },
+                    suffix: IconButton(
+                        onPressed: () {
+                          _scanBook();
+                        },
+                        icon: const Icon(
+                          FluentIcons.generic_scan,
+                          semanticLabel: "Scan Book with rfid",
+                        ))),
+                const SizedBox(
+                  height: 20,
+                ),
+                Texty(
+                  controller: e,
+                  text: 'DATE OF ENTRY',
+                  onChanged: (value) {
+                    date = DateTime.parse(value);
+                  },
+                  suffix: IconButton(
+                    icon: Icon(FluentIcons.edit),
+                    onPressed: () {
+                      _selectDate(context);
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Texty(
+                    controller: bookauthorcontroller,
+                    text: 'NAME OF AUTHOR',
+                    onChanged: (value) {
+                      bookauthor = value;
+                    }),
+                const SizedBox(
+                  height: 20,
+                ),
+                Texty(
+                    controller: bookcategorycontroller,
+                    text: 'BOOK CATEGORY',
+                    onChanged: (value) {
+                      category = value;
+                    }),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  children: [
+                    FilledButton(
+                        child: Text(
+                          'ENTER',
+                          style: TextStyle(),
+                        ),
+                        onPressed: () async {
+                          book = Book(
+                            //IGNORE FIXED VALUES
+                            authorName: bookauthor!,
+                            availability: 1,
+                            bookTitle: bookname!,
+                            isBorrowed: 0,
+                            callNumber: 'NULL',
+                            categoryId: 1234,
+                            dateAdded: date!,
+                            location: 'KUMASI',
+                            publicationYear: '2000',
+                            rfId: bookid.text,
+                          );
+                          if (await add_book(book)) {
+                            return material.showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return ContentDialog(
+                                    title: Text('Book Added Successfully'),
+                                    actions: [
+                                      Button(
+                                          child: const Text('Cancel'),
+                                          onPressed: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop(true);
+                                          }),
+                                      Button(
+                                          child: const Text('Okay'),
+                                          onPressed: () {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop(true);
+                                          })
+                                    ],
+                                  );
+                                });
+                          } else {
+                            return material.showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const ContentDialog(
+                                    title: Text(
+                                      'Unable to add new Book',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  );
+                                });
+                          }
+                        }),
+                    SizedBox(
+                      width: 30,
                     ),
-                    onPressed: () {})
+                    TextButton(
+                        child: Text(
+                          'CLEAR',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        onPressed: () {
+                          bookid.text = '';
+                          booknamecontroller.text = '';
+                          bookauthorcontroller.text = '';
+                          bookcategorycontroller.text = '';
+                        })
+                  ],
+                )
               ],
-            )
-          ],
 
-          // Divider(
-          //   size: 350,
-          //   direction: Axis.vertical,
-          // ),
-          //
-        ),
-        // Image(
-        //   image: AssetImage('images/bookimages.png'),
-        // )
-      ],
-    )
+              // Divider(
+              //   size: 350,
+              //   direction: Axis.vertical,
+              // ),
+              //
+            ),
+            // Image(
+            //   image: AssetImage('images/bookimages.png'),
+            // )
+          ],
+        )
         // ),
         );
   }
@@ -271,15 +284,12 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
         builder: (context) {
           return ContentDialog(
             title: const Text('Scanning Book With Reader'),
-            // content: bookid.text == ''
-            //     ? material.LinearProgressIndicator(
-            //         value:
-            // controller.value,
-            //      semanticsLabel: 'Linear progress indicator',
-            //    )
             content: TextBox(
               controller: bookid,
             ),
+            // content: TextBox(
+            //   controller: bookid,
+            // ),
             actions: [
               Button(
                   child: const Text('Done'),
@@ -290,6 +300,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
                   child: const Text('Cancel'),
                   onPressed: () {
                     Navigator.pop(context);
+                    bookid.text = '';
                   })
             ],
           );

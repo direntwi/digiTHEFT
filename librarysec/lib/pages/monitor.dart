@@ -19,30 +19,28 @@ class _MonitorState extends State<Monitor> {
     return ScaffoldPage(
       header: headerWidget(" - Monitor"),
       content: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Stack(
             children: [
-              // Container(
-              //     decoration: BoxDecoration(
-              //         image: DecorationImage(
-              //             image:
-              //                 AssetImage("images/knust_logo_transparent.png"),
-              //             fit: BoxFit.fill)),
-              //     height: MediaQuery.of(context).size.height,
-              //     width: MediaQuery.of(context).size.width),
               Container(
-                child: ContentDialog(
-                    //title: const Text('Confirm Logout'),
-                    content: const Text('Follow this link to monitor the RFID gate'),
-                    actions: [
-                      TextButton(
-                        child: const Text('RFID GATE MONITOR'),
-                        onPressed: () {
-                          _launchUrl();
-                        },
-                      ),
-                    ]),
-              )
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          opacity: .5,
+                          image: AssetImage("images/webserial_image.png"),
+                          fit: BoxFit.contain)),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width),
+              ContentDialog(
+                  content:
+                      const Text('Follow this link to monitor the RFID gate'),
+                  actions: [
+                    TextButton(
+                      child: const Text('RFID GATE MONITOR'),
+                      onPressed: () {
+                        _launchUrl();
+                      },
+                    ),
+                  ])
             ],
           )),
     );

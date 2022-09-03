@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool hasdata = false;
     return ScaffoldPage(
-      header: headerWidget(""),
+        header: headerWidget(""),
         // padding: const EdgeInsets.all(20),
         content: Padding(
             padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
@@ -360,8 +360,8 @@ class _HomePageState extends State<HomePage> {
                         return ListTile(
                           title: Text(
                               "${snapshot.data!.toList()[position].bookTitle}"),
-                          subtitle: Text(
-                              "${snapshot.data!.toList()[position].dueDate}"),
+                          subtitle:
+                              Text("${snapshot.data!.toList()[position].rfID}"),
                           trailing: IconButton(
                             icon: const Icon(FluentIcons.remove),
                             onPressed: () {

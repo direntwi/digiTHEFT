@@ -40,9 +40,9 @@ class _ItemsState extends State<Items> {
                         itemBuilder: (BuildContext ctx, int position) {
                           return ListTile(
                             title: Text(
-                                "${snapshot.data!.toList()[position].bookTitle}"),
+                                "${snapshot.data!.toList()[position].bookTitle} - ${snapshot.data!.toList()[position].authorName}"),
                             subtitle: Text(
-                                "${snapshot.data!.toList()[position].authorName}"),
+                                "RFID: ${snapshot.data!.toList()[position].rfId}"),
                             // trailing: IconButton(
                             //   icon: const Icon(FluentIcons.remove),
                             //   onPressed: () {
