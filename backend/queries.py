@@ -334,9 +334,9 @@ def checkIfBorrowed(rfID):
     cursor.execute(statement, [rfID])
     result = cursor.fetchone()
     if result:
-        return True
+        return "True"
     else:
-        return False
+        return "False"
 
     
 
