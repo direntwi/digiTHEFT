@@ -1,0 +1,4 @@
+    {
+        "libUsername": "ebaiden",
+        "libPassword": "hashhashhas"
+    }
