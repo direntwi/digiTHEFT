@@ -1,10 +1,9 @@
-//import 'package:flutter/material.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:librarysec/pages/add_book.dart';
 import 'package:librarysec/pages/home.dart';
-import 'package:librarysec/pages/items.dart';
-import 'package:librarysec/pages/profile.dart';
-import 'package:librarysec/pages/search.dart';
+import 'package:librarysec/pages/view_books.dart';
+import 'package:librarysec/pages/patrons.dart';
+import 'package:librarysec/pages/monitor.dart';
 import 'package:librarysec/pages/settings.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:librarysec/navi.dart';
@@ -25,9 +24,9 @@ class _Checkout extends State<Checkout> with WindowListener {
     Navigat(title: 'Home', iconData: FluentIcons.home),
     Navigat(title: 'Add Book', iconData: FluentIcons.add),
     Navigat(title: 'Patrons', iconData: FluentIcons.people),
-    Navigat(title: 'Items', iconData: FluentIcons.history),
-    Navigat(title: 'Search', iconData: FluentIcons.search),
-    Navigat(title: 'Settings', iconData: FluentIcons.settings),
+    Navigat(title: 'View Books', iconData: FluentIcons.library),
+    Navigat(title: 'Monitor', iconData: FluentIcons.view),
+    //Navigat(title: 'Settings', iconData: FluentIcons.settings),
   ];
   final List<Navigat> footerpages = const [
     Navigat(title: 'Log Out', iconData: FluentIcons.sign_out),
@@ -99,12 +98,12 @@ class _Checkout extends State<Checkout> with WindowListener {
       content: NavigationBody(
         index: index,
         children: [
-          HomePage(title: 'Home'),
+          HomePage(),
           AddBook(),
+          Patrons(),
           Items(),
-          Profile(),
-          Search(),
-          Settings(),
+          Monitor(),
+          //Settings(),
           logout(index)
         ],
       ),
