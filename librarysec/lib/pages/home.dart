@@ -32,6 +32,10 @@ class _HomePageState extends State<HomePage> {
   String oneAuthorName = 'Default';
   String oneBookTitle = 'Default';
   String oneRFID = 'Default';
+  String transpatron = '';
+  String transborrow = '';
+  String transreturn = '';
+  List<String> trans = [];
 
   late Future<List<dynamic>> futureAlbums;
   late List transactionAlbums = [];
@@ -116,7 +120,6 @@ class _HomePageState extends State<HomePage> {
                   }),
               Button(
                   child: const Text('Search'),
-
                   // FUNCTION - to handle the input of patron reference number
                   onPressed: () async {
                     final response = await http.get(Uri.parse(
@@ -124,7 +127,8 @@ class _HomePageState extends State<HomePage> {
 
                     final decoded =
                         json.decode(response.body) as Map<String, dynamic>;
-
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context, rootNavigator: true).pop(true);
                     if (response.statusCode == 200) {
                       print("running it");
                       setState(() {
@@ -132,9 +136,15 @@ class _HomePageState extends State<HomePage> {
                         referenceNumber = decoded["referenceID"];
                         patronStatus = decoded["patronStatus"];
                         programme = decoded["programme"];
+                        transpatron = 'Patron';
                       });
                     } else {
                       print("No response");
+                    }
+                    if (transpatron == 'Patron') {
+                      trans.add('$patronName found');
+                    } else {
+                      trans.add('Patron Not Found');
                     }
                   })
             ],
@@ -188,7 +198,6 @@ class _HomePageState extends State<HomePage> {
           print(converted.join());
         }
       });
-      // String buffer = condition;
       String buffer = isBorrowed;
       print(isBorrowed);
       port.writeBytesFromString(buffer);
@@ -196,8 +205,6 @@ class _HomePageState extends State<HomePage> {
         port.close();
         return converted.join();
       });
-      // port.close();
-
     } else {
       print("Unable to find required COM port");
       return ('Unable to checkout');
@@ -211,13 +218,6 @@ class _HomePageState extends State<HomePage> {
           return ContentDialog(
             backgroundDismiss: true,
             title: const Text('Connect the RFID Reader'),
-            // content: Column(
-            //   children: [
-            //     Text(oneBookTitle),
-            //     Text(oneAuthorName),
-            //     Text(oneRFID)
-            //   ],
-            //),
             actions: [
               Button(
                   child: const Text('Return a Book'),
@@ -227,7 +227,6 @@ class _HomePageState extends State<HomePage> {
                     });
                     Navigator.pop(context);
                     scanId();
-                    // Navigator.pop(context);
                   }),
               Button(
                   child: const Text('Borrow a Book'),
@@ -237,7 +236,6 @@ class _HomePageState extends State<HomePage> {
                     });
                     Navigator.pop(context);
                     scanId();
-                    // Navigator.pop(context);
                   })
             ],
           );
@@ -246,13 +244,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future scanId() async {
-    // Future<String>? rfid = scanrfid();
-    // String? rfidtag = await rfid;
-    // print('THIS IS RFID $rfidtag');
-    // print('surely working');
-    // _getbookinfo(rfidtag);
-    // futureAlbumScan = fetchAlbumScan("2437539148");
-
     var dia = material.showDialog(
         context: context,
         builder: (context) {
@@ -266,28 +257,6 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pop(context);
                   })
             ],
-            // actions: [
-            //   Button(
-            //       child: Text('Return'),
-            //       onPressed: () {
-            //         setState(() {
-            //           isBorrowed = 'False';
-            //           print('oh setstate $isBorrowed');
-            //         });
-            //         scanId();
-            //         Navigator.pop(context);
-            //       }),
-            //   Button(
-            //       child: Text('Borrow'),
-            //       onPressed: () {
-            //         setState(() {
-            //           isBorrowed = 'True';
-            //           print('oh setstate $isBorrowed');
-            //         });
-            //         scanId();
-            //         Navigator.pop(context);
-            //       })
-            // ],
           );
         });
     Future<String>? rfid = scanrfid();
@@ -299,7 +268,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       _returnBook(rfidtag!);
     }
-    //_borrowBook(rfidtag!);
     return dia;
   }
 
@@ -327,7 +295,6 @@ class _HomePageState extends State<HomePage> {
                       controller: ScrollController(),
 
                       /// You can add a padding to the view to avoid having the scrollbar over the UI elements
-                      //padding: EdgeInsets.only(right: 16.0),
                       itemCount: snapshot.data!.toList().length,
                       itemBuilder: (BuildContext ctx, int position) {
                         return ListTile(
@@ -365,7 +332,6 @@ class _HomePageState extends State<HomePage> {
                       });
                 } else if (snapshot.hasError) {
                   return const Center(child: Text("No books to display"));
-                  // return Text('${snapshot.error}');
                 }
                 return const ProgressRing();
               })),
@@ -374,20 +340,18 @@ class _HomePageState extends State<HomePage> {
 
   Expanded transLogBoxData() {
     return Expanded(
-      child: Scrollbar(
-          controller: ScrollController(),
-          child: ListView(controller: ScrollController()
-              // itemBuilder: (BuildContext ctx, int position) {
-              //   return ListTile(
-              //     title: Text("${transactionAlbums[position]}"),
-              //     //trailing: Icon(icon),
-              //   );
-              // }
-              )),
-    );
+        child: Scrollbar(
+      controller: ScrollController(),
+      child: trans.isNotEmpty
+          ? ListView.builder(
+              itemCount: trans.length,
+              itemBuilder: (BuildContext ctx, int position) {
+                return ListTile(title: Text(trans[position]));
+              },
+            )
+          : const Center(child: Text('No Transaction Data')),
+    ));
   }
-
-  // return const Text("No transaction log data available");
 
   Future<List<dynamic>> fetchAlbums() async {
     final response = await http
@@ -405,26 +369,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // Future<List<dynamic>> _getbookinfo(String? rfid) async {
-  //   final response =
-  //       await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
-  //   if (response.statusCode == 200) {
-  //     // If the server did return a 200 OK response,
-  //     // then parse the JSON.
-  //     dynamic data = jsonDecode(response.body);
-  //     setState(() {
-  //       print('poollop');
-  //       bookgotten = true;
-  //     });
-  //     return data.map((element) => Album.fromJson(element)).toList();
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     setState(() {});
-  //     throw Exception('No book data found');
-  //   }
-  // }
-
   Future fetchAlbumScan(String? rfid) async {
     final response =
         await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
@@ -441,24 +385,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       print("No response");
     }
-
-    // final response =
-    //     await http.get(Uri.parse("${link.server}/get-book-by-rfid/$rfid"));
-    // if (response.statusCode == 200) {
-    //   // If the server did return a 200 OK response,
-    //   // then parse the JSON.
-    //   dynamic data = jsonDecode(response.body);
-    //   setState(() {
-    //     print('poollop');
-    //     bookgotten = true;
-    //   });
-    //   return data.map((element) => ScannedBook.fromJson(element)).toList();
-    // } else {
-    //   // If the server did not return a 200 OK response,
-    //   // then throw an exception.
-    //   setState(() {});
-    //   throw Exception('No book data found');
-    // }
   }
 
   Future<void> _borrowBook(String bookrfid) async {
@@ -477,12 +403,16 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         setState(() {
           futureAlbums = fetchAlbums();
+          transborrow = 'Borrow';
         });
-        print('yeahhhh');
+        if (transborrow == 'Borrow') {
+          trans.add('Book found and eligible for borrowing');
+        }
       } else {
-        print('noooooooooooo');
+        trans.add('Book Not Found');
       }
     } else {
+      trans.add('Book Not Available for Borrowing');
       return material.showDialog(
           context: context,
           builder: (context) {
@@ -502,20 +432,26 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _returnBook(rfid) async {
     //get transactionID
+    print(rfid);
     var response1 = await http.get(Uri.parse(
       "${link.server}/patron-account/$referenceNumber",
     ));
-    final decoded = json.decode(response1.body); //as Map<String, dynamic>;
+    final decoded = json.decode(response1.body);
     var transID = decoded[0]['transactionID'];
     //return book
     dynamic data = {"rfID": rfid};
     var response2 = await dio.put("${link.server}/return-book",
         data: data, options: Options());
     if (response2.statusCode == 200) {
-      print('done');
       setState(() {
         futureAlbums = fetchAlbums();
+        transreturn = 'Return';
       });
+      if (transreturn == 'Return') {
+        trans.add('Book successfully returned');
+      } else {
+        trans.add('Unable to return Book ...Try Again');
+      }
     }
   }
 }
@@ -577,5 +513,3 @@ class ScannedBook {
         "rfID": rfId,
       };
 }
-
-// fixing conflicts

@@ -61,10 +61,6 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ScaffoldPage(
         header: headerWidget(" - Add New Book"),
-        // content: Padding(
-        //     padding:
-        //     EdgeInsets.only(left: 40, right: 40, bottom: 20),
-        //     child:
         content: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -85,10 +81,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
                 Texty(
                     controller: bookid,
                     text: 'BOOK ID',
-                    // onChanged: (value) {
-                    //   rfid = value;
-                    //   print('THIS IS VALUUEEE $rfid');
-                    // },
+
                     suffix: IconButton(
                         onPressed: () {
                           _scanBook();
@@ -210,15 +203,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
                 )
               ],
 
-              // Divider(
-              //   size: 350,
-              //   direction: Axis.vertical,
-              // ),
-              //
             ),
-            // Image(
-            //   image: AssetImage('images/bookimages.png'),
-            // )
           ],
         )
         // ),
@@ -274,7 +259,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
       setState(() {
         date = picked;
         e.text = DateFormat("yMMMMd").format(date!).toString();
-      }); //&& picked != _selectedDate
+      });
     }
   }
 
@@ -287,9 +272,7 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
             content: TextBox(
               controller: bookid,
             ),
-            // content: TextBox(
-            //   controller: bookid,
-            // ),
+
             actions: [
               Button(
                   child: const Text('Done'),
@@ -330,14 +313,11 @@ class _AddBookState extends State<AddBook> with TickerProviderStateMixin {
           print(converted.join());
         }
       });
-      // String buffer = condition;
       port.writeBytesFromString('False');
       return Future<String>.delayed(const Duration(seconds: 5), () async {
         port.close();
         return converted.join();
       });
-      // port.close();
-
     } else {
       print("Unable to find required COM port");
       return ('');
