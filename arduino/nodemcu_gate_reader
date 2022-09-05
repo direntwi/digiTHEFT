@@ -1,0 +1,148 @@
+#include <SPI.h>
+#include <MFRC522.h>
+#include <RFID.h>
+#include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <WebSerial.h>
+
+constexpr uint8_t RST_PIN = D3;     // Configurable, see typical pin layout above
+constexpr uint8_t SS_PIN = D4;     // Configurable, see typical pin layout above
+constexpr uint8_t BUZZER_PIN = D8;
+
+RFID rfid(SS_PIN, RST_PIN);
+MFRC522 mfrc522(SS_PIN, RST_PIN);
+
+MFRC522::MIFARE_Key key;
+
+String finalValue;
+
+AsyncWebServer server(80);
+
+const char* ssid = "val";          // Your WiFi SSID
+const char* password = "akipawpaw";  // Your WiFi Password
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  if (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    Serial.printf("WiFi Failed!\n");
+//    return;       // commented out to allow code continue in case of wifi error
+  }
+
+  Serial.println("IP Address: ");
+  Serial.println(WiFi.localIP());
+
+  SPI.begin();
+  mfrc522.PCD_Init();
+  pinMode(D8, OUTPUT);
+  
+  // WebSerial is accessible at "<IP Address>/webserial" in browser
+  WebSerial.begin(&server);
+  WebSerial.msgCallback(recvMsg);
+  server.begin();
+
+  Serial.println("Scan a MIFARE Classic card");
+
+  for (byte i = 0; i < 6; i++) {
+    key.keyByte[i] = 0xFF;
+  }
+
+}
+
+int block = 2;
+byte readbackblock[18];
+
+void loop() {
+  // Wait for an RFID card to be read
+  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+    return;
+  }
+  // Select one of the cards
+  if ( ! mfrc522.PICC_ReadCardSerial()) {//if PICC_ReadCardSerial returns 1, the "uid" struct (see MFRC522.h lines 238-45)) contains the ID of the read card.
+    return;//if it returns a '0' something went wrong and we return to the start of the loop
+  }
+  readBlock(block, readbackblock);
+
+  finalValue = extractReadBlock(readbackblock);
+
+  Serial.println(finalValue);
+  WebSerial.println(finalValue);
+
+  if (finalValue == "7097108115") { // ASCII for 'False'
+    beepBuzzer();
+    Serial.println("BOOK NOT ALLOWED TO EXIT!!!");
+    WebSerial.println("BOOK NOT ALLOWED TO EXIT!!!");
+  }
+  else if (finalValue == "84114117101") {
+    Serial.println("Book is allowed to exit.");
+    WebSerial.println("Book is allowed to exit.");
+  }
+  else {
+    Serial.println("RFID tag not included in library database.");
+    WebSerial.println("RFID tag not included in library database.");
+  }
+
+//    for (byte i = 0; i < 4; i++) {
+//    uid_finder[i] = mfrc522.uid.uidByte[i];//keyByte is defined in the "MIFARE_Key" 'struct' definition in the .h file of the library
+//      //Serial.print(uid_finder[i]);
+//    uid_string = uid_string + String(uid_finder[i]);
+//  }
+//  Serial.print(uid_string);
+  
+  mfrc522.PCD_StopCrypto1();
+  //  mfrc522.PICC_HaltA();
+}
+
+void beepBuzzer() {
+  tone(BUZZER_PIN, 1000);
+  delay(1000);
+  noTone(BUZZER_PIN);
+}
+
+String extractReadBlock(byte* readblock) {
+  String temp = "";
+  for (int j = 0 ; j < 4 ; j++) //print the block contents
+  {
+    // Adds read value to temp string
+    temp += readbackblock[j];
+  }
+
+  return temp;
+
+}
+
+int readBlock(int blockNumber, byte arrayAddress[]) {
+  int largestModulo4Number = blockNumber / 4 * 4;
+  int trailerBlock = largestModulo4Number + 3; //determine trailer block for the sector
+
+  byte status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
+
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print("PCD_Authenticate() failed (read): ");
+    Serial.println(mfrc522.GetStatusCodeName((MFRC522::StatusCode)status));
+    return 3;//return "3" as error message
+  }
+
+  byte buffersize = 18;
+  status = mfrc522.MIFARE_Read(blockNumber, arrayAddress, &buffersize);
+  if (status != MFRC522::STATUS_OK) {
+    Serial.print("MIFARE_read() failed: ");
+    Serial.println(mfrc522.GetStatusCodeName((MFRC522::StatusCode)status));
+    return 4;//return "4" as error message
+  }
+  Serial.println("block was read");
+}
+
+
+void recvMsg(uint8_t *data, size_t len) {
+  WebSerial.println("Received Data...");
+  String d = "";
+  for (int i = 0; i < len; i++) {
+    d += char(data[i]);
+  }
+  WebSerial.println(d);
+
+}
