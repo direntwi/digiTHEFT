@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   final autoSuggestBox = TextEditingController();
   final _refNumberController = TextEditingController();
   final _bookIdController = TextEditingController();
-  String com = "COM12";
+  String com = "COM3";
   String patronName = '';
   late String rfID;
   String referenceNumber = '';
@@ -361,6 +361,7 @@ class _HomePageState extends State<HomePage> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       dynamic data = jsonDecode(response.body);
+      print(data);
       return data.map((element) => Album.fromJson(element)).toList();
     } else {
       // If the server did not return a 200 OK response,
@@ -462,14 +463,12 @@ class Album {
       required this.dueDate,
       required this.patronName,
       required this.referenceId,
-      required this.transactionId,
       required this.rfID});
 
   final String bookTitle;
   final dynamic dueDate;
   final String patronName;
   final String referenceId;
-  final String transactionId;
   final String rfID;
 
   factory Album.fromJson(Map<String, dynamic> json) => Album(
@@ -477,7 +476,6 @@ class Album {
       dueDate: json["dueDate"],
       patronName: json["patronName"],
       referenceId: json["referenceID"],
-      transactionId: json["transactionID"],
       rfID: json["rfID"]);
 
   Map<String, dynamic> toJson() => {
@@ -485,7 +483,6 @@ class Album {
         "dueDate": dueDate,
         "patronName": patronName,
         "referenceID": referenceId,
-        "transactionID": transactionId,
         "rfID": rfID
       };
 }
