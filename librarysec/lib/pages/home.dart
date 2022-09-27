@@ -122,14 +122,15 @@ class _HomePageState extends State<HomePage> {
                   child: const Text('Search'),
                   // FUNCTION - to handle the input of patron reference number
                   onPressed: () async {
+                    Navigator.of(context, rootNavigator: true).pop(true);
                     final response = await http.get(Uri.parse(
                         "${link.server}/get-refid/${_refNumberController.text}"));
 
-                    final decoded =
-                        json.decode(response.body) as Map<String, dynamic>;
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context, rootNavigator: true).pop(true);
+                    //Navigator.of(context, rootNavigator: true).pop(true);
                     if (response.statusCode == 200) {
+                      final decoded =
+                          json.decode(response.body) as Map<String, dynamic>;
                       print("running it");
                       setState(() {
                         patronName = decoded['patronName'];
@@ -139,12 +140,19 @@ class _HomePageState extends State<HomePage> {
                         transpatron = 'Patron';
                       });
                     } else {
+                      setState(() {
+                        patronName = '';
+                        referenceNumber = '';
+                        patronStatus = 'No Patron data found';
+                        programme = '';
+                        transpatron = '';
+                      });
                       print("No response");
                     }
                     if (transpatron == 'Patron') {
                       trans.add('$patronName found');
                     } else {
-                      trans.add('Patron Not Found');
+                      trans.add('Patron Not Found...Invalid reference number');
                     }
                   })
             ],
